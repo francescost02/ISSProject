@@ -16,7 +16,7 @@ public class Main extends Game {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        image = new Texture("libgdx.png");
+        image = new Texture(Gdx.files.internal("img/libgdx.png"));
     }
 
     @Override
