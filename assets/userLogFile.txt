@@ -1,0 +1,4 @@
+USERMANAGER LOG FILE: 
+0-L'utente, con username: ciccio è stato registrato.
+1-L'utente, con username: pippo ha effettuato il login con successo.
+2-L'utente, con username: mario è stato modificato con: marco

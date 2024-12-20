@@ -3,6 +3,12 @@ package io.ISSProject.game.model.userManagment;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonWriter;
+import io.ISSProject.game.controller.InterfaceManager;
+import io.ISSProject.game.model.userManagment.state.LoggedInState;
+import io.ISSProject.game.model.userManagment.state.LoggingInState;
+import io.ISSProject.game.model.userManagment.state.SignUpState;
+import io.ISSProject.game.model.userManagment.state.UnregisteredState;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -16,6 +22,8 @@ public class UserManager {
     private Json json;
     private List<User> users;
     private List<Observer> observers;
+    private UserState currentState;
+    private List<InterfaceManager> observersUI;
 
 
     public UserManager(){
@@ -31,8 +39,51 @@ public class UserManager {
         this.json = new Json();
         this.users = new ArrayList<>();
         this.observers = new ArrayList<>();
+
+        observersUI = new ArrayList<>();
+        currentState = new UnregisteredState(this);
     }
 
+    public void selectRegistrationPath(){
+        setState(new SignUpState(this));
+    }
+
+    public void selectLoginPath(){
+        setState(new LoggingInState(this));
+    }
+
+    public void handleInput(String input){
+        currentState.handleInput(input);
+    }
+
+    public UserState getState(){
+        return currentState;
+    }
+
+    public void returnToUnregistered(){
+        setState(new UnregisteredState(this));
+    }
+
+    public void setState(UserState newState){
+        this.currentState = newState;
+        notifyObserversUI();
+    }
+
+    public void addObserverUI(InterfaceManager observer){
+        observersUI.add(observer);
+    }
+
+    public void removeObserverUI(InterfaceManager observer){
+        observersUI.remove(observer);
+    }
+
+    public void notifyObserversUI(){
+        for(InterfaceManager observer : observersUI){
+            observer.update(this);
+        }
+    }
+
+    // Osservatori per notificare file di log francesco
     public void addObserver(Observer observer) {
         observers.add(observer);
     }
@@ -75,6 +126,8 @@ public class UserManager {
     public boolean saveUsers(){
 
         if(this.fileHandle.exists()){
+            //formattazione corretta per file json
+            json.setOutputType(JsonWriter.OutputType.json);
             String jsonString = json.toJson(users);
             this.fileHandle.writeString(jsonString , false);
             return true;
@@ -106,6 +159,7 @@ public class UserManager {
         }
         this.notifyUserLogged(user);
         System.out.println("accesso effettuato con successo");
+        setState(new LoggedInState(user));
         return true;
     }
 
@@ -121,11 +175,10 @@ public class UserManager {
             if(fileHandle.exists()){
                 String jsStr = fileHandle.readString();
                 users = json.fromJson(ArrayList.class , User.class , jsStr);
-
-            }
-        if (users == null) {
-            System.out.println("Attenzione: `users` è ancora null. Inizializzazione forzata.");
-            users = new ArrayList<>();
+                if (users == null) {
+                    System.out.println("Attenzione: `users` è ancora null. Inizializzazione forzata.");
+                    users = new ArrayList<>();
+                }
         }
     }
 
@@ -171,7 +224,6 @@ public class UserManager {
     }
 
 
-
     public static UserManager getInstance(){
 
         if(instance == null){
@@ -180,7 +232,7 @@ public class UserManager {
         }
         return instance;
     }
-
+/*
     public static void main(String[] args) {
         UserManager userManager = UserManager.getInstance();
         userManager.addObserver(new LoggingUserManagerObserver());
@@ -198,4 +250,6 @@ public class UserManager {
 
         userManager.readUsers();
     }
+
+ */
 }
