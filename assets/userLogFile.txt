@@ -1,0 +1,10 @@
+USERMANAGER LOG FILE: 
+0-L'utente, con username: ciccio non è stato registrato poichè già presente nel sistema.
+1-L'utente, con username: pippo non è stato registrato poichè già presente nel sistema.
+2-L'utente, con username: pippo ha effettuato il login con successo.
+3-L'utente, con username: ciccio ha effettuato il login con successo.
+0-L'utente, con username: ciccio non è stato registrato poichè già presente nel sistema.
+1-L'utente, con username: pippo non è stato registrato poichè già presente nel sistema.
+2-L'utente, con username: pippo ha effettuato il login con successo.
+3-L'utente, con username: ciccio ha effettuato il login con successo.
+4-L'utente, con username: ciccio è stato modificato con: pierpaolo
