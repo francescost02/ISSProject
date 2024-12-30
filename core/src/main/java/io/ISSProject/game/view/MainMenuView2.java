@@ -76,7 +76,10 @@ public class MainMenuView2 implements Screen {
 
     @Override
     public void show() {
-        // Preparazioni aggiuntive per quando la schermata viene visualizzata (se necessarie)
+        /*Ogni volta che viene chiamato setScreen viene automaticamente chiamato show(),
+         con questo codice ci assicuriamo che il gestore di input venga correttamente associato alla UI mostrata
+         */
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override

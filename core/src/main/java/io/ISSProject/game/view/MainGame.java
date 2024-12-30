@@ -1,64 +1,59 @@
-
 package io.ISSProject.game.view;
 
-
-import com.badlogic.gdx.*;
-import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.ScreenUtils;
+import io.ISSProject.game.controller.ScreenController;
 import io.ISSProject.game.controller.mainMenuCommand.MainMenuController2;
+import io.ISSProject.game.controller.mediator.GameMediator;
 import io.ISSProject.game.controller.menuState.GameContext;
-import io.ISSProject.game.controller.settingsMenuController.SettingsController;
-import io.ISSProject.game.model.settingsMenuModel.AssetManager;
+import io.ISSProject.game.model.userManagment.UserManager;
+import io.ISSProject.game.view.UI.UnregisteredUI;
 
-// MAIN APPLICATION
+/** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class MainGame extends Game {
+
     private SpriteBatch batch;
+    private GameMediator mediator;
     private MainMenuController2 mainMenuController;
     private GameContext gameContext;
-    private SettingsController settingsController;
+    private UserManager userManager;
+    private ScreenController screenController;
 
     @Override
     public void create() {
         batch = new SpriteBatch();
+        gameContext = new GameContext();
+        userManager = UserManager.getInstance();
+        mainMenuController = new MainMenuController2(gameContext);
+        screenController = new ScreenController(this);
 
-        this.gameContext = new GameContext(); // Inizializzato una sola volta
-        this.mainMenuController = new MainMenuController2(gameContext);
-        this.setScreen(this.mainMenuController.getScreen()); //imposta la schermata
+        //configurazione del mediatore
+        mediator = new GameMediator(this);
+        userManager.setMediator(mediator);
 
+        mediator.registerComponents(
+            mainMenuController,
+            userManager,
+            gameContext,
+            screenController);
 
-/*
-        // Inizializza il controller
-        settingsController = new SettingsController();
+        mainMenuController.setMediator(mediator);
 
-        // Imposta lo schermo tramite il controller
-        setScreen(settingsController.getScreen());
-
- */
+        mediator.notify(null, "SHOW_UNREGISTERED_SCREEN");
     }
-
-
-/*
-    public void setScreen(Screen screen) {
-        screen.show(); // Imposta lo schermo attivo
-    }
-    */
 
     @Override
     public void render() {
-        settingsController.getScreen().render(Gdx.graphics.getDeltaTime());
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        settingsController.getScreen().resize(width, height);
+        super.render();
     }
 
     @Override
     public void dispose() {
-        settingsController.getScreen().dispose();
-        batch.dispose();
-        AssetManager.getInstance().dispose();
+        if(getScreen() != null){
+            getScreen().dispose();
+        }
     }
 }
-
-
-

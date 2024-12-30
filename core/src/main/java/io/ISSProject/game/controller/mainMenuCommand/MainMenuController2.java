@@ -6,17 +6,22 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import io.ISSProject.game.controller.exitMenuStrategy.ExitMenuController2;
 import io.ISSProject.game.controller.mainMenuCommand.*;
+import io.ISSProject.game.controller.mediator.GameComponent;
+import io.ISSProject.game.controller.mediator.GameMediator;
 import io.ISSProject.game.controller.menuState.GameContext;
 import io.ISSProject.game.controller.menuState.MainMenuState;
 import io.ISSProject.game.model.settingsMenuModel.AudioManager;
 import io.ISSProject.game.view.MainMenuView2;
 
-public class MainMenuController2 {
+public class MainMenuController2 implements GameComponent {
 
     private MainMenuReceiver mainMenuReceiver;
     private MainMenuView2 mainMenuView;
     private MainMenuState mainMenuState;
-   private final GameContext gameContext;
+    private final GameContext gameContext;
+    private GameMediator mediator;
+
+
 
 
     public MainMenuController2(GameContext gameContext) {
@@ -73,5 +78,17 @@ public class MainMenuController2 {
 
     public MainMenuView2 getScreen() {
         return mainMenuView;
+    }
+
+    @Override
+    public void setMediator(GameMediator mediator) {
+        this.mediator = mediator;
+    }
+
+    @Override
+    public void notify(String event, Object... data) {
+        if (mediator != null) {
+            mediator.notify(this, event, data);
+        }
     }
 }

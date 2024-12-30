@@ -3,12 +3,23 @@ package io.ISSProject.game.model.userManagment;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonWriter;
+import io.ISSProject.game.controller.InterfaceManager;
+import io.ISSProject.game.controller.mediator.GameComponent;
+import io.ISSProject.game.controller.mediator.GameMediator;
+import io.ISSProject.game.model.userManagment.state.LoggedInState;
+import io.ISSProject.game.model.userManagment.state.LoggingInState;
+import io.ISSProject.game.model.userManagment.state.SignUpState;
+import io.ISSProject.game.model.userManagment.state.UnregisteredState;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserManager {
+public class UserManager implements GameComponent {
+
+    //mediatore tra i vari controller
+    private GameMediator mediator;
 
     private static UserManager instance;
     private String filePath;
@@ -16,6 +27,21 @@ public class UserManager {
     private Json json;
     private List<User> users;
     private List<Observer> observers;
+
+    private UserState currentState;
+    private List<InterfaceManager> observersUI;
+
+    @Override
+    public void setMediator(GameMediator mediator){
+        this.mediator = mediator;
+    }
+
+    @Override
+    public void notify(String event, Object...data){
+        if(mediator != null){
+            mediator.notify(this, event, data);
+        }
+    }
 
 
     public UserManager(){
@@ -31,8 +57,51 @@ public class UserManager {
         this.json = new Json();
         this.users = new ArrayList<>();
         this.observers = new ArrayList<>();
+
+        observersUI = new ArrayList<>();
+        currentState = new UnregisteredState(this);
     }
 
+    public void selectRegistrationPath(){
+        setState(new SignUpState(this, mediator));
+    }
+
+    public void selectLoginPath(){
+        setState(new LoggingInState(this, mediator));
+    }
+
+    public void handleInput(String input){
+        currentState.handleInput(input);
+    }
+
+    public UserState getState(){
+        return currentState;
+    }
+
+    public void returnToUnregistered(){
+        setState(new UnregisteredState(this));
+    }
+
+    public void setState(UserState newState){
+        this.currentState = newState;
+        notifyObserversUI();
+    }
+
+    public void addObserverUI(InterfaceManager observer){
+        observersUI.add(observer);
+    }
+
+    public void removeObserverUI(InterfaceManager observer){
+        observersUI.remove(observer);
+    }
+
+    public void notifyObserversUI(){
+        for(InterfaceManager observer : observersUI){
+            observer.update(this);
+        }
+    }
+
+    // Osservatori per notificare file di log francesco
     public void addObserver(Observer observer) {
         observers.add(observer);
     }
@@ -75,6 +144,8 @@ public class UserManager {
     public boolean saveUsers(){
 
         if(this.fileHandle.exists()){
+            //formattazione corretta per file json
+            json.setOutputType(JsonWriter.OutputType.json);
             String jsonString = json.toJson(users);
             this.fileHandle.writeString(jsonString , false);
             return true;
@@ -93,18 +164,21 @@ public class UserManager {
             this.users.add(newUser);
             this.saveUsers();
             this.notifyUserAdded(newUser);
+            //eseguiamo automaticamente il login dopo la registrazione
+            loginUser(newUser.getUsername());
             return true;
         }
     }
 
     public boolean loginUser(String username){
         User user = this.findUserByName(username);
-
         if(user == null){
             System.out.println("L'utente non e' registrato nel sistema");
             return false;
         }
         this.notifyUserLogged(user);
+        setState(new LoggedInState(user, mediator));
+        this.notify("USER_LOGGED_IN", user);
         System.out.println("accesso effettuato con successo");
         return true;
     }
@@ -121,11 +195,14 @@ public class UserManager {
             if(fileHandle.exists()){
                 String jsStr = fileHandle.readString();
                 users = json.fromJson(ArrayList.class , User.class , jsStr);
-
             }
         if (users == null) {
             System.out.println("Attenzione: `users` è ancora null. Inizializzazione forzata.");
             users = new ArrayList<>();
+                if (users == null) {
+                    System.out.println("Attenzione: `users` è ancora null. Inizializzazione forzata.");
+                    users = new ArrayList<>();
+                }
         }
     }
 
@@ -170,8 +247,6 @@ public class UserManager {
         return null;
     }
 
-
-
     public static UserManager getInstance(){
 
         if(instance == null){
@@ -179,23 +254,5 @@ public class UserManager {
             return instance;
         }
         return instance;
-    }
-
-    public static void main(String[] args) {
-        UserManager userManager = UserManager.getInstance();
-        userManager.addObserver(new LoggingUserManagerObserver());
-        userManager.registerNewUser(new User("ciccio"));
-
-        userManager.registerNewUser(new User("pippo"));
-
-        userManager.loginUser("pippo");
-        userManager.loginUser("ciccio");
-
-        //userManager.showAllUsers();
-
-        userManager.deleteUser("mimmo");
-        userManager.updateUserData(new User("ciccio") , "pierpaolo");
-
-        userManager.readUsers();
     }
 }

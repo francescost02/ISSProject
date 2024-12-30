@@ -1,4 +1,5 @@
-USERMANAGER LOG FILE: 
+USERMANAGER LOG FILE:
+<<<<<<< HEAD
 0-L'utente, con username: ciccio non è stato registrato poichè già presente nel sistema.
 1-L'utente, con username: pippo non è stato registrato poichè già presente nel sistema.
 2-L'utente, con username: pippo ha effettuato il login con successo.

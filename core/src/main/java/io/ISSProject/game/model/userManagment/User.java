@@ -7,12 +7,9 @@ public class User implements Json.Serializable {
     private String username;
 
     //Questo costruttore serve per la deserializzazione dal file json
-    public User(){
-
-    }
+    public User(){}
 
     public User(String username){
-
         this.username = username;
     }
 
