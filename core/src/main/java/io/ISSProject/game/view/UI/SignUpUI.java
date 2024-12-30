@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.ISSProject.game.controller.ScreenController;
 import io.ISSProject.game.model.userManagment.UserManager;
 
@@ -26,7 +27,7 @@ public class SignUpUI extends ScreenAdapter {
     public SignUpUI(ScreenController controller) {
         this.controller = controller;
 
-        stage = new Stage(new FillViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        stage = new Stage(new ScreenViewport());
         skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
         Gdx.input.setInputProcessor(stage);
 
@@ -64,6 +65,7 @@ public class SignUpUI extends ScreenAdapter {
         Table contentTable = new Table();
         Container<Table> container = new Container<>(contentTable);
         container.setBackground(createColorBackground(new Color(0.3f, 0.3f, 0.3f, 0.9f)));
+        container.pad(40);
         /*
         container.setActor(table);
         // Dimensioni fisse o che si adattano alla schermata? Può dare problemi con diverse risoluzioni?
@@ -94,8 +96,8 @@ public class SignUpUI extends ScreenAdapter {
         registerButton.getLabel().setFontScale(1.5f);
 
         //Layout della tabella principale
-        mainTable.add(backButton).pad(20).top().left().expandX().row();
-        mainTable.add(container).expand().fill().pad(50);
+        mainTable.add(backButton).pad(20).top().left().row();
+        mainTable.add(container).center().pad(50);
 
         // Layout del contenuto
         contentTable.add(titleLabel).pad(30).row();

@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.ISSProject.game.controller.ScreenController;
 import io.ISSProject.game.model.userManagment.UserManager;
 
@@ -26,7 +27,7 @@ public class LoggingInUI extends ScreenAdapter {
     public LoggingInUI(ScreenController controller) {
         this.controller = controller;
 
-        stage = new Stage(new FillViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        stage = new Stage(new ScreenViewport());
         skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
         Gdx.input.setInputProcessor(stage);
 
@@ -45,11 +46,13 @@ public class LoggingInUI extends ScreenAdapter {
         stage.clear();
 
         // Crea la tabella per la UI
-        Table table = new Table();
-        table.setFillParent(true);
-        stage.addActor(table);
+        Table mainTable = new Table();
+        mainTable.setFillParent(true);
+        stage.addActor(mainTable);
 
-        TextButton backButton = new TextButton("<", skin);
+        //Pulsante per tornare indietro
+        TextButton backButton = new TextButton("Indietro", skin);
+        backButton.getLabel().setFontScale(1.5f);
 
         backButton.addListener(new ClickListener() {
             @Override
@@ -58,29 +61,32 @@ public class LoggingInUI extends ScreenAdapter {
             }
         });
 
-        table.add(backButton).pad(10).top().left().row();
+        Table contentTable = new Table();
+        Container<Table> container = new Container<>(contentTable);
+        container.setBackground(createColorBackground(new Color(0.3f, 0.3f, 0.3f, 0.9f)));
+        container.pad(40);
 
-        Container<Table> container = new Container<>();
-        container.setActor(table);
-        //dimensoni fisse o che si adattano alla schermata? Può dare problemi con diverse risoluzioni?
-        container.setSize(600, 400);
-        container.setPosition((Gdx.graphics.getWidth() - container.getWidth()) / 2, (Gdx.graphics.getHeight() - container.getHeight()) / 2);
-        //container.pad(20); avendo dimensioni fisse non influisce per ora
-        container.setBackground(createColorBackground(new Color(Color.GRAY)));
-        //fillX occupa tutta la larghezza disponibile, ha senso se utilizziamo dimensioni fisse
-        container.fillX();
-        container.fillY();
-
-        stage.addActor(container);
+        Label titleLabel = new Label("LOGIN", skin);
+        titleLabel.setFontScale(2.0f);
 
         Label usernameLabel = new Label("Inserisci il tuo username:", skin);
-        usernameField = new TextField("", skin); // Campo di input per l'username
-        TextButton confirmButton = new TextButton("Conferma Username", skin);
+        usernameLabel.setFontScale(1.5f);
 
-        // Aggiungi gli elementi alla tabella
-        table.add(usernameLabel).padBottom(10).row();
-        table.add(usernameField).width(200).padBottom(10).row(); // Aggiungi il campo username
-        table.add(confirmButton).padBottom(10).row(); // Aggiungi il pulsante di conferma
+        usernameField = new TextField("", skin); // Campo di input per l'username
+        usernameField.setScale(1.5f);
+
+        TextButton confirmButton = new TextButton("Conferma Username", skin);
+        confirmButton.getLabel().setFontScale(1.5f);
+
+        //Layout della tabella principale
+        mainTable.add(backButton).pad(20).top().left().row();
+        mainTable.add(container).center().pad(50);
+
+        // Layout del contenuto
+        contentTable.add(titleLabel).pad(30).row();
+        contentTable.add(usernameLabel).pad(20).row();
+        contentTable.add(usernameField).width(400).height(60).pad(20).row();
+        contentTable.add(confirmButton).width(300).height(70).pad(30).row();
 
         // Listener per il pulsante di conferma username
         confirmButton.addListener(new ClickListener() {

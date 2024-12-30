@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.ISSProject.game.controller.ScreenController;
 import io.ISSProject.game.controller.mediator.GameComponent;
 import io.ISSProject.game.controller.mediator.GameMediator;
@@ -47,7 +48,7 @@ public class LoggedInUI extends ScreenAdapter implements GameComponent{
         setMediator(mediator);
         this.controller = controller;
 
-        stage = new Stage(new FillViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        stage = new Stage(new ScreenViewport());
         skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
         Gdx.input.setInputProcessor(stage);
 
@@ -57,16 +58,14 @@ public class LoggedInUI extends ScreenAdapter implements GameComponent{
     // Metodo per creare la UI
     public void createUI() {
         stage.clear();
-        Table table = new Table();
-        table.setFillParent(true);
+        Table mainTable = new Table();
+        mainTable.setFillParent(true);
+        stage.addActor(mainTable);
 
-        Container<Table> container = new Container<>();
-        container.setActor(table);
-        container.setSize(600, 400);
-        container.setPosition((Gdx.graphics.getWidth() - container.getWidth()) / 2, (Gdx.graphics.getHeight() - container.getHeight()) / 2);
+        Table contentTable = new Table();
+        Container<Table> container = new Container<>(contentTable);
         container.setBackground(createColorBackground(new Color(Color.GRAY)));
-        container.fillX();
-        container.fillY();
+        container.pad(40);
 
         proceedButton = new TextButton("Vai al Menu", skin);
         proceedButton.addListener(new ClickListener(){
@@ -76,16 +75,19 @@ public class LoggedInUI extends ScreenAdapter implements GameComponent{
             }
                                   });
 
-        container.setActor(table);
-        stage.addActor(container);
 
         // Elementi base
         Label welcomeLabel = new Label("Benvenuto!", skin);
         Label infoLabel = new Label("Sei autenticato. Qui potrai accedere alle funzionalità disponibili.", skin);
 
-        table.add(proceedButton).padTop(20).row();
-        table.add(welcomeLabel).padBottom(15).row();
-        table.add(infoLabel).padBottom(20).row();
+        //Layout contenuto
+        contentTable.defaults().pad(10);
+        contentTable.add(welcomeLabel).padBottom(15).row();
+        contentTable.add(infoLabel).padBottom(20).row();
+        contentTable.add(proceedButton).padTop(20).row();
+
+        //Aggiunge container alla tabella principale centrandolo
+        mainTable.add(container).expand().center();
     }
 
     @Override
