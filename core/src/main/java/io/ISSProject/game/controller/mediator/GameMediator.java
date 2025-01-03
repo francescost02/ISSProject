@@ -39,6 +39,9 @@ public class GameMediator {
             case "USER_LOGIN_REQUESTED":
                 userManager.selectLoginPath();
                 break;
+            case"LOGIN_ERROR":
+                screenController.showErrorNotification((String)data[0]);
+                break;
             case "USER_REGISTRATION_REQUESTED":
                 userManager.selectRegistrationPath();
                 break;

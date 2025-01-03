@@ -45,20 +45,29 @@ public class UserManager implements GameComponent {
 
 
     public UserManager(){
+        //Inizializza il json
+        this.json = new Json();
 
         this.filePath = "assets/json/users.json";
         fileHandle = new FileHandle(new File(filePath));
 
+        //Inizializza lista degli utenti
+        this.users = new ArrayList<>();
+
+        //Inizializza lista degli osservatori
+        this.observers = new ArrayList<>();
+        this.observersUI = new ArrayList<>();
+
+        //Gestione del file
         if(!fileHandle.exists()){
-            this.fileHandle.writeString("" , false);
-            System.out.println("File json creato");
+            //this.fileHandle.writeString("" , false);
+            saveUsers(); //Salva una lista vuota in formato JSON
+            System.out.println("File json creato con lista vuota");
+        } else{
+            readUsers();
         }
 
-        this.json = new Json();
-        this.users = new ArrayList<>();
-        this.observers = new ArrayList<>();
-
-        observersUI = new ArrayList<>();
+        //Stato iniziale
         currentState = new UnregisteredState(this);
     }
 
@@ -191,18 +200,30 @@ public class UserManager implements GameComponent {
     }
 
     public void readUsers(){
-
-            if(fileHandle.exists()){
+        try{
+            if (fileHandle.exists()){
+                //Legge il contenuto del file Json,
+                //se non vuoto viene creata una lista di utenti
                 String jsStr = fileHandle.readString();
-                users = json.fromJson(ArrayList.class , User.class , jsStr);
-            }
-        if (users == null) {
-            System.out.println("Attenzione: `users` è ancora null. Inizializzazione forzata.");
-            users = new ArrayList<>();
-                if (users == null) {
-                    System.out.println("Attenzione: `users` è ancora null. Inizializzazione forzata.");
-                    users = new ArrayList<>();
+                if(!jsStr.trim().isEmpty()){
+                    List<User> loadedUsers = json.fromJson(ArrayList.class, User.class, jsStr);
+                    // Se la lista di utenti iscriti non è un puntatore a null, viene utilizzata
+                    // per ottenre il riferimento alla corrente lista di utenti
+                    if (loadedUsers != null){
+                        users = loadedUsers;
+                        return;
+                    }
                 }
+            }
+        } catch (Exception e){
+            System.err.println("Errore nella lettura degli utenti: "+ e.getMessage());
+            e.printStackTrace();
+        }
+
+        // se la lista di utenti è vuota quando viene chiamato readUsers() essa viene inizializzata
+        // con una lista vuota
+        if (users == null) {
+            users = new ArrayList<>();
         }
     }
 

@@ -31,6 +31,7 @@ public class ScreenController implements InterfaceManager {
 
     public void submitRegistration(String username){
         userManager.handleInput(username);
+
     }
 
 
@@ -42,6 +43,17 @@ public class ScreenController implements InterfaceManager {
 
     public void goBackToUnregistered(){
         userManager.returnToUnregistered();
+    }
+
+    @Override
+    public void showErrorNotification(String errorMessage){
+        Stage stage = game.getCurrentStage();
+        if (stage!= null) {
+            showNotification("Errore", errorMessage, stage);
+        } else{
+            System.err.println("Impossibile mostrare il messaggio di erroe, stage null");
+        }
+
     }
 
     public void showNotification(String title, String message, Stage stage){

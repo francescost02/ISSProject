@@ -10,7 +10,9 @@ import io.ISSProject.game.controller.mainMenuCommand.MainMenuController2;
 import io.ISSProject.game.controller.mediator.GameMediator;
 import io.ISSProject.game.controller.menuState.GameContext;
 import io.ISSProject.game.model.userManagment.UserManager;
+import io.ISSProject.game.view.UI.LoggingInUI;
 import io.ISSProject.game.view.UI.UnregisteredUI;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class MainGame extends Game {
@@ -43,6 +45,13 @@ public class MainGame extends Game {
         mainMenuController.setMediator(mediator);
 
         mediator.notify(null, "SHOW_UNREGISTERED_SCREEN");
+    }
+
+    public Stage getCurrentStage(){
+        if (getScreen() instanceof LoggingInUI){
+            return ((LoggingInUI) getScreen()).getStage();
+        }
+        return null;
     }
 
     @Override

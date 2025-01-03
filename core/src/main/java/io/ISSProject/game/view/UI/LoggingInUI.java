@@ -98,7 +98,7 @@ public class LoggingInUI extends ScreenAdapter {
                 }
 
                 controller.submitRegistration(username);
-                System.out.println("Username confermato: " + username);
+                //System.out.println("Username confermato: " + username);
 
 
             }
@@ -118,6 +118,10 @@ public class LoggingInUI extends ScreenAdapter {
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
+    }
+
+    public Stage getStage(){
+        return stage;
     }
 
     private Drawable createColorBackground(Color color) {
