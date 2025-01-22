@@ -3,6 +3,7 @@ package io.ISSProject.game.lwjgl3;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import io.ISSProject.game.Prova;
 import io.ISSProject.game.view.*;
 import io.ISSProject.game.view.MainGame;
 

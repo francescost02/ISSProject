@@ -11,7 +11,8 @@ public class MainMenuState implements GameState {
 
     public MainMenuState (GameContext gameContext) {
         this.gameContext = gameContext;
-        gameContext.changeState(this); // Passa allo stato MainMenu
+        // Il Mediator già si occupa di gestire il cambio di stato, questa chiamata è ridondante
+        //gameContext.changeState(this); // Passa allo stato MainMenu
     }
     @Override
     public void exit() {

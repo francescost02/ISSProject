@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
+import io.ISSProject.game.controller.GameplayController;
 import io.ISSProject.game.controller.ScreenController;
 import io.ISSProject.game.controller.mainMenuCommand.MainMenuController2;
 import io.ISSProject.game.controller.mediator.GameMediator;
@@ -23,6 +24,7 @@ public class MainGame extends Game {
     private GameContext gameContext;
     private UserManager userManager;
     private ScreenController screenController;
+    private GameplayController gameplayController;
 
     @Override
     public void create() {
@@ -31,6 +33,7 @@ public class MainGame extends Game {
         userManager = UserManager.getInstance();
         mainMenuController = new MainMenuController2(gameContext);
         screenController = new ScreenController(this);
+        gameplayController = new GameplayController(gameContext);
 
         //configurazione del mediatore
         mediator = new GameMediator(this);
@@ -40,9 +43,12 @@ public class MainGame extends Game {
             mainMenuController,
             userManager,
             gameContext,
-            screenController);
+            screenController,
+            gameplayController);
 
         mainMenuController.setMediator(mediator);
+
+        gameplayController.setMediator(mediator);
 
         mediator.notify(null, "SHOW_UNREGISTERED_SCREEN");
     }

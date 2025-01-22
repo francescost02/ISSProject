@@ -10,6 +10,8 @@ import io.ISSProject.game.controller.exitMenuStrategy.CancelStrategy;
 import io.ISSProject.game.controller.exitMenuStrategy.CloseWithoutSavingStrategy;
 import io.ISSProject.game.controller.exitMenuStrategy.SaveAndCloseStrategy;
 import io.ISSProject.game.controller.mainMenuCommand.MainMenuController2;
+import io.ISSProject.game.controller.mediator.GameComponent;
+import io.ISSProject.game.controller.mediator.GameMediator;
 import io.ISSProject.game.controller.menuState.ExitMenuState;
 import io.ISSProject.game.controller.menuState.GameContext;
 import io.ISSProject.game.controller.menuState.GameState;
@@ -20,7 +22,7 @@ import io.ISSProject.game.view.settingsMenu.SettingsView;
 
 
 // CONTROLLER
-public class SettingsController {
+public class SettingsController implements GameComponent {
     private final SettingsModel model;
     private final SettingsView settingMenuView;
     private final GameContext gameContext;
@@ -29,6 +31,7 @@ public class SettingsController {
     private Command setResolutionCommand;
     private Command setVolumeCommand;
     private Command toggleMuteCommand;
+    private GameMediator mediator;
 
     public SettingsController(GameContext gameContext) {
 
@@ -82,15 +85,30 @@ public class SettingsController {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 settingsMenuState.exit();
+                /*
+                if(mediator!=null){
+                    mediator.notify(SettingsController.this, "RETURN_TO_MAIN_MENU");
+                }
+
+                 */
+
                 BackCommand command = new BackCommand(settingsMenuState);
                 command.execute();
 
+                if (mediator!=null){
+                    mediator.notify(SettingsController.this, "RETURN_TO_MAIN_MENU");
+                }
+
+                /*
                 // Torna alla schermata principale
                 Game game = (Game) Gdx.app.getApplicationListener();
                 MainMenuController2 mainMenuController = new MainMenuController2(gameContext);
                 game.setScreen(mainMenuController.getScreen());
                 // Aggiorna l'InputProcessor per il menu principale
                 Gdx.input.setInputProcessor(mainMenuController.getScreen().getStage());
+
+                 */
+
             }
         });
     }
@@ -113,6 +131,18 @@ public class SettingsController {
 
     public Screen getScreen() {
         return settingMenuView;
+    }
+
+    @Override
+    public void setMediator(GameMediator mediator){
+        this.mediator = mediator;
+    }
+
+    @Override
+    public void notify(String event, Object...data){
+        if(mediator != null){
+            mediator.notify(this, event, data);
+        }
     }
 }
 

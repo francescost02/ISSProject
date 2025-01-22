@@ -72,6 +72,7 @@ public class MainMenuView2 implements Screen {
 
         // Aggiungere uno sfondo personalizzato (opzionale)
         rootTable.setBackground(new TextureRegionDrawable(new Texture(Gdx.files.internal("images/background-menu-tmp.jpg"))));
+        rootTable.setDebug(true);
     }
 
     @Override
@@ -80,6 +81,10 @@ public class MainMenuView2 implements Screen {
          con questo codice ci assicuriamo che il gestore di input venga correttamente associato alla UI mostrata
          */
         Gdx.input.setInputProcessor(stage);
+
+        if (stage.getActors().get(0) != null) {
+            stage.getActors().get(0).setTouchable(Touchable.enabled);
+        }
     }
 
     @Override
@@ -97,6 +102,9 @@ public class MainMenuView2 implements Screen {
     @Override
     public void hide() {
         // Pulisce o resetta la schermata quando viene nascosta
+        if (stage.getActors().get(0) != null) {
+            stage.getActors().get(0).setTouchable(Touchable.disabled);
+        }
     }
 
     @Override

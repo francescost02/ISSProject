@@ -4,3 +4,4 @@ package io.ISSProject.game.controller.menuState;
 public interface GameState {
     void exit();
 }
+

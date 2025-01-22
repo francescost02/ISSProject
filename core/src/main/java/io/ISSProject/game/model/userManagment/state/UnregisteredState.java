@@ -15,12 +15,12 @@ public class UnregisteredState implements UserState {
 
     @Override
     public void handleInput(String input){
-
     }
 
     @Override
     public Screen getUIScreen(ScreenController controller){
         return new UnregisteredUI(controller);
     }
+
 }
 

@@ -1,10 +1,16 @@
 package io.ISSProject.game.controller.mediator;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import io.ISSProject.game.ClueNotification;
+import io.ISSProject.game.controller.GameplayController;
 import io.ISSProject.game.controller.ScreenController;
 import io.ISSProject.game.controller.mainMenuCommand.MainMenuController2;
 import io.ISSProject.game.controller.menuState.GameContext;
 import io.ISSProject.game.controller.menuState.MainMenuState;
+import io.ISSProject.game.model.GameplayState.BrotherLivingRoomState;
 import io.ISSProject.game.model.userManagment.UserManager;
 import io.ISSProject.game.view.UI.UnregisteredUI;
 
@@ -14,6 +20,7 @@ public class GameMediator {
     private GameContext gameContext;
     private ScreenController screenController;
     private Game game;
+    private GameplayController gameplayController;
 
     public GameMediator(Game game) {
         this.game = game;
@@ -23,11 +30,13 @@ public class GameMediator {
         MainMenuController2 menuController,
         UserManager userManager,
         GameContext gameContext,
-        ScreenController screenController) {
+        ScreenController screenController,
+        GameplayController gameplayController) {
         this.menuController = menuController;
         this.userManager = userManager;
         this.gameContext = gameContext;
         this.screenController = screenController;
+        this.gameplayController = gameplayController;
     }
 
     public void notify(GameComponent sender, String event, Object... data) {
@@ -52,9 +61,25 @@ public class GameMediator {
             case "RETURN_TO_UNREGISTERED":
                 userManager.returnToUnregistered();
                 break;
-            case "MENU_STATE_CHANGED":
-                screenController.update(userManager);
+            case "START_NEW_GAME":
+                gameContext.changeState(new BrotherLivingRoomState(gameContext));
+                game.setScreen(gameplayController.getScreen());
                 break;
+            case "RETURN_TO_MAIN_MENU":
+                if(menuController != null){
+                    gameContext.changeState(new MainMenuState(gameContext));
+                    game.setScreen(menuController.getScreen());
+                    //Gdx.input.setInputProcessor(menuController.getScreen().getStage());
+                }
+                break;
+            case "CLUE_FOUND":
+                String clueTitle = (String) data[0];
+                Stage currentStage = gameplayController.getScreen().getStage();
+                Skin skin = gameplayController.getScreen().getSkin();
+                new ClueNotification(clueTitle, skin, currentStage);
+                break;
+
+
         }
     }
 }

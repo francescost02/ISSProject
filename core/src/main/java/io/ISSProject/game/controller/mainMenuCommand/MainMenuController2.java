@@ -28,11 +28,11 @@ public class MainMenuController2 implements GameComponent {
         AudioManager.getInstance().playMusic();
         this.gameContext = gameContext;
         this.mainMenuView = new MainMenuView2();
-        addListeners();
+        //addListeners();
 
         //this.mainMenuState = new MainMenuState(this.mainMenuState.getGameContext());
         //this.mainMenuReceiver = new MainMenuReceiver(this.mainMenuState.getGameContext());
-        this.mainMenuReceiver = new MainMenuReceiver(gameContext);
+        //this.mainMenuReceiver = new MainMenuReceiver(gameContext);
         this.mainMenuState = new MainMenuState(gameContext);
     }
 
@@ -42,9 +42,10 @@ public class MainMenuController2 implements GameComponent {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 //mainMenuState.getGameContext().exit();
-                gameContext.exit();
+                //gameContext.exit();
                 NewGameCommand command = new NewGameCommand(mainMenuReceiver);
                 command.execute();
+                mediator.notify(MainMenuController2.this, "START_NEW_GAME");
             }
         });
 
@@ -83,6 +84,9 @@ public class MainMenuController2 implements GameComponent {
     @Override
     public void setMediator(GameMediator mediator) {
         this.mediator = mediator;
+
+        this.mainMenuReceiver = new MainMenuReceiver(gameContext, mediator);
+        addListeners();
     }
 
     @Override

@@ -53,12 +53,6 @@ public class UnregisteredUI extends ScreenAdapter {
         Label subMessageLabel = new Label("Accedi o registrati per iniziare a giocare.", skin);
         TextButton loginButton = new TextButton("Accedi", skin);
         TextButton registerButton = new TextButton("Registrati", skin);
-/*
-        messageLabel.setFontScale(1.5f);
-        subMessageLabel.setFontScale(1.5f);
-        loginButton.getLabel().setFontScale(1.5f);
-        registerButton.getLabel().setFontScale(1.5f);
- */
 
         table.center();
         table.add(messageLabel).padBottom(15).row();
