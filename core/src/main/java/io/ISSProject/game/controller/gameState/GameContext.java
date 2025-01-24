@@ -1,4 +1,4 @@
-package io.ISSProject.game.controller;
+package io.ISSProject.game.controller.gameState;
 
 import io.ISSProject.game.controller.gameState.BrotherLivingRoomState;
 import io.ISSProject.game.controller.gameState.GameState;
@@ -15,26 +15,32 @@ public class GameContext {
         this.currentState = new MainMenuState(this);
     }
 
-    public void changeState(GameState state) {
-        this.currentState = state;
-        System.out.println("Stato corrente: " + this.currentState.getClass().getSimpleName());
-
-        // Se lo stato corrente ha una scena associata, aggiornala nel contesto
-        if (state instanceof BrotherLivingRoomState) {
-            this.currentScene = ((BrotherLivingRoomState) state).getCurrentScene();
-        } else {
-            this.currentScene = null;
+    public void changeState(GameState newState) {
+        if (currentState != null) {
+            currentState.exit();  // Uscita dallo stato precedente
         }
+
+        this.currentState = newState;
+
+        // Aggiorna la scena associata automaticamente
+        this.currentScene = newState.getAssociatedScene();
+
+        System.out.println("Stato corrente: " + this.currentState.getClass().getSimpleName());
     }
+
     public void exit() {
         if (currentState != null) {
             currentState.exit();
         }
     }
+
     public GameState getCurrentState() {
         return currentState;
     }
-    public Scene getCurrentScene () { return currentScene;}
+
+    public Scene getCurrentScene() {
+        return currentScene;
+    }
 }
 
 

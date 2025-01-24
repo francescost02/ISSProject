@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 
-import io.ISSProject.game.controller.GameContext;
+import io.ISSProject.game.controller.gameState.GameContext;
 
 public class MainMenuCommandTest {
 

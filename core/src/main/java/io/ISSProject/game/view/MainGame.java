@@ -6,7 +6,7 @@ import io.ISSProject.game.controller.GameplayController;
 import io.ISSProject.game.controller.ScreenController;
 import io.ISSProject.game.controller.mainMenuCommand.MainMenuController2;
 import io.ISSProject.game.controller.mediator.GameMediator;
-import io.ISSProject.game.controller.GameContext;
+import io.ISSProject.game.controller.gameState.GameContext;
 import io.ISSProject.game.model.Scene;
 import io.ISSProject.game.model.userManagment.UserManager;
 import io.ISSProject.game.view.UI.LoggingInUI;

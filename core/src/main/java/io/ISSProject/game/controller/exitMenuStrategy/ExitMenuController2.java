@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import io.ISSProject.game.controller.mainMenuCommand.MainMenuController2;
 import io.ISSProject.game.controller.gameState.ExitMenuState;
-import io.ISSProject.game.controller.GameContext;
+import io.ISSProject.game.controller.gameState.GameContext;
 import io.ISSProject.game.controller.gameState.GameState;
 import io.ISSProject.game.view.ExitMenuView2;
 

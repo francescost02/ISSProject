@@ -7,7 +7,7 @@ import io.ISSProject.game.ClueNotification;
 import io.ISSProject.game.controller.GameplayController;
 import io.ISSProject.game.controller.ScreenController;
 import io.ISSProject.game.controller.mainMenuCommand.MainMenuController2;
-import io.ISSProject.game.controller.GameContext;
+import io.ISSProject.game.controller.gameState.GameContext;
 import io.ISSProject.game.controller.gameState.MainMenuState;
 import io.ISSProject.game.controller.gameState.BrotherLivingRoomState;
 import io.ISSProject.game.model.Clue;

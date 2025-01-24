@@ -2,7 +2,7 @@ package io.ISSProject.game.controller.gameState;
 
 //import io.test.controller.mainMenuCommand.MainMenuInvoker;
 
-import io.ISSProject.game.controller.GameContext;
+import io.ISSProject.game.model.Scene;
 
 public class MainMenuState implements GameState {
 
@@ -19,5 +19,9 @@ public class MainMenuState implements GameState {
     @Override
     public void exit() {
         System.out.println ("Uscita da MainMenuState");
+    }
+
+    public Scene getAssociatedScene() {
+        return null;  // Nessuna scena associata al menu principale
     }
 }

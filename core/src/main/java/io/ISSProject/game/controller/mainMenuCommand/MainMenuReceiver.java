@@ -4,7 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import io.ISSProject.game.controller.exitMenuStrategy.ExitMenuController2;
 import io.ISSProject.game.controller.mediator.GameMediator;
-import io.ISSProject.game.controller.GameContext;
+import io.ISSProject.game.controller.gameState.GameContext;
 import io.ISSProject.game.controller.settingsMenuController.SettingsController;
 
 public class MainMenuReceiver {

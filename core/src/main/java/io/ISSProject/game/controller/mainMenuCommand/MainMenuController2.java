@@ -4,7 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import io.ISSProject.game.controller.mediator.GameComponent;
 import io.ISSProject.game.controller.mediator.GameMediator;
-import io.ISSProject.game.controller.GameContext;
+import io.ISSProject.game.controller.gameState.GameContext;
 import io.ISSProject.game.controller.gameState.MainMenuState;
 import io.ISSProject.game.model.settingsMenuModel.AudioManager;
 import io.ISSProject.game.view.MainMenuView2;

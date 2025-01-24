@@ -3,7 +3,7 @@ package io.ISSProject.game.view;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import io.ISSProject.game.controller.mainMenuCommand.MainMenuController2;
-import io.ISSProject.game.controller.GameContext;
+import io.ISSProject.game.controller.gameState.GameContext;
 
 public class MainGame2 extends Game {
     private SpriteBatch batch;

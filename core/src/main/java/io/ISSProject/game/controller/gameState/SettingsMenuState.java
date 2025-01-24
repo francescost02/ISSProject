@@ -1,6 +1,6 @@
 package io.ISSProject.game.controller.gameState;
 
-import io.ISSProject.game.controller.GameContext;
+import io.ISSProject.game.model.Scene;
 
 public class SettingsMenuState implements GameState {
     private final GameContext gameContext;
@@ -21,5 +21,9 @@ public class SettingsMenuState implements GameState {
 
     public GameContext getGameContext() {
         return gameContext;
+    }
+
+    public Scene getAssociatedScene() {
+        return null;  // Nessuna scena associata al menu principale
     }
 }
