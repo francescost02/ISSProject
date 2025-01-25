@@ -9,6 +9,7 @@ import io.ISSProject.game.model.Scene;
 public class GameContext {
     private GameState currentState;
     private Scene currentScene;
+    private Scene savedScene; // Aggiungi questa variabile per salvare la scena
 
     public GameContext() {
         // Imposta lo stato iniziale durante l'istanza
@@ -19,7 +20,6 @@ public class GameContext {
         if (currentState != null) {
             currentState.exit();  // Uscita dallo stato precedente
         }
-
         this.currentState = newState;
 
         // Aggiorna la scena associata automaticamente
@@ -33,6 +33,17 @@ public class GameContext {
             currentState.exit();
         }
     }
+
+    public void saveCurrentState() {
+        this.savedScene = this.currentScene;
+    }
+
+    public void restorePreviousState() {
+        if (this.savedScene != null) {
+            this.currentScene = this.savedScene;
+        }
+    }
+
 
     public GameState getCurrentState() {
         return currentState;

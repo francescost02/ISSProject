@@ -8,11 +8,10 @@ import io.ISSProject.game.model.Scene;
 public class BrotherLivingRoomState implements GameState {
     private final GameContext gameContext;
     private Scene currentScene;  // scena con oggetti interattivi
-    private GameplayController controller;
 
     public BrotherLivingRoomState(GameContext gameContext) {
         this.gameContext = gameContext;
-        this.currentScene = new Scene("Brother's Living Room", 2);  // imposta nome e indizi
+        this.currentScene = new Scene("Brother's Living Room", 1);  // imposta nome e indizi
 
         // Aggiungi indizi alla scena
         Clue lamp = new Clue("Una lampada vintage", "Una lampada vintage...non credo mi possa aiutare nella risoluzione di questo caso.");

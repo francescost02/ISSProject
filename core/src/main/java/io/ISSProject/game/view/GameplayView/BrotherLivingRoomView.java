@@ -1,6 +1,7 @@
 package io.ISSProject.game.view.GameplayView;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -13,64 +14,67 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.utils.viewport.*;
 import io.ISSProject.game.model.Clue;
 import io.ISSProject.game.model.InteractiveObject;
-import io.ISSProject.game.model.Scene;
 import io.ISSProject.game.model.SceneObject;
 import io.ISSProject.game.view.DialogWindow;
 import io.ISSProject.game.controller.GameplayController;
 
 public class BrotherLivingRoomView extends ScreenAdapter {
-    private Stage stage;
-    private Skin skin;
+    private final Stage stage;
+    private final Skin skin;
     private Table mainTable;
-    private Table gameArea;
     private DialogWindow dialogWindow;
-    private Texture backgroundTexture;
-    private GameplayController controller;
-    private Scene currentScene;
-    private Vector2 tempCoords = new Vector2();
+    private final GameplayController controller;
+    private final Texture backgroundTexture;
+    private final Vector2 tempCoords = new Vector2();
+    private Table gameArea;
+    private Table overlayArea;
+    private TextButton pauseButton; // Pulsante di pausa
 
     public BrotherLivingRoomView(GameplayController controller) {
         this.controller = controller;
-        stage = new Stage(new FitViewport(800, 600));
-        skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
-        backgroundTexture = new Texture(Gdx.files.internal("images/BrotherLivingRoom.jpeg"));
-        dialogWindow = new DialogWindow(skin);
+        this.stage = new Stage(new FitViewport(800, 600));
+        this.skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
+        this.backgroundTexture = new Texture(Gdx.files.internal("images/BrotherLivingRoom.jpeg"));
+        this.dialogWindow = new DialogWindow(skin);
+
+        // Inizializzazione del pulsante pausa
+       this.pauseButton = new TextButton("Pause", skin);
     }
 
     public void setupUI() {
         stage.clear();
         setupLayout();
         setupInteractiveObjects();
-        //stage.setDebugAll(true);
     }
 
-
     private void setupLayout() {
-        // Table principale che occupa tutto lo schermo
         mainTable = new Table();
         mainTable.setFillParent(true);
 
-        // Area di gioco (parte superiore)
         gameArea = new Table();
+        mainTable.add(gameArea).expandX().fill().height(stage.getHeight() * 0.7f).row();
+        mainTable.add(dialogWindow).expandX().fill().height(stage.getHeight() * 0.3f).row();
 
-        mainTable.add(gameArea).expandX().fill().height(stage.getHeight()*0.7f).row(); // Aggiunge gameArea al layout
-        mainTable.add(dialogWindow).expandX().fill().height(stage.getHeight()*0.3f).row();
-
+        overlayArea = new Table(); // crea un'area separata per il pulsante pausa
         stage.addActor(mainTable);
 
+        // Configura l'overlay (per esempio, il pulsante di pausa)
+        pauseButton.setSize(100, 40); // Dimensioni del pulsante
+        pauseButton.setPosition(stage.getViewport().getWorldWidth() - 120, stage.getViewport().getWorldHeight() - 50); // Posizionato in alto a destra
+
+        // Aggiungi il pulsante di pausa allo stage
+        overlayArea.addActor(pauseButton);
+        stage.addActor(overlayArea);
     }
 
     private void setupInteractiveObjects() {
-        //Container per ottenre coordinate assolute
         Table interactiveLayer = new Table();
 
-        // Crea attori trasparenti per le aree interattive
-        // Creazione degli oggetti interattivi
+        // Crea attori per le aree interattive (simile a prima)
         Clue lamp = new Clue(
             "una lampada vintage",
             "Una lampada vintage...non credo mi possa aiutare nella risoluzione di questo caso."
         );
-
         InteractiveObject book = new SceneObject(
             "Un antico libro sulla magia...",
             "Un antico libro sulla magia...chissà se esiste qualche incantesimo per avere una giornata normale ogni tanto."
@@ -86,23 +90,18 @@ public class BrotherLivingRoomView extends ScreenAdapter {
             "Questa chiave sembra importante... potrei usarla per qualcosa."
         );
 
-        // Aggiunta degli attori
         Actor lampActor = controller.createInteractiveArea(lamp);
         Actor bookActor = controller.createInteractiveArea(book);
         Actor paintingActor = controller.createInteractiveArea(painting);
-        Actor keyActor = controller.createInteractiveArea(key);
 
-
-        //Stack per sovrapporre lo sfondo e gli oggetti interattivi
         Stack gameStack = new Stack();
         gameStack.add(new Image(backgroundTexture));
         gameStack.add(interactiveLayer);
 
-
         // Usa un approccio relativo per il posizionamento
         lampActor.setPosition(
             599f / 800f * stage.getViewport().getWorldWidth(),
-            127f / 600f * stage.getViewport().getWorldHeight() * 0.7f // Moltiplica per 0.7f perché gameArea occupa il 70%
+            127f / 600f * stage.getViewport().getWorldHeight() * 0.7f
         );
         lampActor.setSize(
             40f / 800f * stage.getViewport().getWorldWidth(),
@@ -134,122 +133,46 @@ public class BrotherLivingRoomView extends ScreenAdapter {
 
         gameArea.add(gameStack).expand().fill();
     }
-
-    public Skin getSkin(){
-        return skin;
-    }
-
-    /*
-    private Actor createInteractiveArea(String tooltipText, String dialogText) {
-        Actor actor = new Actor();
-        actor.setTouchable(Touchable.enabled);
-
-        //actor.setDebug(true);
-
-        // Aggiungi tooltip
-        TextTooltip tooltip = new TextTooltip(tooltipText, skin);
-        tooltip.setInstant(true);
-        actor.addListener(tooltip);
-
-        // Aggiungi listener per il click nel controller
-        actor.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                System.out.println("Area clicked " + tooltipText);
-                dialogWindow.updateText(dialogText);
-            }
-        });
-
-        return actor;
-    }
-
-     */
-
-    @Override
-    public void resize(int width, int height) {
-        // Aggiorna il viewport
-        stage.getViewport().update(width, height, true);
-
-    }
-
     @Override
     public void render(float delta) {
-        // Pulisci lo schermo
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // Aggiorna e disegna lo stage
-        stage.act(Gdx.graphics.getDeltaTime());
+        stage.act(delta);
         stage.draw();
     }
 
+    @Override
+    public void show() {
+        Gdx.input.setInputProcessor(stage);
+        setupUI();
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        stage.getViewport().update(width, height, true);
+    }
+
+    @Override
     public void dispose() {
         stage.dispose();
         skin.dispose();
         backgroundTexture.dispose();
     }
 
-    @Override
-    public void show(){
-        Gdx.input.setInputProcessor(stage);
-        setupUI();
-
-        // Listener per ottenere la posizione in cui clicco e posizionare gli attori, TEMPORANEO
-        stage.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                // Coordinate assolute del clic nello stage
-                Vector2 localCoords = stageToGameAreaCoordinates(x, y);
-
-                //Prima verifichiamo seil click è nell'area di ame
-                if (isClickInGameArea(localCoords)) {
-                    System.out.println("Coordinate stage:(" + x + "," + y + ")");
-                    System.out.println("Coordinate locali di GameArea:(" + localCoords.x + "," + localCoords.y + ")");
-
-                    //Conversione in coordinate relaitve, in modo che la poizione sia sempre coerente indifferentementa dalla dimensione della schermata
-                    Vector2 relativeCoords = gameAreaToRelativeCoordinates(localCoords);
-                    System.out.println("Relative coordinates (0-1): (" + relativeCoords.x + "," + relativeCoords.y + ")");
-                }
-            }
-        });
+    public Skin getSkin() {
+        return skin;
     }
 
-    private Vector2 stageToGameAreaCoordinates(float stageX, float stageY){
-        tempCoords.set(stageX, stageY);
-        // Converti le coordinate dello stage in coordinate locali della gameArea
-        Vector2 localCoords = gameArea.stageToLocalCoordinates(tempCoords);
-
-        // Aggiusta le coordinate Y per tenere conto che gameArea occupa solo il 70% dell'altezza
-        localCoords.y = localCoords.y / 0.7f;
-
-        return localCoords;
-
-    }
-
-    private Vector2 gameAreaToRelativeCoordinates(Vector2 localCoords) {
-        // Converti le coordinate locali in coordinate relative (0-1)
-        return new Vector2(
-            localCoords.x / gameArea.getWidth(),
-            localCoords.y / gameArea.getHeight()
-        );
-    }
-
-    private boolean isClickInGameArea(Vector2 localCoords) {
-        return localCoords.x >= 0 && localCoords.x <= gameArea.getWidth() &&
-            localCoords.y >= 0 && localCoords.y <= gameArea.getHeight();
-    }
-
-    public Table getGameArea(){
-        return gameArea;
-    }
-
-    public DialogWindow getDialogWindow(){
-        return dialogWindow;
-    }
-
-    public Stage getStage(){
+    public Stage getStage() {
         return stage;
     }
 
+    public DialogWindow getDialogWindow() {
+        return dialogWindow;
+    }
 
+    public TextButton getPauseButton() {
+        return pauseButton;
+    }
 }

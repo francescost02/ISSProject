@@ -4,11 +4,10 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.*;
+import io.ISSProject.game.controller.exitMenuStrategy.ExitMenuController2;
+import io.ISSProject.game.controller.gameState.*;
 import io.ISSProject.game.controller.mediator.GameComponent;
 import io.ISSProject.game.controller.mediator.GameMediator;
-import io.ISSProject.game.controller.gameState.GameContext;
-import io.ISSProject.game.controller.gameState.GameState;
-import io.ISSProject.game.controller.gameState.SettingsMenuState;
 import io.ISSProject.game.model.settingsMenuModel.SettingsModel;
 import io.ISSProject.game.view.settingsMenu.SettingsView;
 
@@ -31,7 +30,6 @@ public class SettingsController implements GameComponent {
         //this.view = new SettingsView(model.getAssetManager().getSkin());
         this.settingMenuView = new SettingsView();
         this.gameContext = gameContext;
-
         this.currentState = gameContext.getCurrentState(); //recupera lo stato corrente
         this.settingsMenuState = new SettingsMenuState(currentState, gameContext);
 
@@ -87,8 +85,22 @@ public class SettingsController implements GameComponent {
                 BackCommand command = new BackCommand(settingsMenuState);
                 command.execute();
 
-                if (mediator!=null){
-                    mediator.notify(SettingsController.this, "RETURN_TO_MAIN_MENU");
+                if (mediator!=null) {
+                    // Verifica lo stato precedente
+                    GameState previousState = settingsMenuState.getPreviousState();
+
+                    // Se lo stato precedente è il menu principale
+                    if (previousState instanceof MainMenuState) {
+                        mediator.notify(SettingsController.this, "RETURN_TO_MAIN_MENU");
+                    }
+                    // Se lo stato precedente è il menu di pausa
+                    else if (previousState instanceof PauseMenuState) {
+                        mediator.notify(SettingsController.this, "RETURN_TO_PAUSE_MENU");
+                    }
+                }
+                else {
+                    // Gestione di altri eventi
+                    System.out.println("Evento non gestito: " + event);
                 }
 
                 /*

@@ -42,6 +42,7 @@ public class MainMenuReceiver {
 
         // Logica per uscire dal gioco
         ExitMenuController2 exitMenuController = new ExitMenuController2(gameContext);
+        exitMenuController.setMediator(mediator);
         Game game = (Game) Gdx.app.getApplicationListener(); // Ottieni l'oggetto Game corrente
         game.setScreen(exitMenuController.getScreen()); // Imposta la schermata di uscita
     }

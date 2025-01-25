@@ -4,7 +4,6 @@ import io.ISSProject.game.controller.gameState.GameState;
 import io.ISSProject.game.controller.gameState.SettingsMenuState;
 
 public class BackCommand implements Command {
-    private SettingsController settingsController;
     private SettingsMenuState settingsMenuState;
 
     public BackCommand (SettingsMenuState settingsMenuState) {
@@ -13,7 +12,7 @@ public class BackCommand implements Command {
 
     @Override
     public void execute() {
-        System.out.println("Uscita cancellata. Ritorna allo stato precedente.");
+        System.out.println("Uscita cancellata. Ritorna allo stato "+ settingsMenuState.getPreviousState().getClass().getSimpleName());
 
         // Recupera lo stato precedente
         GameState previousState = settingsMenuState.getPreviousState();

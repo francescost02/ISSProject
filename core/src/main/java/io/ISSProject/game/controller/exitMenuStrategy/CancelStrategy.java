@@ -10,7 +10,7 @@ public class CancelStrategy implements ExitStrategy {
     }
     @Override
     public void execute() {
-        System.out.println("Uscita cancellata. Ritorna allo stato precedente.");
+        System.out.println("Uscita cancellata. Ritorna allo stato " + exitMenuState.getPreviousState().getClass().getSimpleName());
 
         // Recupera lo stato precedente
         GameState previousState = exitMenuState.getPreviousState();
@@ -19,4 +19,5 @@ public class CancelStrategy implements ExitStrategy {
             System.out.println("Nessuno stato precedente.");
         }
     }
+
 }
