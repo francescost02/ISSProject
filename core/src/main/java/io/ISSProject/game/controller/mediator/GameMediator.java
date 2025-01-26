@@ -9,14 +9,10 @@ import io.ISSProject.game.controller.GameplayController;
 import io.ISSProject.game.controller.PauseMenuController;
 import io.ISSProject.game.controller.ScreenController;
 import io.ISSProject.game.controller.exitMenuStrategy.ExitMenuController2;
-import io.ISSProject.game.controller.gameState.PauseMenuState;
+import io.ISSProject.game.controller.gameState.*;
 import io.ISSProject.game.controller.mainMenuCommand.MainMenuController2;
-import io.ISSProject.game.controller.gameState.GameContext;
-import io.ISSProject.game.controller.gameState.MainMenuState;
-import io.ISSProject.game.controller.gameState.BrotherLivingRoomState;
 import io.ISSProject.game.controller.settingsMenuController.SettingsController;
 import io.ISSProject.game.model.Clue;
-import io.ISSProject.game.model.InteractiveObject;
 import io.ISSProject.game.model.Scene;
 import io.ISSProject.game.model.userManagment.UserManager;
 import io.ISSProject.game.view.UI.UnregisteredUI;
@@ -47,56 +43,68 @@ public class GameMediator {
     }
 
     public void notify(GameComponent sender, String event, Object... data) {
-        switch(event) {
+        switch (event) {
             case "SHOW_UNREGISTERED_SCREEN":
-                System.out.println("Mostra schermata Unregistered");
                 game.setScreen(new UnregisteredUI(screenController));
                 break;
+
             case "USER_LOGIN_REQUESTED":
                 userManager.selectLoginPath();
                 break;
-            case"LOGIN_ERROR":
-                screenController.showErrorNotification((String)data[0]);
+
+            case "LOGIN_ERROR":
+                screenController.showErrorNotification((String) data[0]);
                 break;
+
             case "USER_REGISTRATION_REQUESTED":
                 userManager.selectRegistrationPath();
                 break;
+
             case "USER_LOGGED_IN":
                 gameContext.changeState(new MainMenuState(gameContext));
                 game.setScreen(menuController.getScreen());
                 break;
-            case "RETURN_TO_UNREGISTERED":
-                userManager.returnToUnregistered();
-                break;
+
             case "START_NEW_GAME":
-                gameContext.changeState(new BrotherLivingRoomState(gameContext));
+                Scene initialScene = gameContext.getCurrentScene();
+
+                if (initialScene == null) {
+                    initialScene = new Scene("Brother's Living Room", 1);
+                    gameContext.setCurrentScene(initialScene);
+                }
+
+                gameContext.changeState(new GameplayState(gameContext, initialScene));
                 game.setScreen(gameplayController.getScreen());
                 break;
+
+
             case "RETURN_TO_MAIN_MENU":
-                if(menuController != null){
+                if (menuController != null) {
                     gameContext.changeState(new MainMenuState(gameContext));
                     game.setScreen(menuController.getScreen());
                 }
                 break;
+
             case "OPEN_PAUSE_MENU":
-                System.out.println("Apertura menu di pausa");
-                // Salva la scena attuale nel contesto
                 gameContext.saveCurrentState();
-                gameContext.changeState(new PauseMenuState(gameContext));
                 PauseMenuController pauseMenuController = new PauseMenuController(gameContext);
-               pauseMenuController.setMediator(this);
+                pauseMenuController.setMediator(this);
+                gameContext.changeState(new PauseMenuState(gameContext));
                 game.setScreen(pauseMenuController.getScreen());
                 break;
+
             case "SHOW_SETTINGS_MENU":
                 SettingsController settingsController = new SettingsController(gameContext);
                 settingsController.setMediator(this);
                 game.setScreen(settingsController.getScreen());
                 break;
+
             case "SHOW_EXIT_MENU":
                 ExitMenuController2 exitMenuController = new ExitMenuController2(gameContext);
                 exitMenuController.setMediator(this);
                 game.setScreen(exitMenuController.getScreen());
                 break;
+
             case "RETURN_TO_PAUSE_MENU":
                 pauseMenuController = new PauseMenuController(gameContext);
                 gameContext.changeState(new PauseMenuState(gameContext));
@@ -104,6 +112,7 @@ public class GameMediator {
                 game.setScreen(pauseMenuController.getScreen());
                 Gdx.input.setInputProcessor(pauseMenuController.getScreen().getStage());
                 break;
+
             case "CLUE_FOUND":
                 Clue clue = (Clue) data[0];
                 String clueTitle = clue.getTooltipText();
@@ -111,6 +120,7 @@ public class GameMediator {
 
                 // Controlla se l'indizio è già stato trovato
                 if (currentScene.isClueAlreadyFound(clueTitle)) {
+                    System.out.println("Hai già trovato questo indizio.");
                     return; // Esce senza fare nulla
                 }
 
@@ -127,6 +137,17 @@ public class GameMediator {
                     currentScene.addInteractiveObject(clue);
                 }
                 break;
+
+            case "GO_TO_NEXT_SCENE":
+                Scene nextScene = gameContext.getCurrentScene().getNextScene();
+                if (nextScene != null) {
+                    gameContext.changeState(new GameplayState(gameContext, nextScene));
+                    game.setScreen(gameplayController.getScreen());
+                } else {
+                    System.out.println("Non ci sono più scene.");
+                }
+                break;
+
             case "RETURN_TO_GAME":
                 // Ripristina la scena salvata se necessario
                 if (gameContext.getCurrentScene() == null) {
@@ -136,7 +157,6 @@ public class GameMediator {
                 game.setScreen(gameplayController.getScreen());
                 Gdx.input.setInputProcessor(gameplayController.getScreen().getStage());
                 break;
-
         }
     }
 }

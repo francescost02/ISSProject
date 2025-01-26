@@ -18,12 +18,6 @@ public class Clue extends InteractiveObject {
 
     @Override
     public void interact() {
-        if (!found) {
-            //found = true; viene fatto nel mediator
-            System.out.println("Hai trovato un indizio: " + getTooltipText());
-        } else {
-            System.out.println("Hai gia' trovato questo indizio.");
-        }
+        System.out.println("Hai trovato un indizio: " + getTooltipText());
     }
-
 }

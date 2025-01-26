@@ -86,6 +86,9 @@ public class GameplayController implements GameComponent {
         if (currentScene != null && currentScene.isCompleted()) {
             System.out.println("Scena completata!");
             mediator.notify(this, "SCENE_COMPLETED", currentScene);
+
+            // Passa alla scena successiva
+            gameContext.goToNextScene();
         } else {
             System.out.println("La scena non è ancora completata.");
         }

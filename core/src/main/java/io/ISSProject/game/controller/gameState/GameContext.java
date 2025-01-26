@@ -1,6 +1,7 @@
 package io.ISSProject.game.controller.gameState;
 
-import io.ISSProject.game.controller.gameState.BrotherLivingRoomState;
+import io.ISSProject.game.controller.GameInitializer;
+import io.ISSProject.game.controller.gameState.GameplayState;
 import io.ISSProject.game.controller.gameState.GameState;
 import io.ISSProject.game.controller.gameState.MainMenuState;
 import io.ISSProject.game.model.Scene;
@@ -14,6 +15,9 @@ public class GameContext {
     public GameContext() {
         // Imposta lo stato iniziale durante l'istanza
         this.currentState = new MainMenuState(this);
+
+        // Inizializza le scene del gioco
+        GameInitializer.initializeGame(this);
     }
 
     public void changeState(GameState newState) {
@@ -42,8 +46,22 @@ public class GameContext {
         if (this.savedScene != null) {
             this.currentScene = this.savedScene;
         }
+        System.out.println ("Scena corrente: " + this.currentScene.getName());
     }
 
+    public void setCurrentScene(Scene currentScene) {
+        this.currentScene = currentScene;
+    }
+
+    // Metodo per passare alla scena successiva
+    public void goToNextScene() {
+        if (currentScene != null && currentScene.getNextScene() != null) {
+            this.currentScene = currentScene.getNextScene();
+            System.out.println("Passaggio alla scena successiva: " + currentScene.getName());
+        } else {
+            System.out.println("Non esiste una scena successiva.");
+        }
+    }
 
     public GameState getCurrentState() {
         return currentState;
