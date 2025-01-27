@@ -27,7 +27,7 @@ public class GameplayController implements GameComponent {
     public  Actor createInteractiveArea(String tooltipText, String dialogText, boolean isClue) {
         Actor actor = new Actor();
         actor.setTouchable(Touchable.enabled);
-        //actor.setDebug(true);
+        actor.setDebug(true);
         // Aggiungi tooltip
         TextTooltip tooltip = new TextTooltip(tooltipText, gameView.getSkin());
         tooltip.setInstant(true);

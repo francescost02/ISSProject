@@ -37,7 +37,7 @@ public class BrotherLivingRoomView extends ScreenAdapter {
         stage.clear();
         setupLayout();
         setupInteractiveObjects();
-        //stage.setDebugAll(true);
+        stage.setDebugAll(true);
     }
 
 
@@ -64,7 +64,7 @@ public class BrotherLivingRoomView extends ScreenAdapter {
         Actor lampActor = controller.createInteractiveArea(
             "Una lampada vintage...",
             "Una lampada vintage...non credo mi possa aiutare nella risoluzione di questo caso.",
-            true
+            false
         );
 
         Actor bookActor = controller.createInteractiveArea(
@@ -75,9 +75,16 @@ public class BrotherLivingRoomView extends ScreenAdapter {
 
         Actor paintingActor = controller.createInteractiveArea(
             "Un quadro di un famoso artista contemporaneo",
-            "Un bellissimo quadro, ma a meno che mio fratello l'abbia rubato a un gallesrista non credo mi servirà per risolvere il caso...",
+            "Un bellissimo quadro, ma a meno che mio fratello l'abbia rubato non credo mi servirà per risolvere il caso...",
             false
         );
+
+        Actor envelopeActor = controller.createInteractiveArea(
+            "Una busta...",
+            "Una busta! Lascita così sul diavno...sembra contenere documenti importanti, vediamo un po'...\n\"*Qualcosa scritto nel documento*\"" ,
+
+            true
+            );
 
         //Stack per sovrapporre lo sfondo e gli oggetti interattivi
         Stack gameStack = new Stack();
@@ -111,12 +118,23 @@ public class BrotherLivingRoomView extends ScreenAdapter {
 
         paintingActor.setSize(
             130f / 800f * stage.getViewport().getWorldWidth(),
-            40f / 160f * stage.getViewport().getWorldHeight() * 0.7f
+            160f / 600f * stage.getViewport().getWorldHeight() * 0.7f
+        );
+
+        envelopeActor.setPosition(
+            458f / 800f * stage.getViewport().getWorldWidth(),
+            213f / 600f * stage.getViewport().getWorldHeight() * 0.7f
+        );
+
+        envelopeActor.setSize(
+            40f / 800f * stage.getViewport().getWorldWidth(),
+            40f / 600f * stage.getViewport().getWorldHeight() * 0.7f
         );
 
         interactiveLayer.addActor(lampActor);
         interactiveLayer.addActor(bookActor);
         interactiveLayer.addActor(paintingActor);
+        interactiveLayer.addActor(envelopeActor);
 
         gameArea.add(gameStack).expand().fill();
     }
