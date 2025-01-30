@@ -9,9 +9,11 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.utils.viewport.*;
+import io.ISSProject.game.view.DiaryUI;
 import io.ISSProject.game.view.DialogWindow;
 import io.ISSProject.game.controller.GameplayController;
 
@@ -24,6 +26,8 @@ public class BrotherLivingRoomView extends ScreenAdapter {
     private Texture backgroundTexture;
     private GameplayController controller;
     private Vector2 tempCoords = new Vector2();
+    private DiaryUI diaryWindow;
+    private Table uiOverlay;
 
     public BrotherLivingRoomView(GameplayController controller) {
         this.controller = controller;
@@ -31,13 +35,20 @@ public class BrotherLivingRoomView extends ScreenAdapter {
         skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
         backgroundTexture = new Texture(Gdx.files.internal("images/BrotherLivingRoom.jpeg"));
         dialogWindow = new DialogWindow(skin);
+        diaryWindow = new DiaryUI(skin);
+        diaryWindow.setVisible(false);
     }
 
+    public DiaryUI getDiaryWindow(){
+        return diaryWindow;
+    }
     public void setupUI() {
         stage.clear();
         setupLayout();
         setupInteractiveObjects();
         stage.setDebugAll(true);
+        setUpDiaryButton();
+        stage.addActor(diaryWindow);
     }
 
 
@@ -49,11 +60,29 @@ public class BrotherLivingRoomView extends ScreenAdapter {
         // Area di gioco (parte superiore)
         gameArea = new Table();
 
+        uiOverlay = new Table();
+        uiOverlay.setFillParent(true);
+        uiOverlay.top().right();
+
         mainTable.add(gameArea).expandX().fill().height(stage.getHeight()*0.7f).row(); // Aggiunge gameArea al layout
         mainTable.add(dialogWindow).expandX().fill().height(stage.getHeight()*0.3f).row();
 
         stage.addActor(mainTable);
+        stage.addActor(uiOverlay);
 
+    }
+
+    private void setUpDiaryButton() {
+        TextButton diaryButton = new TextButton("Diario", skin);
+        diaryButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeListener.ChangeEvent event, Actor actor) {
+                controller.toggleDiary();
+            }
+        });
+
+        // Aggiungi il pulsante all'overlay UI con padding
+        uiOverlay.add(diaryButton).pad(10).top().right();
     }
 
     private void setupInteractiveObjects() {

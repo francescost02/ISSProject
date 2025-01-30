@@ -23,10 +23,10 @@ public class ClueNotification extends Dialog {
     private void setupAnimations(){
         getColor().a = 0;
         addAction(Actions.sequence(
-            Actions.fadeIn(0.5f),
-            Actions.delay(1.5f),
+            Actions.fadeIn(2.0f)
+            //Actions.delay(1.5f),
             //Actions.fadeOut(0.5f),
-            Actions.removeActor()
+            //Actions.removeActor()
         ));
     }
 }

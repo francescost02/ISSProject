@@ -11,6 +11,9 @@ public class DetectiveDiary {
     private static DetectiveDiary instance;
     private final List<DiaryEntry> entries;
     private final List<DiaryObservers> observers;
+    private boolean isOpen;
+
+
 
     //costruttore privato
     private DetectiveDiary(){

@@ -10,6 +10,7 @@ import io.ISSProject.game.controller.mediator.GameComponent;
 import io.ISSProject.game.controller.mediator.GameMediator;
 import io.ISSProject.game.controller.menuState.GameContext;
 import io.ISSProject.game.model.Diary.DetectiveDiary;
+import io.ISSProject.game.view.DiaryUI;
 import io.ISSProject.game.view.GameplayView.BrotherLivingRoomView;
 
 public class GameplayController implements GameComponent {
@@ -24,6 +25,14 @@ public class GameplayController implements GameComponent {
         this.diary = DetectiveDiary.getInstance();
     }
 
+    public void toggleDiary(){
+        DiaryUI diaryWindow = gameView.getDiaryWindow();
+        if (diaryWindow.isVisible()){
+            diaryWindow.hide();
+        } else {
+            diaryWindow.show();
+        }
+    }
     public  Actor createInteractiveArea(String tooltipText, String dialogText, boolean isClue) {
         Actor actor = new Actor();
         actor.setTouchable(Touchable.enabled);
