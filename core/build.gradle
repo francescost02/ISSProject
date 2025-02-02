@@ -1,0 +1,33 @@
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+eclipse.project.name = appName + '-core'
+
+gdxVersion = "1.12.1"
+
+dependencies {
+  api "com.badlogicgames.gdx:gdx:$gdxVersion"
+
+  if(enableGraalNative == 'true') {
+    implementation "io.github.berstanio:gdx-svmhelper-annotations:$graalHelperVersion"
+  }
+
+  testImplementation "org.junit.jupiter:junit-jupiter:5.10.0"
+  testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.10.0"
+
+  implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+  implementation "com.kotcrab.vis:vis-ui:1.5.1"
+  implementation 'com.google.code.gson:gson:2.10.1'
+
+
+  // Backend headless per test senza grafica
+  testImplementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+
+  // Librerie native richieste per il backend headless
+  testImplementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+
+  testImplementation 'org.mockito:mockito-core:4.9.0'
+
+}
+
+tasks.withType(Test) {
+  useJUnitPlatform()
+}
