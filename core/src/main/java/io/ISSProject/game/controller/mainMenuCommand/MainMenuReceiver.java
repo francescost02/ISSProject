@@ -22,7 +22,7 @@ public class MainMenuReceiver {
 
     public MainMenuReceiver(GameMediator mediator) {
         this.gameContext = GameContext.getInstance();
-        this.saveGameManager = new SaveGameManager(clues);
+        this.saveGameManager = new SaveGameManager(/*clues*/);
     }
     public void createNewGame() {
         System.out.println ("Creazione di una nuova partita...");

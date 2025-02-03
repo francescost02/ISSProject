@@ -1,6 +1,8 @@
 package io.ISSProject.game.model.saveModel;
 
 import io.ISSProject.game.model.Clue;
+import io.ISSProject.game.model.Diary.DetectiveDiary;
+import io.ISSProject.game.model.Diary.DiaryEntry;
 import io.ISSProject.game.model.Scene;
 
 import java.io.File;
@@ -13,10 +15,11 @@ import java.util.stream.Collectors;
 public class SaveGameManager {
     private static final String SAVE_DIRECTORY = "saves/";
    private final FileManager fileManager;
-    private List<Clue> clues; // Lista degli indizi da salvare
+    //private List<Clue> clues; // Lista degli indizi da salvare
+    //private final DetectiveDiary diary;
 
-    public SaveGameManager(List<Clue> clues) {
-        this.clues = clues;
+    public SaveGameManager(/*List<Clue> clues*/) {
+        //this.clues = clues;
         this.fileManager = new FileManager();
         ensureSaveDirectoryExists();
     }
@@ -86,6 +89,12 @@ public class SaveGameManager {
 
         if (memento == null) {
             throw new IllegalStateException("Errore durante il caricamento del salvataggio.");
+        }
+        DetectiveDiary diary = DetectiveDiary.getInstance();
+        diary.clear();
+
+        for (DiaryEntry entry: memento.getDiaryEntries()){
+            diary.addEntry(entry.getTitle(), entry.getDescription());
         }
 
         return memento; // Ritorna il memento caricato
