@@ -27,9 +27,14 @@ public class DetectiveDiary {
     }
 
     public void addEntry(String title, String description){
-        DiaryEntry entry = new DiaryEntry(title, description);
-        entries.add(entry);
-        notifyObservers(entry);
+        //Controlliamo se esiste già una entry con lo stesso nome
+        boolean entryExists = entries.stream()
+            .anyMatch(entry -> entry.getTitle().equals(title));
+        if(!entryExists) {
+            DiaryEntry entry = new DiaryEntry(title, description);
+            entries.add(entry);
+            notifyObservers(entry);
+        }
     }
 
     public void notifyObservers(DiaryEntry newEntry){

@@ -12,6 +12,7 @@ import io.ISSProject.game.model.Clue;
 import io.ISSProject.game.model.Diary.DetectiveDiary;
 import io.ISSProject.game.model.InteractiveObject;
 import io.ISSProject.game.model.Scene;
+import io.ISSProject.game.view.DiaryUI;
 import io.ISSProject.game.view.GameplayView.BrotherLivingRoomView;
 
 
@@ -30,6 +31,7 @@ public class GameplayController implements GameComponent {
 
         // Assicuriamoci che il pulsante pausa abbia un listener
         addPauseListener();
+        addDiaryListener();
     }
 
     private void addPauseListener() {
@@ -104,5 +106,31 @@ public class GameplayController implements GameComponent {
         if (mediator != null) {
             mediator.notify(this, event, data);
         }
+    }
+
+    public void openDiary(){
+        DiaryUI diaryWindow = gameView.getDiaryWindow();
+        diaryWindow.setVisible(true);
+        float x = (gameView.getStage().getWidth() - gameView.getDiaryWindow().getWidth()) / 2;
+        float y = (gameView.getStage().getHeight() - gameView.getDiaryWindow().getHeight()) / 2;
+        gameView.getDiaryWindow().setPosition(x, y);
+    }
+
+    private void addDiaryListener(){
+        gameView.getDiaryButton().addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                openDiary();
+            }
+        });
+/*
+        gameView.getDiaryWindow().getCloseButton().addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                closeDiary();
+            }
+        });
+
+ */
     }
 }

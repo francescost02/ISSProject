@@ -38,7 +38,7 @@ public class BrotherLivingRoomView extends ScreenAdapter {
     private Table uiOverlay;
     private TextButton pauseButton; // Pulsante di pausa
     private DiaryUI diaryWindow;
-    private Table overlayArea;
+    private TextButton diaryButton;
 
     public BrotherLivingRoomView(GameplayController controller) {
         this.controller = controller;
@@ -50,6 +50,7 @@ public class BrotherLivingRoomView extends ScreenAdapter {
         this.diaryWindow = new DiaryUI(skin);
         diaryWindow.setVisible(false);
         this.pauseButton = new TextButton("Pause", skin);
+        this.diaryButton = new TextButton("Diario", skin);
     }
 
 
@@ -71,20 +72,27 @@ public class BrotherLivingRoomView extends ScreenAdapter {
         mainTable.setFillParent(true);
 
         gameArea = new Table();
-
         mainTable.add(gameArea).expandX().fill().height(stage.getHeight() * 0.7f).row();
         mainTable.add(dialogWindow).expandX().fill().height(stage.getHeight() * 0.3f).row();
 
-        overlayArea = new Table(); // crea un'area separata per il pulsante pausa
-        stage.addActor(mainTable);
+        Table buttonGroup = new Table();
+        buttonGroup.setFillParent(true);
+        buttonGroup.top().right();
 
         // Configura l'overlay (per esempio, il pulsante di pausa)
         pauseButton.setSize(100, 40); // Dimensioni del pulsante
-        pauseButton.setPosition(stage.getViewport().getWorldWidth() - 120, stage.getViewport().getWorldHeight() - 50); // Posizionato in alto a destra
+        diaryButton.setSize(100, 40);// Posizionato in alto a destra
 
-        // Aggiungi il pulsante di pausa allo stage
-        overlayArea.addActor(pauseButton);
-        stage.addActor(overlayArea);
+        buttonGroup.add(pauseButton).size(100, 40).padBottom(5).row();
+        buttonGroup.add(diaryButton).size(100, 40);
+
+
+        //float buttonX = stage.getViewport().getWorldWidth() - buttonGroup.getWidth() -5;
+        //float buttonY = stage.getViewport().getWorldHeight() - buttonGroup.getHeight() -5;
+        //buttonGroup.setPosition(buttonX, buttonY);
+
+       stage.addActor(mainTable);
+       stage.addActor(buttonGroup);
     }
 
     private void setupInteractiveObjects() {
@@ -204,8 +212,8 @@ public class BrotherLivingRoomView extends ScreenAdapter {
 
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(stage);
         setupUI();
+        Gdx.input.setInputProcessor(stage);
 
         // Listener per ottenere la posizione in cui clicco e posizionare gli attori, TEMPORANEO
         stage.addListener(new ClickListener() {
@@ -254,6 +262,10 @@ public class BrotherLivingRoomView extends ScreenAdapter {
 
     public Table getGameArea() {
         return gameArea;
+    }
+
+    public TextButton getDiaryButton(){
+        return diaryButton;
     }
 }
 

@@ -142,7 +142,7 @@ public class DiaryUI extends Window implements DiaryObservers {
         titleLabel.setWrap(true);
         //titleLabel.setAlignment(Align.center);
 
-        Label dateLabel = new Label(entry.getFormattedTimestamp(), getSkin());
+        Label dateLabel = new Label(entry.getTimestamp(), getSkin());
         //dateLabel.setAlignment(Align.center);
 
         headerTable.add(titleLabel).expandX().fillX().left();
