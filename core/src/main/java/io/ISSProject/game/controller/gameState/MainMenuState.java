@@ -4,6 +4,7 @@ package io.ISSProject.game.controller.gameState;
 
 import io.ISSProject.game.model.Scene;
 
+
 public class MainMenuState implements GameState {
 
     private final GameContext gameContext;
@@ -20,6 +21,7 @@ public class MainMenuState implements GameState {
     public void exit() {
         System.out.println ("Uscita da MainMenuState");
     }
+
     public Scene getAssociatedScene() {
         return null;  // Nessuna scena associata al menu principale
     }

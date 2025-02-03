@@ -4,6 +4,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.*;
+import io.ISSProject.game.controller.exitMenuStrategy.ExitMenuController2;
 import io.ISSProject.game.controller.gameState.*;
 import io.ISSProject.game.controller.mediator.GameComponent;
 import io.ISSProject.game.controller.mediator.GameMediator;
@@ -23,13 +24,12 @@ public class SettingsController implements GameComponent {
     private Command toggleMuteCommand;
     private GameMediator mediator;
 
-    public SettingsController(GameContext gameContext) {
+    public SettingsController() {
 
         this.model = new SettingsModel();
         //this.view = new SettingsView(model.getAssetManager().getSkin());
         this.settingMenuView = new SettingsView();
-        this.gameContext = gameContext;
-
+        this.gameContext = GameContext.getInstance();
         this.currentState = gameContext.getCurrentState(); //recupera lo stato corrente
         this.settingsMenuState = new SettingsMenuState(currentState, gameContext);
 
@@ -75,7 +75,6 @@ public class SettingsController implements GameComponent {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 settingsMenuState.exit();
-
                 if (mediator!=null) {
                     // Verifica lo stato precedente
                     GameState previousState = settingsMenuState.getPreviousState();
@@ -93,6 +92,17 @@ public class SettingsController implements GameComponent {
                     // Gestione di altri eventi
                     System.out.println("Evento non gestito: " + event);
                 }
+
+                /*
+                // Torna alla schermata principale
+                Game game = (Game) Gdx.app.getApplicationListener();
+                MainMenuController2 mainMenuController = new MainMenuController2(gameContext);
+                game.setScreen(mainMenuController.getScreen());
+                // Aggiorna l'InputProcessor per il menu principale
+                Gdx.input.setInputProcessor(mainMenuController.getScreen().getStage());
+
+                 */
+
             }
         });
     }

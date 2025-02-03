@@ -45,7 +45,7 @@ public class MainMenuCommandTest {
         loadGameCommand.execute();
 
         // Verifica che il metodo loadGame sia stato chiamato
-        verify(mainMenuReceiver, times(1)).openSaveGameView();
+        verify(mainMenuReceiver, times(1)).loadGame();
     }
 
     @Test

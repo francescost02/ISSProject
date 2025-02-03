@@ -22,6 +22,7 @@ public class SettingsMenuState implements GameState {
     public GameContext getGameContext() {
         return gameContext;
     }
+
     public Scene getAssociatedScene() {
         return null;  // Nessuna scena associata al menu principale
     }

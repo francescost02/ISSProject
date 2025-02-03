@@ -1,4 +1,3 @@
-
 package io.ISSProject.game.controller.gameState;
 
 import io.ISSProject.game.model.Scene;
@@ -8,3 +7,4 @@ public interface GameState {
     void exit();
     Scene getAssociatedScene();  // Metodo per ottenere la scena associata
 }
+

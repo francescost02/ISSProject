@@ -9,6 +9,6 @@ public class LoadGameCommand implements MainMenuCommand {
 
     @Override
     public void execute() {
-        mainMenuReceiver.openSaveGameView();
+        mainMenuReceiver.loadGame();
     }
 }

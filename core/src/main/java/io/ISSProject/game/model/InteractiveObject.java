@@ -1,4 +1,3 @@
-
 package io.ISSProject.game.model;
 
 public abstract class InteractiveObject {
@@ -12,9 +11,6 @@ public abstract class InteractiveObject {
 
     public String getTooltipText() {
         return tooltipText;
-    }
-    public void setTooltipText(String text) {
-        this.tooltipText = text;
     }
 
     public String getDialogText() {

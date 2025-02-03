@@ -1,5 +1,3 @@
-
-
 package io.ISSProject.game.view.GameplayView;
 
 import com.badlogic.gdx.Gdx;
@@ -15,10 +13,17 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.utils.viewport.*;
+import io.ISSProject.game.model.Clue;
 import io.ISSProject.game.model.InteractiveObject;
 import io.ISSProject.game.view.DiaryUI;
 import io.ISSProject.game.view.DialogWindow;
-import io.ISSProject.game.controller.GameplayController;
+import io.ISSProject.game.controller.gamePlayController.GameplayController;
+
+import com.badlogic.gdx.utils.viewport.*;
+import io.ISSProject.game.model.Clue;
+import io.ISSProject.game.model.InteractiveObject;
+import io.ISSProject.game.model.SceneObject;
+import io.ISSProject.game.view.DialogWindow;
 
 public class BrotherLivingRoomView extends ScreenAdapter {
 
@@ -33,6 +38,7 @@ public class BrotherLivingRoomView extends ScreenAdapter {
     private Table uiOverlay;
     private TextButton pauseButton; // Pulsante di pausa
     private DiaryUI diaryWindow;
+    private Table overlayArea;
 
     public BrotherLivingRoomView(GameplayController controller) {
         this.controller = controller;
@@ -40,6 +46,8 @@ public class BrotherLivingRoomView extends ScreenAdapter {
         this.skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
         this.backgroundTexture = new Texture(Gdx.files.internal("images/BrotherLivingRoom.jpeg"));
         this.dialogWindow = new DialogWindow(skin);
+
+        this.diaryWindow = new DiaryUI(skin);
         diaryWindow.setVisible(false);
         this.pauseButton = new TextButton("Pause", skin);
     }
@@ -54,7 +62,7 @@ public class BrotherLivingRoomView extends ScreenAdapter {
         setupLayout();
         setupInteractiveObjects();
         stage.setDebugAll(true);
-        setUpDiaryButton();
+        //setUpDiaryButton();
         stage.addActor(diaryWindow);
     }
 
@@ -63,63 +71,49 @@ public class BrotherLivingRoomView extends ScreenAdapter {
         mainTable.setFillParent(true);
 
         gameArea = new Table();
-        uiOverlay = new Table();
-        uiOverlay.setFillParent(true);
-        uiOverlay.top().right();
 
         mainTable.add(gameArea).expandX().fill().height(stage.getHeight() * 0.7f).row();
         mainTable.add(dialogWindow).expandX().fill().height(stage.getHeight() * 0.3f).row();
 
-        // Configura il pulsante pausa
-        pauseButton.setSize(100, 40);
-        pauseButton.setPosition(stage.getViewport().getWorldWidth() - 120, stage.getViewport().getWorldHeight() - 50);
-        uiOverlay.addActor(pauseButton);
-
+        overlayArea = new Table(); // crea un'area separata per il pulsante pausa
         stage.addActor(mainTable);
-        stage.addActor(uiOverlay);
-    }
 
-    private void setUpDiaryButton() {
-        TextButton diaryButton = new TextButton("Diario", skin);
-        diaryButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-                controller.toggleDiary();
-            }
-        });
-        // Aggiungi il pulsante all'overlay UI con padding
-        uiOverlay.add(diaryButton).pad(10).top().right();
+        // Configura l'overlay (per esempio, il pulsante di pausa)
+        pauseButton.setSize(100, 40); // Dimensioni del pulsante
+        pauseButton.setPosition(stage.getViewport().getWorldWidth() - 120, stage.getViewport().getWorldHeight() - 50); // Posizionato in alto a destra
+
+        // Aggiungi il pulsante di pausa allo stage
+        overlayArea.addActor(pauseButton);
+        stage.addActor(overlayArea);
     }
 
     private void setupInteractiveObjects() {
-        //Container per ottenre coordinate assolute
         Table interactiveLayer = new Table();
 
-        // Crea attori trasparenti per le aree interattive
-        InteractiveObject lampActor = new
-            "Una lampada vintage...",
-            "Una lampada vintage...non credo mi possa aiutare nella risoluzione di questo caso.",
-            false);
-
-        Actor bookActor = controller.createInteractiveArea(
+        // Crea attori per le aree interattive (simile a prima)
+        Clue lamp = new Clue(
+            "una lampada vintage",
+            "Una lampada vintage...non credo mi possa aiutare nella risoluzione di questo caso."
+        );
+        InteractiveObject book = new SceneObject(
             "Un antico libro sulla magia...",
-            "Un antico libro sulla magia...chissà se esiste qualche incantesimo per avere una giornata normale ogni tanto.",
-            false
+            "Un antico libro sulla magia...chissà se esiste qualche incantesimo per avere una giornata normale ogni tanto."
         );
 
-        Actor paintingActor = controller.createInteractiveArea(
+        InteractiveObject painting = new SceneObject(
             "Un quadro di un famoso artista contemporaneo",
-            "Un bellissimo quadro, ma a meno che mio fratello l'abbia rubato non credo mi servirà per risolvere il caso...",
-            false
+            "Un bellissimo quadro, ma a meno che mio fratello l'abbia rubato a un gallerista, non credo mi servirà per risolvere il caso..."
         );
 
-        Actor envelopeActor = controller.createInteractiveArea(
-            "Una busta...",
-            "Una busta! Lascita così sul diavno...sembra contenere documenti importanti, vediamo un po'...\n\"*Qualcosa scritto nel documento*\"",
-            true
+        InteractiveObject key = new Clue(
+            "Una chiave misteriosa",
+            "Questa chiave sembra importante... potrei usarla per qualcosa."
         );
 
-        //Stack per sovrapporre lo sfondo e gli oggetti interattivi
+        Actor lampActor = controller.createInteractiveArea(lamp);
+        Actor bookActor = controller.createInteractiveArea(book);
+        Actor paintingActor = controller.createInteractiveArea(painting);
+
         Stack gameStack = new Stack();
         gameStack.add(new Image(backgroundTexture));
         gameStack.add(interactiveLayer);
@@ -129,7 +123,6 @@ public class BrotherLivingRoomView extends ScreenAdapter {
             599f / 800f * stage.getViewport().getWorldWidth(),
             127f / 600f * stage.getViewport().getWorldHeight() * 0.7f
         );
-
         lampActor.setSize(
             40f / 800f * stage.getViewport().getWorldWidth(),
             260f / 600f * stage.getViewport().getWorldHeight() * 0.7f
@@ -153,7 +146,7 @@ public class BrotherLivingRoomView extends ScreenAdapter {
             130f / 800f * stage.getViewport().getWorldWidth(),
             160f / 600f * stage.getViewport().getWorldHeight() * 0.7f
         );
-
+/*
         envelopeActor.setPosition(
             458f / 800f * stage.getViewport().getWorldWidth(),
             213f / 600f * stage.getViewport().getWorldHeight() * 0.7f
@@ -163,27 +156,28 @@ public class BrotherLivingRoomView extends ScreenAdapter {
             40f / 600f * stage.getViewport().getWorldHeight() * 0.7f
         );
 
+ */
+
         interactiveLayer.addActor(lampActor);
         interactiveLayer.addActor(bookActor);
         interactiveLayer.addActor(paintingActor);
-        interactiveLayer.addActor(envelopeActor);
+        //interactiveLayer.addActor(envelopeActor);
 
         gameArea.add(gameStack).expand().fill();
     }
 
     @Override
-    public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
+    public void render(float delta) {
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        stage.act(delta);
+        stage.draw();
     }
 
     @Override
-    public void render(float delta) {
-        // Pulisci lo schermo
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        // Aggiorna e disegna lo stage
-        stage.act(Gdx.graphics.getDeltaTime());
-        stage.draw();
+    public void resize(int width, int height) {
+        stage.getViewport().update(width, height, true);
     }
 
     public void dispose() {
@@ -261,8 +255,6 @@ public class BrotherLivingRoomView extends ScreenAdapter {
     public Table getGameArea() {
         return gameArea;
     }
-
 }
-
 
 

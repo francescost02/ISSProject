@@ -1,7 +1,6 @@
 
 package io.ISSProject.game.controller.gameState;
 
-import io.ISSProject.game.controller.GameplayController;
 import io.ISSProject.game.model.Clue;
 import io.ISSProject.game.model.Scene;
 

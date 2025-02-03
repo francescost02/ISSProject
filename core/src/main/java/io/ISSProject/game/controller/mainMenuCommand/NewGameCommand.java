@@ -8,6 +8,6 @@ public class NewGameCommand implements MainMenuCommand {
     }
     @Override
     public void execute() {
-       // mainMenuReceiver.createNewGame();
+        mainMenuReceiver.createNewGame();
     }
 }

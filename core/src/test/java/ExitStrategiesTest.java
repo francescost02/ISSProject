@@ -1,11 +1,8 @@
-
 import io.ISSProject.game.controller.exitMenuStrategy.CancelStrategy;
 import io.ISSProject.game.controller.exitMenuStrategy.CloseWithoutSavingStrategy;
 import io.ISSProject.game.controller.exitMenuStrategy.SaveAndCloseStrategy;
 import io.ISSProject.game.controller.gameState.ExitMenuState;
-import io.ISSProject.game.controller.gameState.GameContext;
 import io.ISSProject.game.controller.gameState.GameState;
-import io.ISSProject.game.model.saveModel.SaveGameManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,8 +14,6 @@ import com.badlogic.gdx.Gdx;
 class ExitStrategiesTest {
 
     private Application mockApp;
-    private GameContext gameContext;
-    private SaveGameManager saveGameManager;
 
     @BeforeEach
     void setUp() {
@@ -30,7 +25,6 @@ class ExitStrategiesTest {
     @Test
     void testSaveAndCloseStrategy() {
         // Strategia da testare
-        SaveAndCloseStrategy saveAndCloseStrategy = new SaveAndCloseStrategy(saveGameManager);
 
         // Esecuzione
         saveAndCloseStrategy.execute();

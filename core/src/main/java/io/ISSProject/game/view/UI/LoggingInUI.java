@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.ISSProject.game.controller.ScreenController;
@@ -72,8 +73,20 @@ public class LoggingInUI extends ScreenAdapter {
         Label usernameLabel = new Label("Inserisci il tuo username:", skin);
         usernameLabel.setFontScale(1.5f);
 
-        usernameField = new TextField("", skin); // Campo di input per l'username
-        usernameField.setScale(1.5f);
+        // Campo di input per l'username
+        usernameField = new TextField("", skin); // Crea il TextField
+
+        // Modifica lo stile per centrare il testo e ingrandire il font
+        TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle(usernameField.getStyle());
+
+        // Imposta un nuovo font con dimensioni maggiori
+        textFieldStyle.font.getData().setScale(1.5f); // Scala il font a dimensioni maggiori
+
+        // Centra il testo
+        usernameField.setAlignment(Align.center);
+
+        // Applica il nuovo stile
+        usernameField.setStyle(textFieldStyle);
 
         TextButton confirmButton = new TextButton("Conferma Username", skin);
         confirmButton.getLabel().setFontScale(1.5f);

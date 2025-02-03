@@ -7,8 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import io.ISSProject.game.controller.GameplayController;
-import io.ISSProject.game.controller.ScreenController;
+import io.ISSProject.game.controller.gamePlayController.GameplayController;
 import io.ISSProject.game.controller.gameState.GameState;
 import io.ISSProject.game.controller.mainMenuCommand.MainMenuController2;
 import io.ISSProject.game.controller.gameState.GameContext;
@@ -18,27 +17,33 @@ import io.ISSProject.game.controller.mediator.GameMediator;
 import io.ISSProject.game.controller.settingsMenuController.SettingsController;
 import io.ISSProject.game.model.Clue;
 import io.ISSProject.game.model.Scene;
+import io.ISSProject.game.model.saveModel.FileManager;
+import io.ISSProject.game.model.saveModel.GameStateMemento;
 import io.ISSProject.game.model.saveModel.SaveGameManager;
-import io.ISSProject.game.view.MainGame;
 import io.ISSProject.game.view.saveMenu.SaveGameView;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class SaveController implements GameComponent {
     private SaveGameView saveGameView;
     private SaveMenuState saveMenuState;
     private final GameContext gameContext;
-    private final SaveGameManager saveGameManager;
+    private final FileManager fileManager;
     private GameState currentState;
     private GameMediator mediator;
+    private final SaveGameManager saveGameManager;
     private List<Clue> clues;
 
-    public SaveController(String username) {
+    public SaveController() {
         this.gameContext = GameContext.getInstance();
         this.saveGameManager = new SaveGameManager(clues);
-        this.saveGameView = new SaveGameView(username); // Passa il nome utente
+        this.saveGameView = new SaveGameView(gameContext.getUsername()); // Passa il nome utente
         this.currentState = gameContext.getCurrentState(); // Recupera lo stato corrente
         this.saveMenuState = new SaveMenuState(currentState, gameContext);
+        this.fileManager = new FileManager();
         addListeners();
     }
 
@@ -46,7 +51,7 @@ public class SaveController implements GameComponent {
         saveGameView.getLoadButton().addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                SaveMenuCommand loadCommand = new LoadCommand(saveGameManager, saveGameView);
+                SaveMenuCommand loadCommand = new LoadCommand(SaveController.this, saveGameManager);
                 loadCommand.execute();
             }
         });
@@ -54,7 +59,7 @@ public class SaveController implements GameComponent {
         saveGameView.getDeleteButton().addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                SaveMenuCommand deleteCommand = new DeleteCommand(saveGameManager, saveGameView);
+                SaveMenuCommand deleteCommand = new DeleteCommand(SaveController.this, saveGameManager);
                 deleteCommand.execute();
             }
         });
@@ -63,21 +68,9 @@ public class SaveController implements GameComponent {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 saveMenuState.exit();
-                io.ISSProject.game.controller.saveMenu.BackCommand command = new BackCommand(saveMenuState);
-                command.execute();
-
-                if (mediator!=null){
+                if (mediator != null) {
                     mediator.notify(SaveController.this, "RETURN_TO_MAIN_MENU");
                 }
-
-                /*
-                // Torna alla schermata principale
-                Game game = (Game) Gdx.app.getApplicationListener();
-                MainMenuController2 mainMenuController = new MainMenuController2(gameContext);
-                game.setScreen(mainMenuController.getScreen());
-                // Aggiorna l'InputProcessor per il menu principale
-                Gdx.input.setInputProcessor(mainMenuController.getScreen().getStage());
-                */
             }
         });
 
@@ -92,13 +85,13 @@ public class SaveController implements GameComponent {
     }
 
     @Override
-    public void setMediator(GameMediator mediator){
+    public void setMediator(GameMediator mediator) {
         this.mediator = mediator;
     }
 
     @Override
-    public void notify(String event, Object...data){
-        if(mediator != null){
+    public void notify(String event, Object... data) {
+        if (mediator != null) {
             mediator.notify(this, event, data);
         }
     }
@@ -107,12 +100,25 @@ public class SaveController implements GameComponent {
         return saveGameView;
     }
 
+/*
+    public void switchToLoadedScene(Scene loadedScene) {
+        // Cambia la schermata attuale alla nuova scena
+        Game game = (Game) Gdx.app.getApplicationListener();
+        GameplayController gameplayController = GameplayController.getInstance(gameContext);
+
+        gameContext.setCurrentScene(loadedScene);
+        game.setScreen(gameplayController.getScreen());
+
+        // Aggiorna l'InputProcessor per la scena caricata
+        Gdx.input.setInputProcessor(gameplayController.getScreen().getStage());
+    }*/
+
     public void switchToLoadedScene(Scene loadedScene) {
         // Cambia la schermata attuale alla nuova scena
         Game game = (Game) Gdx.app.getApplicationListener();
 
-        GameplayController gameplayController = new GameplayController(gameContext);
-        MainMenuController2 mainMenuController2 = new MainMenuController2(gameContext);
+        GameplayController gameplayController = new GameplayController();
+        MainMenuController2 mainMenuController2 = new MainMenuController2();
 
         mediator = new GameMediator(game);
         mediator.registerComponents2(

@@ -2,6 +2,7 @@ package io.ISSProject.game.model.saveModel;
 
 import io.ISSProject.game.model.Clue;
 import io.ISSProject.game.model.Scene;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class SaveGameManager {
     private static final String SAVE_DIRECTORY = "saves/";
-    private final FileManager fileManager;
+   private final FileManager fileManager;
     private List<Clue> clues; // Lista degli indizi da salvare
 
     public SaveGameManager(List<Clue> clues) {
@@ -20,9 +21,8 @@ public class SaveGameManager {
         ensureSaveDirectoryExists();
     }
 
-
-     //Assicura che la directory principale dei salvataggi esista.
-    private void ensureSaveDirectoryExists() {
+    //Assicura che la directory principale dei salvataggi esista.
+    public void ensureSaveDirectoryExists() {
         File saveDir = new File(SAVE_DIRECTORY);
         if (!saveDir.exists() && !saveDir.mkdirs()) {
             System.err.println("Impossibile creare la directory principale dei salvataggi.");
@@ -30,8 +30,8 @@ public class SaveGameManager {
     }
 
 
-     //Assicura che la directory dei salvataggi per uno specifico utente esista.
-    private void ensureUserDirectoryExists(String username) {
+    //Assicura che la directory dei salvataggi per uno specifico utente esista.
+    public void ensureUserDirectoryExists(String username) {
         File userDir = new File(SAVE_DIRECTORY + username);
         if (!userDir.exists() && !userDir.mkdirs()) {
             System.err.println("Impossibile creare la directory per l'utente: " + username);
@@ -51,12 +51,17 @@ public class SaveGameManager {
         // Genera il percorso completo del file
         String filePath = getFilePath(username, fileName);
 
+        // Evita duplicati aggiungendo un suffisso se necessario
+        filePath = resolveDuplicateFileName(filePath);
+
         // Crea un oggetto memento con i dati da salvare
         GameStateMemento memento = new GameStateMemento(
             username,                     // Nome dell'utente
             scene.getName(),              // Nome della scena
             scene.exportFoundClues()      // Indizi trovati nella scena
         );
+
+        System.out.println ( scene.getName() + "assurdo");
 
         // Salva il memento nel file JSON
         System.out.println("Salvataggio in corso: " + filePath);
@@ -105,14 +110,30 @@ public class SaveGameManager {
         }
         return deleted;
     }
+
     //Genera un nome file univoco basato sulla data e l'ora.
     public String generateFileName(String username) {
         String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         return username + "_" + timestamp + ".json";
     }
+    //Risolve i conflitti di nomi aggiungendo un suffisso incrementale.
+    public String resolveDuplicateFileName(String filePath) {
+        File file = new File(filePath);
+        int counter = 1;
+
+        while (file.exists()) {
+            String baseName = filePath.substring(0, filePath.lastIndexOf('.'));
+            String extension = filePath.substring(filePath.lastIndexOf('.'));
+            filePath = baseName + "_" + counter + extension;
+            file = new File(filePath);
+            counter++;
+        }
+
+        return filePath;
+    }
 
     //Ottiene il percorso completo di un file di salvataggio per un utente specifico.
-    private String getFilePath(String username, String fileName) {
+    public String getFilePath(String username, String fileName) {
         if (!fileName.endsWith(".json")) {
             fileName += ".json";
         }

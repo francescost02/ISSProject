@@ -1,4 +1,5 @@
 package io.ISSProject.game.controller.mainMenuCommand;
+
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import io.ISSProject.game.controller.mediator.GameComponent;
@@ -17,11 +18,9 @@ public class MainMenuController2 implements GameComponent {
     private GameMediator mediator;
 
 
-
-
-    public MainMenuController2(GameContext gameContext) {
+    public MainMenuController2() {
         AudioManager.getInstance().playMusic();
-        this.gameContext = gameContext;
+        this.gameContext = GameContext.getInstance();
         this.mainMenuView = new MainMenuView2();
         //addListeners();
 
@@ -50,6 +49,7 @@ public class MainMenuController2 implements GameComponent {
                 gameContext.exit();
                 LoadGameCommand command = new LoadGameCommand(mainMenuReceiver);
                 command.execute();
+                mediator.notify(MainMenuController2.this, "LOAD_GAME");
             }
         });
 
@@ -59,6 +59,7 @@ public class MainMenuController2 implements GameComponent {
                 gameContext.exit();
                 SettingsCommand command = new SettingsCommand(mainMenuReceiver);
                 command.execute();
+                mediator.notify(MainMenuController2.this, "SHOW_SETTINGS_MENU");
             }
         });
 
@@ -68,6 +69,7 @@ public class MainMenuController2 implements GameComponent {
                 gameContext.exit();
                 ExitGameCommand command = new ExitGameCommand(mainMenuReceiver);
                 command.execute();
+                mediator.notify(MainMenuController2.this, "SHOW_EXIT_MENU");
             }
         });
     }

@@ -1,4 +1,3 @@
-
 package io.ISSProject.game.model;
 
 import io.ISSProject.game.controller.gameState.GameState;
@@ -12,6 +11,7 @@ public class Scene {
     private List<InteractiveObject> interactiveObjects; // Lista degli oggetti interattivi nella scena
     private int requiredClues; // Numero di indizi richiesti per completare la scena
     private GameState associatedState;
+    private Scene nextScene; // Scena successiva
 
     public Scene(String name, int requiredClues) {
         this.name = name;
@@ -101,6 +101,15 @@ public class Scene {
     public GameState getAssociatedState() {
         return associatedState;
     }
+
+    public void setNextScene(Scene nextScene) {
+        this.nextScene = nextScene;
+    }
+    public int getRequiredClues() {
+        return requiredClues;
+    }
+    // Ottieni la scena successiva
+    public Scene getNextScene() {
+        return nextScene;
+    }
 }
-
-

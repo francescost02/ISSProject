@@ -3,8 +3,8 @@ package io.ISSProject.game.controller.exitMenuStrategy;
 import com.badlogic.gdx.Gdx;
 import io.ISSProject.game.controller.gameState.GameContext;
 import io.ISSProject.game.model.saveModel.FileManager;
+import io.ISSProject.game.model.saveModel.GameStateMemento;
 import io.ISSProject.game.model.saveModel.SaveGameManager;
-import java.io.IOException;
 
 public class SaveAndCloseStrategy implements ExitStrategy {
     private final GameContext gameContext;
@@ -35,18 +35,26 @@ public class SaveAndCloseStrategy implements ExitStrategy {
                     return; // Esci senza salvare
                 }
 
+                // Crea un memento per salvare lo stato corrente
+                GameStateMemento memento = new GameStateMemento(
+                    gameContext.getUsername(),
+                    gameContext.getCurrentScene().getName(),
+                    gameContext.getCurrentScene().exportFoundClues()// Salva gli indizi trovati
+                );
+
                 // Genera il nome del file di salvataggio
                 String saveFileName = saveGameManager.generateFileName(username);
 
                 // Effettua il salvataggio dello stato corrente
                 saveGameManager.saveGame(username, saveFileName, gameContext.getCurrentScene());
+                System.out.println( gameContext.getCurrentScene().getName() + "crazy");
                 System.out.println("Partita salvata con il nome file: " + saveFileName);
             } catch (Exception e) {
                 System.err.println("Errore durante il salvataggio del gioco: " + e.getMessage());
             }
         }
 
-    // Chiude l'applicazione
+        // Chiude l'applicazione
         Gdx.app.exit();
     }
 }

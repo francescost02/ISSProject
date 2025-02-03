@@ -1,9 +1,10 @@
-// GameContext.java
 package io.ISSProject.game.controller.gameState;
 
+import io.ISSProject.game.controller.GameInitializer;
 import io.ISSProject.game.model.Clue;
 import io.ISSProject.game.model.Scene;
 import io.ISSProject.game.model.saveModel.GameStateMemento;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,12 +14,13 @@ public class GameContext {
     private Scene currentScene;
     private String username; // Per memorizzare l'utente loggato
     private Scene savedScene; // Per salvare lo stato della scena
-    private Map<String, Scene> sceneRegistry = new HashMap<>();
-    private Map<String, Clue> clueRegistry = new HashMap<>();
+    private Map<String, Clue> clueRegistry = new HashMap<>(); //indizi
+    private Map<String, Scene> sceneRegistry = new HashMap<>(); //scene disponibili
 
 
     public GameContext() {
-        this.currentState = new MainMenuState(this);
+        GameInitializer.initializeGame(this);
+        this.currentState = new MainMenuState(this);  // Stato iniziale
     }
 
     public static synchronized GameContext getInstance() {
@@ -35,19 +37,16 @@ public class GameContext {
         }
         this.currentState = newState;
 
-        // Aggiorna la scena solo se il nuovo stato ha una scena associata
+        // Imposta la scena corrente in base allo stato
         Scene associatedScene = newState.getAssociatedScene();
         if (associatedScene != null) {
-            this.currentScene = associatedScene;
-            System.out.println("Scena corrente impostata a: " + this.currentScene.getName());
+            setCurrentScene(associatedScene);
+            System.out.println("Scena corrente impostata a: " + associatedScene.getName());
         } else {
-            System.out.println("Il nuovo stato non ha una scena associata. Scena corrente invariata. ");
+            System.out.println("Il nuovo stato non ha una scena associata. Scena corrente invariata.");
         }
-
         System.out.println("Stato corrente: " + this.currentState.getClass().getSimpleName());
     }
-
-
 
     public void exit() {
         if (currentState != null) {
@@ -68,7 +67,6 @@ public class GameContext {
         System.out.println("Scena corrente aggiornata: " + (scene != null ? scene.getName() : "null"));
     }
 
-
     public String getUsername() {
         return username;
     }
@@ -82,47 +80,6 @@ public class GameContext {
         }
     }
 
-    public void restoreScene(GameStateMemento memento) {
-        if (memento != null) {
-            // Controlla se la scena è già registrata
-            Scene loadedScene = sceneRegistry.get(memento.getSceneName());
-
-            if (loadedScene == null) {
-                System.out.println("La scena '" + memento.getSceneName() + "' non è registrata. La registro ora.");
-                if(memento.getSceneName().equals("Brother's Living Room")) {
-                    loadedScene = new Scene(memento.getSceneName(), 1); // Creiamo una nuova scena se non esiste
-                    loadedScene.setAssociatedState(new BrotherLivingRoomState(this));
-                    registerScene(loadedScene);  // La registriamo nel registro
-                } else {
-                    //sviluppare per altre scene
-                }
-            }
-
-            // Ora che la scena è registrata, la carichiamo dal registro
-            loadedScene = loadSceneByName(memento.getSceneName());
-
-            // Imposta la scena corrente nel contesto di gioco
-            setCurrentScene(loadedScene);
-
-            // Recupera gli indizi trovati dal memento e li aggiunge alla scena
-            for (String clueName : memento.getFoundClues()) {
-                Clue foundClue = clueRegistry.get(clueName);
-                if (foundClue != null) {
-                    loadedScene.addInteractiveObject(foundClue);
-                    System.out.println("Indizio aggiunto alla scena: " + foundClue.getTooltipText());
-                } else {
-                    System.err.println("Errore: Indizio '" + clueName + "' non registrato.");
-                }
-            }
-            // Aggiorna gli indizi trovati nella scena caricata
-            loadedScene.markCluesAsFound(memento.getFoundClues());
-
-            System.out.println("Scena del gioco ripristinata con successo.");
-        } else {
-            System.out.println("GameContext: Nessuna scena da ripristinare.");
-        }
-    }
-
     public void saveCurrentScene() {
         if (this.currentScene == null) {
             System.err.println("ERRORE: currentScene è null!");
@@ -132,58 +89,14 @@ public class GameContext {
         this.savedScene = this.currentScene;
     }
 
-
     public void restorePreviousState() {
         if (this.savedScene != null) {
             this.currentScene = this.savedScene;
+            System.out.println("Stato precedente ripristinato. Scena: " + this.savedScene.getName());
         }
     }
 
-    // Metodo per registrare le scene
-    public void registerScene(Scene scene) {
-        if (scene != null && scene.getName() != null) {
-            if (sceneRegistry.containsKey(scene.getName())) {
-                System.out.println("La scena '" + scene.getName() + "' è già registrata. Nessuna azione necessaria.");
-                return; // Evitiamo la registrazione duplicata
-            }
-
-            sceneRegistry.put(scene.getName(), scene);
-            System.out.println("Scena registrata: " + scene.getName());
-            printSceneRegistry();
-        } else {
-            System.err.println("Errore nella registrazione della scena: nome nullo o scena nulla.");
-        }
-    }
-
-
-    // Metodo per caricare una scena dal nome
-    public Scene loadSceneByName(String sceneName) {
-        if (sceneName == null || sceneName.isEmpty()) {
-            System.err.println("Errore: il nome della scena è null o vuoto.");
-            return null;
-        }
-
-        Scene scene = sceneRegistry.get(sceneName);
-        if (scene == null) {
-            System.err.println("Errore: la scena con il nome '" + sceneName + "' non è stata trovata nel registro.");
-        }
-
-        return scene;
-    }
-
-
-    // Metodo per ispezionare il contenuto di sceneRegistry
-    public void printSceneRegistry() {
-        if (sceneRegistry.isEmpty()) {
-            System.out.println("Il registry delle scene è vuoto.");
-        } else {
-            System.out.println("Contenuto del registry delle scene:");
-            for (Map.Entry<String, Scene> entry : sceneRegistry.entrySet()) {
-                System.out.println("Nome scena: " + entry.getKey() + ", Scena: " + entry.getValue());
-            }
-        }
-    }
-
+    // Gestione degli indizi
     public void registerClue(Clue clue) {
         if (clue != null && clue.getTooltipText() != null) {
             if (clueRegistry.containsKey(clue.getTooltipText())) {
@@ -193,20 +106,94 @@ public class GameContext {
 
             clueRegistry.put(clue.getTooltipText(), clue);
             System.out.println("Indizio registrato: " + clue.getTooltipText());
-            printClueRegistry();
         } else {
             System.err.println("Errore nella registrazione dell'indizio: nome nullo o oggetto nullo.");
         }
     }
 
-    public void printClueRegistry() {
-        if (clueRegistry.isEmpty()) {
-            System.out.println("Il registry degli indizi è vuoto.");
-        } else {
-            System.out.println("Contenuto del registry degli indizi:");
-            for (Map.Entry<String, Clue> entry : clueRegistry.entrySet()) {
-                System.out.println("Nome indizio: " + entry.getKey() + ", Indizio: " + entry.getValue());
+
+    // Salvataggio e ripristino dello stato
+    public void restoreScene(GameStateMemento memento) {
+        if (memento != null) {
+            String savedSceneName = memento.getSceneName();
+            System.out.println (savedSceneName);
+            System.out.println("Caricando la scena: " + savedSceneName);
+
+            // Ripristina la scena dal nome salvato
+            Scene restoredScene = loadSceneByName(savedSceneName);
+
+            if (restoredScene != null) {
+                setCurrentScene(restoredScene);
+                System.out.println("Scena ripristinata: " + restoredScene.getName());
+            } else {
+                System.err.println("Errore: scena '" + savedSceneName + "' non trovata.");
             }
+
+            //  Riassegna lo stato alla scena se manca
+            if (restoredScene.getAssociatedState() == null) {
+                System.out.println("Lo stato della scena e' nullo, lo ripristino...");
+                restoredScene.setAssociatedState(new GameplayState(this, restoredScene));
+            }
+
+            // Aggiungi gli indizi trovati
+            for (String clueName : memento.getFoundClues()) {
+                Clue foundClue = clueRegistry.get(clueName);
+                if (foundClue != null) {
+                    currentScene.addInteractiveObject(foundClue);
+                    System.out.println("Indizio aggiunto alla scena: " + foundClue.getTooltipText());
+                }
+            }
+
+            // **Assicuriamoci che gli indizi siano registrati PRIMA di aggiungerli alla scena**
+            for (String clueName : memento.getFoundClues()) {
+                if (!clueRegistry.containsKey(clueName)) {
+                    System.out.println("Registrazione dell'indizio mancante: " + clueName);
+                    Clue newClue = new Clue(clueName, "Testo segnaposto per " + clueName);
+                    registerClue(newClue);
+                }
+            }
+
+            // Recupera gli indizi trovati dal memento e li aggiunge alla scena
+            for (String clueName : memento.getFoundClues()) {
+                Clue foundClue = clueRegistry.get(clueName);
+                if (foundClue != null) {
+                    currentScene.addInteractiveObject(foundClue);
+                    System.out.println("Indizio aggiunto alla scena: " + foundClue.getTooltipText());
+                } else {
+                    System.err.println("Errore: Indizio '" + clueName + "' non registrato.");
+                }
+            }
+            // Aggiorna gli indizi trovati nella scena caricata
+            currentScene.markCluesAsFound(memento.getFoundClues());
+            System.out.println("Scena del gioco ripristinata con successo.");
+        } else {
+            System.out.println("Nessuna scena da ripristinare.");
+        }
+    }
+
+
+    public Scene loadSceneByName(String sceneName) {
+        if (sceneName == null || sceneName.isEmpty()) {
+            System.err.println("Errore: nome della scena nullo o vuoto.");
+            return null;
+        }
+
+        // Cerca la scena nella mappa delle scene
+        Scene scene = sceneRegistry.get(sceneName);
+        if (scene != null) {
+            return scene;
+        }
+
+        System.err.println("Errore: scena con nome '" + sceneName + "' non trovata.");
+        return null;
+    }
+
+
+    // Metodo per aggiungere una scena alla mappa
+    public void addScene(Scene scene) {
+        if (scene != null && !sceneRegistry.containsKey(scene.getName())) {
+            sceneRegistry.put(scene.getName(), scene);
+            System.out.println("Scena '" + scene.getName() + "' aggiunta.");
         }
     }
 }

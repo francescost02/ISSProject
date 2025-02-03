@@ -54,8 +54,8 @@ public class SaveGameView implements Screen {
         return backButton;
     }
 
-    /**
-     * Restituisce il pulsante "Carica".
+
+     /* Restituisce il pulsante "Carica".
      */
     public TextButton getLoadButton() {
         return loadButton;

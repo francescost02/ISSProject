@@ -1,14 +1,10 @@
-package io.ISSProject.game.controller;
+package io.ISSProject.game.controller.gamePlayController;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextTooltip;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
-import io.ISSProject.game.controller.gameState.BrotherLivingRoomState;
 import io.ISSProject.game.controller.gameState.GameContext;
 import io.ISSProject.game.controller.mediator.GameComponent;
 import io.ISSProject.game.controller.mediator.GameMediator;
@@ -22,29 +18,18 @@ import io.ISSProject.game.view.GameplayView.BrotherLivingRoomView;
 public class GameplayController implements GameComponent {
     private final GameContext gameContext;
     private final BrotherLivingRoomView gameView;
+    //private PauseView overlayView;
     private final DetectiveDiary diary;
     private GameMediator mediator;
-    private static GameplayController instance;
+    //private Viewport sharedViewport = new ScreenViewport();
 
-    public GameplayController(GameContext gameContext) {
+    public GameplayController() {
         this.gameContext = GameContext.getInstance();
         this.gameView = new BrotherLivingRoomView(this);
         this.diary = DetectiveDiary.getInstance();
 
-        // Registrazione della scena
-        Scene brotherLivingRoomScene = new Scene("Brother's Living Room", 1);
-        brotherLivingRoomScene.setAssociatedState(new BrotherLivingRoomState(gameContext));
-        gameContext.registerScene(brotherLivingRoomScene);
-
         // Assicuriamoci che il pulsante pausa abbia un listener
         addPauseListener();
-    }
-
-    public synchronized static GameplayController getInstance(GameContext gameContext) {
-        if (instance == null) {
-            instance = new GameplayController(gameContext);
-        }
-        return instance;
     }
 
     private void addPauseListener() {
@@ -80,11 +65,8 @@ public class GameplayController implements GameComponent {
 
                 // Se l'oggetto è un indizio, aggiorna la scena
                 if (object instanceof Clue clue) {
-                    if (clue.isFound()) {
-                        System.out.println("Indizio già trovato: " + clue.getTooltipText());
-                        return; // Esce senza ripetere la notifica
-                    }
-                    diary.addEntry(clue.getTooltipText(), clue.getDialogText());
+                    //clue.setFound(true); // Segna l'indizio come trovato
+                    //System.out.println ("Found: " + clue.isFound());
                     mediator.notify(GameplayController.this, "CLUE_FOUND", clue);
                     checkSceneCompletion();
                 }
@@ -93,12 +75,16 @@ public class GameplayController implements GameComponent {
         return actor;
     }
 
+
     // Metodo per controllare il completamento della scena
     public void checkSceneCompletion() {
         Scene currentScene = gameContext.getCurrentScene();
         if (currentScene != null && currentScene.isCompleted()) {
             System.out.println("Scena completata!");
             mediator.notify(this, "SCENE_COMPLETED", currentScene);
+
+            // Passa alla scena successiva
+            //gameContext.goToNextScene();
         } else {
             System.out.println("La scena non è ancora completata.");
         }
@@ -109,7 +95,7 @@ public class GameplayController implements GameComponent {
     }
 
     @Override
-    public void setMediator(GameMediator mediator){
+    public void setMediator(GameMediator mediator) {
         this.mediator = mediator;
     }
 

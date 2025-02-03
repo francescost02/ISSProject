@@ -1,6 +1,5 @@
 package io.ISSProject.game.controller.saveMenu;
 
-import io.ISSProject.game.controller.GameplayController;
 import io.ISSProject.game.controller.gameState.GameContext;
 import io.ISSProject.game.controller.gameState.GameState;
 import io.ISSProject.game.model.Scene;
@@ -11,40 +10,51 @@ import io.ISSProject.game.view.saveMenu.SaveGameView;
 public class LoadCommand implements SaveMenuCommand {
     private final GameContext gameContext;
     private final SaveGameManager saveGameManager;
-    private final SaveGameView saveGameView;
+    private final SaveController saveController;
 
-    public LoadCommand(SaveGameManager saveGameManager, SaveGameView saveGameView) {
+    public LoadCommand(SaveController saveController, SaveGameManager saveGameManager) {
         this.gameContext = GameContext.getInstance();
         this.saveGameManager = saveGameManager;
-        this.saveGameView = saveGameView;
+        this.saveController = saveController;
     }
 
     @Override
     public void execute() {
-        String selectedFile = saveGameView.getSelectedFile();
+        SaveGameView view = (SaveGameView) saveController.getScreen();
+        String selectedFile = view.getSelectedFile();
+
         if (selectedFile != null && !selectedFile.isEmpty()) {
             try {
                 // Carica il memento dal file
-                GameStateMemento gameState = saveGameManager.loadGame(saveGameView.getUsername(), selectedFile);
+                GameStateMemento gameState = saveGameManager.loadGame(gameContext.getUsername(), selectedFile);
 
                 if (gameState != null) {
                     // Ripristina lo stato nel contesto di gioco
                     gameContext.restoreScene(gameState);
 
-                    SaveController saveController = new SaveController(saveGameView.getUsername());
+
+                    // Carica la scena
                     Scene scena = gameContext.loadSceneByName(gameState.getSceneName());
-                    saveController.switchToLoadedScene(scena);
+                    //Scene scena = gameContext.loadSceneByName("Brother's Living Room");
+                    if (scena != null) {
+                        // Ripristina gli indizi trovati nella scena
+                        scena.markCluesAsFound(gameState.getFoundClues());
 
-                    // CAMBIO DI STATO: Aggiorniamo lo stato in base alla scena caricata
-                    GameState newState = scena.getAssociatedState();
-                    if (newState != null) {
-                        gameContext.changeState(newState);
-                        System.out.println("Nuovo stato impostato: " + newState.getClass().getSimpleName());
+                        SaveController saveController = new SaveController();
+                       saveController.switchToLoadedScene(scena);
+
+                        // CAMBIO DI STATO: Aggiorniamo lo stato in base alla scena caricata
+                        GameState newState = scena.getAssociatedState();
+                        if (newState != null) {
+                            gameContext.changeState(newState);
+                            System.out.println("Nuovo stato impostato: " + newState.getClass().getSimpleName());
+                        } else {
+                            System.err.println("Errore: la scena caricata non ha uno stato associato!");
+                        }
+                        System.out.println("Partita caricata correttamente: " + selectedFile);
                     } else {
-                        System.err.println("Errore: la scena caricata non ha uno stato associato!");
+                        System.err.println("Errore: la scena caricata non è valida!");
                     }
-
-                    System.out.println("Partita caricata correttamente: " + selectedFile);
                 } else {
                     System.err.println("Errore: il file selezionato non contiene uno stato valido.");
                 }
@@ -56,3 +66,4 @@ public class LoadCommand implements SaveMenuCommand {
         }
     }
 }
+

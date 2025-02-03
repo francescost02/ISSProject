@@ -1,4 +1,3 @@
-
 package io.ISSProject.game.model;
 
 import io.ISSProject.game.model.InteractiveObject;

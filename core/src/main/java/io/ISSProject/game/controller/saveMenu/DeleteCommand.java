@@ -5,21 +5,22 @@ import io.ISSProject.game.view.saveMenu.SaveGameView;
 
 public class DeleteCommand implements SaveMenuCommand {
     private final SaveGameManager saveGameManager;
-    private final SaveGameView saveGameView;
+    private final SaveController saveController;
 
-    public DeleteCommand(SaveGameManager saveGameManager, SaveGameView saveGameView) {
+    public DeleteCommand(SaveController saveController, SaveGameManager saveGameManager) {
         this.saveGameManager = saveGameManager;
-        this.saveGameView = saveGameView;
+        this.saveController = saveController;
     }
     @Override
     public void execute() {
-        String selectedFile = saveGameView.getSelectedFile();
-        String username = saveGameView.getUsername(); // Ottieni l'username dalla view
+        SaveGameView view = (SaveGameView) saveController.getScreen();
+        String selectedFile = view.getSelectedFile();
+        String username = view.getUsername(); // Ottieni l'username dalla view
 
         if (selectedFile != null && username != null && !username.isEmpty()) {
             if (saveGameManager.deleteSave(username, selectedFile)) {
                 System.out.println("Salvataggio eliminato: " + selectedFile);
-                saveGameView.populateFileList(username); // Aggiorna la lista dei file dell'utente
+                view.populateFileList(username); // Aggiorna la lista dei file dell'utente
             } else {
                 System.out.println("Errore nell'eliminazione del file o file non trovato.");
             }

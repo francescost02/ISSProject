@@ -5,9 +5,9 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 import io.ISSProject.game.controller.InterfaceManager;
+import io.ISSProject.game.controller.gameState.GameContext;
 import io.ISSProject.game.controller.mediator.GameComponent;
 import io.ISSProject.game.controller.mediator.GameMediator;
-import io.ISSProject.game.controller.gameState.GameContext;
 import io.ISSProject.game.model.userManagment.state.LoggedInState;
 import io.ISSProject.game.model.userManagment.state.LoggingInState;
 import io.ISSProject.game.model.userManagment.state.SignUpState;
@@ -190,7 +190,7 @@ public class UserManager implements GameComponent {
         setState(new LoggedInState(user, mediator));
         this.notify("USER_LOGGED_IN", user);
         System.out.println("accesso effettuato con successo");
-        GameContext.getInstance().setUsername(username);
+        GameContext.getInstance().setUsername(username); //passa l'username al GameContext
         return true;
     }
 
