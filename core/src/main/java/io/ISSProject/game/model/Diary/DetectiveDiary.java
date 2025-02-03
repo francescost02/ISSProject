@@ -56,5 +56,9 @@ public class DetectiveDiary {
             .collect(Collectors.toList());
     }
 
+    public void clear(){
+        entries.clear();
+    }
+
 
 }
