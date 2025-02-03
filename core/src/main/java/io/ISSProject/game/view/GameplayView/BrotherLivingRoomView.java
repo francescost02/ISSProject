@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.utils.viewport.*;
+import io.ISSProject.game.model.InteractiveObject;
 import io.ISSProject.game.view.DiaryUI;
 import io.ISSProject.game.view.DialogWindow;
 import io.ISSProject.game.controller.GameplayController;
@@ -44,7 +45,7 @@ public class BrotherLivingRoomView extends ScreenAdapter {
     }
 
 
-    public DiaryUI getDiaryWindow(){
+    public DiaryUI getDiaryWindow() {
         return diaryWindow;
     }
 
@@ -95,11 +96,10 @@ public class BrotherLivingRoomView extends ScreenAdapter {
         Table interactiveLayer = new Table();
 
         // Crea attori trasparenti per le aree interattive
-        Actor lampActor = controller.createInteractiveArea(
+        InteractiveObject lampActor = new
             "Una lampada vintage...",
             "Una lampada vintage...non credo mi possa aiutare nella risoluzione di questo caso.",
-            false
-        );
+            false);
 
         Actor bookActor = controller.createInteractiveArea(
             "Un antico libro sulla magia...",
@@ -115,9 +115,9 @@ public class BrotherLivingRoomView extends ScreenAdapter {
 
         Actor envelopeActor = controller.createInteractiveArea(
             "Una busta...",
-            "Una busta! Lascita così sul diavno...sembra contenere documenti importanti, vediamo un po'...\n\"*Qualcosa scritto nel documento*\"" ,
+            "Una busta! Lascita così sul diavno...sembra contenere documenti importanti, vediamo un po'...\n\"*Qualcosa scritto nel documento*\"",
             true
-            );
+        );
 
         //Stack per sovrapporre lo sfondo e gli oggetti interattivi
         Stack gameStack = new Stack();
@@ -207,10 +207,9 @@ public class BrotherLivingRoomView extends ScreenAdapter {
     public TextButton getPauseButton() {
         return pauseButton;
     }
-}
 
     @Override
-    public void show(){
+    public void show() {
         Gdx.input.setInputProcessor(stage);
         setupUI();
 
@@ -234,7 +233,7 @@ public class BrotherLivingRoomView extends ScreenAdapter {
         });
     }
 
-    private Vector2 stageToGameAreaCoordinates(float stageX, float stageY){
+    private Vector2 stageToGameAreaCoordinates(float stageX, float stageY) {
         tempCoords.set(stageX, stageY);
         // Converti le coordinate dello stage in coordinate locali della gameArea
         Vector2 localCoords = gameArea.stageToLocalCoordinates(tempCoords);
@@ -259,10 +258,9 @@ public class BrotherLivingRoomView extends ScreenAdapter {
             localCoords.y >= 0 && localCoords.y <= gameArea.getHeight();
     }
 
-    public Table getGameArea(){
+    public Table getGameArea() {
         return gameArea;
     }
-
 
 }
 

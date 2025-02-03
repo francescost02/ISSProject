@@ -15,6 +15,7 @@ dependencies {
 
   implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
   implementation "com.kotcrab.vis:vis-ui:1.5.1"
+
   implementation 'com.google.code.gson:gson:2.10.1'
 
 
