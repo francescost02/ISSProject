@@ -1,5 +1,4 @@
 package io.ISSProject.game.controller.mainMenuCommand;
-
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import io.ISSProject.game.controller.mediator.GameComponent;

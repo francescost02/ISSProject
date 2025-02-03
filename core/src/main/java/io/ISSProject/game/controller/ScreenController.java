@@ -1,4 +1,3 @@
-
 package io.ISSProject.game.controller;
 
 import com.badlogic.gdx.Gdx;

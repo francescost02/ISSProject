@@ -1,4 +1,3 @@
-
 package io.ISSProject.game.controller;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -23,10 +22,8 @@ import io.ISSProject.game.view.GameplayView.BrotherLivingRoomView;
 public class GameplayController implements GameComponent {
     private final GameContext gameContext;
     private final BrotherLivingRoomView gameView;
-    //private PauseView overlayView;
     private final DetectiveDiary diary;
     private GameMediator mediator;
-    //private Viewport sharedViewport = new ScreenViewport();
     private static GameplayController instance;
 
     public GameplayController(GameContext gameContext) {
@@ -87,6 +84,7 @@ public class GameplayController implements GameComponent {
                         System.out.println("Indizio già trovato: " + clue.getTooltipText());
                         return; // Esce senza ripetere la notifica
                     }
+                    diary.addEntry(clue.getTooltipText(), clue.getDialogText());
                     mediator.notify(GameplayController.this, "CLUE_FOUND", clue);
                     checkSceneCompletion();
                 }
@@ -111,7 +109,7 @@ public class GameplayController implements GameComponent {
     }
 
     @Override
-    public void setMediator(GameMediator mediator) {
+    public void setMediator(GameMediator mediator){
         this.mediator = mediator;
     }
 

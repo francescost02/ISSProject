@@ -1,7 +1,7 @@
 package io.ISSProject.game.controller.exitMenuStrategy;
-
 import io.ISSProject.game.controller.gameState.ExitMenuState;
 import io.ISSProject.game.controller.gameState.GameState;
+
 
 public class CancelStrategy implements ExitStrategy {
     private ExitMenuState exitMenuState;

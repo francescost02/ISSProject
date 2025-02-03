@@ -81,13 +81,6 @@ public class ExitMenuController2 implements GameComponent {
                     // Gestione di altri eventi
                     System.out.println("Evento non gestito: " + event);
                 }
-
-                /*
-                // Torna alla schermata principale
-                Game game = (Game) Gdx.app.getApplicationListener();
-                MainMenuController2 mainMenuController = new MainMenuController2(gameContext);
-                game.setScreen(mainMenuController.getScreen());
-                */
             }
         });
     }

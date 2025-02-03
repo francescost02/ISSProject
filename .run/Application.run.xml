@@ -1,9 +1,14 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Application" type="Application" factoryName="Application">
+<<<<<<< HEAD
     <option name="ALTERNATIVE_JRE_PATH" value="21" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <option name="MAIN_CLASS_NAME" value="io.ISSProject.game.lwjgl3.Lwjgl3Launcher" />
     <module name="ProgettoISS.lwjgl3.main" />
+=======
+    <option name="MAIN_CLASS_NAME" value="io.ISSProject.game.lwjgl3.Lwjgl3Launcher" />
+    <module name="ISSProject.lwjgl3.main" />
+>>>>>>> branch-di-giacomo
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

@@ -1,4 +1,3 @@
-
 package io.ISSProject.game.controller.mediator;
 
 import com.badlogic.gdx.Game;
@@ -17,7 +16,6 @@ import io.ISSProject.game.controller.gameState.MainMenuState;
 import io.ISSProject.game.controller.gameState.BrotherLivingRoomState;
 import io.ISSProject.game.controller.settingsMenuController.SettingsController;
 import io.ISSProject.game.model.Clue;
-import io.ISSProject.game.model.InteractiveObject;
 import io.ISSProject.game.model.Scene;
 import io.ISSProject.game.model.userManagment.UserManager;
 import io.ISSProject.game.view.UI.UnregisteredUI;
@@ -114,43 +112,7 @@ public class GameMediator {
                 Gdx.input.setInputProcessor(pauseMenuController.getScreen().getStage());
                 break;
             case "CLUE_FOUND":
-                Clue receivedClue = (Clue) data[0];
-                String clueTitle = receivedClue.getTooltipText();
-                Scene currentScene = gameContext.getCurrentScene();
-
-                // Trova l'istanza esatta del Clue nella scena
-                Clue clue = currentScene.getInteractiveObjects().stream()
-                    .filter(obj -> obj instanceof Clue && ((Clue) obj).getTooltipText().equals(clueTitle))
-                    .map(obj -> (Clue) obj)
-                    .findFirst()
-                    .orElse(null);
-
-                if (clue == null) {
-                    clue = receivedClue; // Usa comunque il Clue ricevuto per evitare crash
-                    currentScene.addInteractiveObject(clue);
-                }
-
-                boolean alreadyFound = clue.isFound();
-                if(alreadyFound == false) {
-                    // Mostra la notifica del nuovo indizio
-                    Stage currentStage = gameplayController.getScreen().getStage();
-                    Skin skin = gameplayController.getScreen().getSkin();
-
-                    // Segna l'indizio come trovato
-                    clue.setFound(true);
-                    new ClueNotification(clueTitle, skin, currentStage);
-                } else {
-                    // Mostra la notifica dell'indizio già trovato
-                    Stage currentStage = gameplayController.getScreen().getStage();
-                    Skin skin = gameplayController.getScreen().getSkin();
-
-                    new ClueNotification(clueTitle, skin, currentStage, alreadyFound);
-                }
-
-                // Aggiungi l'indizio alla scena solo se non è già presente
-                if (!currentScene.getInteractiveObjects().contains(clue)) {
-                    currentScene.addInteractiveObject(clue);
-                }
+                handleClueFound((Clue) data[0]);
                 break;
             case "RETURN_TO_GAME":
                 // Ripristina la scena salvata se necessario
@@ -161,6 +123,45 @@ public class GameMediator {
                 game.setScreen(gameplayController.getScreen());
                 Gdx.input.setInputProcessor(gameplayController.getScreen().getStage());
                 break;
+        }
+    }
+
+    private void handleClueFound(Clue receivedClue){
+        String clueTitle = receivedClue.getTooltipText();
+        Scene currentScene = gameContext.getCurrentScene();
+
+        // Trova l'istanza esatta del Clue nella scena
+        Clue clue = currentScene.getInteractiveObjects().stream()
+            .filter(obj -> obj instanceof Clue && ((Clue) obj).getTooltipText().equals(clueTitle))
+            .map(obj -> (Clue) obj)
+            .findFirst()
+            .orElse(null);
+
+        if (clue == null) {
+            clue = receivedClue; // Usa comunque il Clue ricevuto per evitare crash
+            currentScene.addInteractiveObject(clue);
+        }
+
+        boolean alreadyFound = clue.isFound();
+        if(!alreadyFound) {
+            // Mostra la notifica del nuovo indizio
+            Stage currentStage = gameplayController.getScreen().getStage();
+            Skin skin = gameplayController.getScreen().getSkin();
+
+            // Segna l'indizio come trovato
+            clue.setFound(true);
+            new ClueNotification(clueTitle, skin, currentStage);
+        } else {
+            // Mostra la notifica dell'indizio già trovato
+            Stage currentStage = gameplayController.getScreen().getStage();
+            Skin skin = gameplayController.getScreen().getSkin();
+
+            new ClueNotification(clueTitle, skin, currentStage, alreadyFound);
+        }
+
+        // Aggiungi l'indizio alla scena solo se non è già presente
+        if (!currentScene.getInteractiveObjects().contains(clue)) {
+            currentScene.addInteractiveObject(clue);
         }
     }
 }

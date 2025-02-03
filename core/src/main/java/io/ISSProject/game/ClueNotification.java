@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class ClueNotification extends Dialog {
+
     public ClueNotification(String tooltipText, Skin skin, Stage stage) {
         super("Nuovo Indizio!", skin);
         text("Hai trovato un nuovo indizio: " + tooltipText);
@@ -39,7 +40,6 @@ public class ClueNotification extends Dialog {
         addAction(Actions.sequence(
             Actions.fadeIn(0.5f),
             Actions.delay(1.5f),
-            //Actions.fadeOut(0.5f),
             Actions.removeActor()
         ));
     }

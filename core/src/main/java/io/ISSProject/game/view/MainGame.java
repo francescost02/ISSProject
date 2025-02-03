@@ -2,6 +2,10 @@ package io.ISSProject.game.view;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.ScreenUtils;
 import io.ISSProject.game.controller.GameplayController;
 import io.ISSProject.game.controller.ScreenController;
 import io.ISSProject.game.controller.mainMenuCommand.MainMenuController2;
@@ -10,6 +14,7 @@ import io.ISSProject.game.controller.gameState.GameContext;
 import io.ISSProject.game.model.Scene;
 import io.ISSProject.game.model.userManagment.UserManager;
 import io.ISSProject.game.view.UI.LoggingInUI;
+import io.ISSProject.game.view.UI.UnregisteredUI;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */

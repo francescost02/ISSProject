@@ -75,12 +75,6 @@ public class SettingsController implements GameComponent {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 settingsMenuState.exit();
-                /*
-                if(mediator!=null){
-                    mediator.notify(SettingsController.this, "RETURN_TO_MAIN_MENU");
-                }
-
-                 */
 
                 if (mediator!=null) {
                     // Verifica lo stato precedente
@@ -99,16 +93,6 @@ public class SettingsController implements GameComponent {
                     // Gestione di altri eventi
                     System.out.println("Evento non gestito: " + event);
                 }
-                 /*
-                // Torna alla schermata principale
-                Game game = (Game) Gdx.app.getApplicationListener();
-                MainMenuController2 mainMenuController = new MainMenuController2(gameContext);
-                game.setScreen(mainMenuController.getScreen());
-                // Aggiorna l'InputProcessor per il menu principale
-                Gdx.input.setInputProcessor(mainMenuController.getScreen().getStage());
-
-                 */
-
             }
         });
     }
