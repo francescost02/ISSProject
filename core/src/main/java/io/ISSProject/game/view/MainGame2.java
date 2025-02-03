@@ -15,7 +15,7 @@ public class MainGame2 extends Game {
         batch = new SpriteBatch();
         this.gameContext = new GameContext(); // Inizializzato una sola volta
 
-        this.mainMenuController = new MainMenuController2(gameContext);
+        this.mainMenuController = new MainMenuController2();
         this.setScreen(this.mainMenuController.getScreen()); //imposta la schermata
     }
 

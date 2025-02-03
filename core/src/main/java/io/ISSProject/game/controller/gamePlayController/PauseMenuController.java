@@ -1,12 +1,9 @@
-package io.ISSProject.game.controller;
+package io.ISSProject.game.controller.gamePlayController;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import io.ISSProject.game.controller.mediator.GameComponent;
 import io.ISSProject.game.controller.mediator.GameMediator;
-import io.ISSProject.game.controller.settingsMenuController.SettingsController;
-import io.ISSProject.game.controller.exitMenuStrategy.ExitMenuController2;
 import io.ISSProject.game.controller.gameState.GameContext;
 import io.ISSProject.game.controller.gameState.PauseMenuState;
 import io.ISSProject.game.view.PauseMenuView;

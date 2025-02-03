@@ -9,14 +9,13 @@ public class GameplayState implements GameState {
     public GameplayState(GameContext gameContext, Scene currentScene) {
         this.gameContext = gameContext;
         this.currentScene = currentScene;
-        gameContext.setCurrentScene(currentScene); // Imposta la scena corrente nel contesto di gioco
-
+        //gameContext.setCurrentScene(currentScene);
         System.out.println("Entrato nello stato GameplayState per la scena: " + currentScene.getName());
-        System.out.println("Indizi nella scena: " + currentScene.getRequiredClues());
     }
 
     @Override
     public void exit() {
+        gameContext.saveCurrentScene();
         System.out.println("Uscita dallo stato GameplayState per la scena: " + currentScene.getName());
     }
 

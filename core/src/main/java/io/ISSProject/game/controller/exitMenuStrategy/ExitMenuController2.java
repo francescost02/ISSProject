@@ -8,9 +8,13 @@ import io.ISSProject.game.controller.gameState.*;
 import io.ISSProject.game.controller.mainMenuCommand.MainMenuController2;
 import io.ISSProject.game.controller.mediator.GameComponent;
 import io.ISSProject.game.controller.mediator.GameMediator;
-import io.ISSProject.game.controller.settingsMenuController.BackCommand;
+import io.ISSProject.game.controller.saveMenu.SaveController;
 import io.ISSProject.game.controller.settingsMenuController.SettingsController;
+import io.ISSProject.game.model.Clue;
+import io.ISSProject.game.model.saveModel.SaveGameManager;
 import io.ISSProject.game.view.ExitMenuView2;
+
+import java.util.List;
 
 
 public class ExitMenuController2 implements GameComponent {
@@ -20,16 +24,18 @@ public class ExitMenuController2 implements GameComponent {
     private ExitMenuState exitMenuState;
     private GameState currentState;
     private GameMediator mediator;
+    private SaveGameManager saveGameManager;
+    private List<Clue> clues;
+   // private final SaveController saveController;
 
-    public ExitMenuController2(GameContext gameContext) {
-        this.gameContext = gameContext;
+    public ExitMenuController2() {
+        this.gameContext = GameContext.getInstance();
         this.exitMenuView = new ExitMenuView2();
         addListeners();
 
-        //this.currentState = this.exitMenuState.getGameContext().getCurrentState();
-        //this.exitMenuState = new ExitMenuState(currentState,this.exitMenuState.getGameContext());
         this.currentState = gameContext.getCurrentState(); //recupera lo stato corrente
         this.exitMenuState = new ExitMenuState(currentState, gameContext);
+        this.saveGameManager = new SaveGameManager(clues);
     }
 
     public void addListeners() {
@@ -38,7 +44,7 @@ public class ExitMenuController2 implements GameComponent {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 exitMenuState.exit();
-                SaveAndCloseStrategy strategy = new SaveAndCloseStrategy();
+                SaveAndCloseStrategy strategy = new SaveAndCloseStrategy(saveGameManager);
                 strategy.execute();
             }
         });
@@ -56,8 +62,6 @@ public class ExitMenuController2 implements GameComponent {
             @Override
            public void clicked(InputEvent event, float x, float y) {
                 exitMenuState.exit();
-                CancelStrategy strategy = new CancelStrategy(exitMenuState);
-                strategy.execute();
 
                 if (mediator!=null) {
                     // Verifica lo stato precedente
@@ -65,11 +69,11 @@ public class ExitMenuController2 implements GameComponent {
 
                     // Se lo stato precedente è il menu principale
                     if (previousState instanceof MainMenuState) {
-                        mediator.notify(ExitMenuController2.this, "RETURN_TO_MAIN_MENU");
+                        mediator.notify(ExitMenuController2.this,  "RETURN_TO_MAIN_MENU");
                     }
                     // Se lo stato precedente è il menu di pausa
                     else if (previousState instanceof PauseMenuState) {
-                        mediator.notify(ExitMenuController2.this, "RETURN_TO_PAUSE_MENU");
+                        mediator.notify(ExitMenuController2.this,"RETURN_TO_PAUSE_MENU");
                     }
                 } else {
                     // Gestione di altri eventi

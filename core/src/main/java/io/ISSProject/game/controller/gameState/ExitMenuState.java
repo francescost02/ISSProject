@@ -5,7 +5,7 @@ import io.ISSProject.game.model.Scene;
 
 public class ExitMenuState implements GameState {
     private final GameState previousState;
-    private final GameContext gameContext;
+    private  GameContext gameContext;
 
     public ExitMenuState(GameState previousState, GameContext gameContext) {
         this.previousState = previousState;
@@ -30,6 +30,5 @@ public class ExitMenuState implements GameState {
     public GameState getPreviousState() {
         return previousState;
     }
-
 
 }

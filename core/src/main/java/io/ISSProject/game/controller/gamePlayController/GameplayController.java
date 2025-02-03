@@ -1,13 +1,10 @@
-package io.ISSProject.game.controller;
+package io.ISSProject.game.controller.gamePlayController;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextTooltip;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import io.ISSProject.game.controller.gameState.GameContext;
 import io.ISSProject.game.controller.mediator.GameComponent;
 import io.ISSProject.game.controller.mediator.GameMediator;
@@ -26,8 +23,8 @@ public class GameplayController implements GameComponent {
     private GameMediator mediator;
     //private Viewport sharedViewport = new ScreenViewport();
 
-    public GameplayController(GameContext gameContext) {
-        this.gameContext = gameContext;
+    public GameplayController() {
+        this.gameContext = GameContext.getInstance();
         this.gameView = new BrotherLivingRoomView(this);
         this.diary = DetectiveDiary.getInstance();
 
@@ -79,7 +76,6 @@ public class GameplayController implements GameComponent {
     }
 
 
-
     // Metodo per controllare il completamento della scena
     public void checkSceneCompletion() {
         Scene currentScene = gameContext.getCurrentScene();
@@ -88,7 +84,7 @@ public class GameplayController implements GameComponent {
             mediator.notify(this, "SCENE_COMPLETED", currentScene);
 
             // Passa alla scena successiva
-            gameContext.goToNextScene();
+            //gameContext.goToNextScene();
         } else {
             System.out.println("La scena non è ancora completata.");
         }

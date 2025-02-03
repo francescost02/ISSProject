@@ -20,6 +20,20 @@ public class ClueNotification extends Dialog {
         show(stage);
     }
 
+    public ClueNotification(String tooltipText, Skin skin, Stage stage, boolean a) {
+        super("Indizio Già Trovato!", skin);
+        text("Hai già trovato questo indizio: " + tooltipText);
+        button("OK");
+
+        setPosition(
+            (stage.getWidth() - getWidth()) / 2,
+            (stage.getHeight() - getHeight()) / 2
+        );
+
+        setupAnimations();
+        show(stage);
+    }
+
     private void setupAnimations(){
         getColor().a = 0;
         addAction(Actions.sequence(
@@ -30,5 +44,3 @@ public class ClueNotification extends Dialog {
         ));
     }
 }
-
-

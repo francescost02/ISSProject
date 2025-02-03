@@ -1,7 +1,6 @@
 package io.ISSProject.game.view.GameplayView;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -9,14 +8,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.utils.viewport.*;
 import io.ISSProject.game.model.Clue;
 import io.ISSProject.game.model.InteractiveObject;
 import io.ISSProject.game.model.SceneObject;
 import io.ISSProject.game.view.DialogWindow;
-import io.ISSProject.game.controller.GameplayController;
+import io.ISSProject.game.controller.gamePlayController.GameplayController;
 
 public class BrotherLivingRoomView extends ScreenAdapter {
     private final Stage stage;

@@ -24,12 +24,12 @@ public class SettingsController implements GameComponent {
     private Command toggleMuteCommand;
     private GameMediator mediator;
 
-    public SettingsController(GameContext gameContext) {
+    public SettingsController() {
 
         this.model = new SettingsModel();
         //this.view = new SettingsView(model.getAssetManager().getSkin());
         this.settingMenuView = new SettingsView();
-        this.gameContext = gameContext;
+        this.gameContext = GameContext.getInstance();
         this.currentState = gameContext.getCurrentState(); //recupera lo stato corrente
         this.settingsMenuState = new SettingsMenuState(currentState, gameContext);
 
@@ -75,16 +75,6 @@ public class SettingsController implements GameComponent {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 settingsMenuState.exit();
-                /*
-                if(mediator!=null){
-                    mediator.notify(SettingsController.this, "RETURN_TO_MAIN_MENU");
-                }
-
-                 */
-
-                BackCommand command = new BackCommand(settingsMenuState);
-                command.execute();
-
                 if (mediator!=null) {
                     // Verifica lo stato precedente
                     GameState previousState = settingsMenuState.getPreviousState();
