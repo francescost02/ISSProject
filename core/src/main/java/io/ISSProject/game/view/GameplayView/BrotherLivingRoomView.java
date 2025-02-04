@@ -15,56 +15,33 @@ import io.ISSProject.game.model.SceneObject;
 import io.ISSProject.game.view.DialogWindow;
 import io.ISSProject.game.controller.gamePlayController.GameplayController;
 
-public class BrotherLivingRoomView extends ScreenAdapter {
-    private final Stage stage;
-    private final Skin skin;
-    private Table mainTable;
-    private DialogWindow dialogWindow;
+public class BrotherLivingRoomView extends AbstractSceneView {
+    //private Table mainTable;
+    //private DialogWindow dialogWindow;
     private final GameplayController controller;
     private final Texture backgroundTexture;
     private final Vector2 tempCoords = new Vector2();
-    private Table gameArea;
-    private Table overlayArea;
-    private TextButton pauseButton; // Pulsante di pausa
+   // private Table gameArea;
+   // private Table overlayArea;
+    //private TextButton pauseButton; // Pulsante di pausa
 
-    public BrotherLivingRoomView(GameplayController controller) {
+    public BrotherLivingRoomView (GameplayController controller) {
+        super(); // Chiama il costruttore della superclasse
         this.controller = controller;
-        this.stage = new Stage(new FitViewport(800, 600));
-        this.skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
         this.backgroundTexture = new Texture(Gdx.files.internal("images/BrotherLivingRoom.jpeg"));
-        this.dialogWindow = new DialogWindow(skin);
-
-        // Inizializzazione del pulsante pausa
-       this.pauseButton = new TextButton("Pause", skin);
+        //gameArea = new Table();
     }
 
     public void setupUI() {
-        stage.clear();
-        setupLayout();
-        setupInteractiveObjects();
+        super.setupUI();
     }
 
-    private void setupLayout() {
-        mainTable = new Table();
-        mainTable.setFillParent(true);
-
-        gameArea = new Table();
-        mainTable.add(gameArea).expandX().fill().height(stage.getHeight() * 0.7f).row();
-        mainTable.add(dialogWindow).expandX().fill().height(stage.getHeight() * 0.3f).row();
-
-        overlayArea = new Table(); // crea un'area separata per il pulsante pausa
-        stage.addActor(mainTable);
-
-        // Configura l'overlay (per esempio, il pulsante di pausa)
-        pauseButton.setSize(100, 40); // Dimensioni del pulsante
-        pauseButton.setPosition(stage.getViewport().getWorldWidth() - 120, stage.getViewport().getWorldHeight() - 50); // Posizionato in alto a destra
-
-        // Aggiungi il pulsante di pausa allo stage
-        overlayArea.addActor(pauseButton);
-        stage.addActor(overlayArea);
+    public void setupLayout() {
+        super.setupLayout();
+       // gameArea = new Table();
     }
 
-    private void setupInteractiveObjects() {
+    public void setupInteractiveObjects() {
         Table interactiveLayer = new Table();
 
         // Crea attori per le aree interattive (simile a prima)
@@ -128,7 +105,7 @@ public class BrotherLivingRoomView extends ScreenAdapter {
         interactiveLayer.addActor(bookActor);
         interactiveLayer.addActor(paintingActor);
 
-        gameArea.add(gameStack).expand().fill();
+        getGameArea().add(gameStack).expand().fill();
     }
     @Override
     public void render(float delta) {
@@ -141,8 +118,7 @@ public class BrotherLivingRoomView extends ScreenAdapter {
 
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(stage);
-        setupUI();
+        super.show();
     }
 
     @Override
@@ -157,10 +133,7 @@ public class BrotherLivingRoomView extends ScreenAdapter {
         backgroundTexture.dispose();
     }
 
-    public Skin getSkin() {
-        return skin;
-    }
-
+/*
     public Stage getStage() {
         return stage;
     }
@@ -172,4 +145,6 @@ public class BrotherLivingRoomView extends ScreenAdapter {
     public TextButton getPauseButton() {
         return pauseButton;
     }
+
+     */
 }

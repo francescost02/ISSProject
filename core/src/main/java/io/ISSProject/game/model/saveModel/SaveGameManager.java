@@ -6,6 +6,7 @@ import io.ISSProject.game.model.Scene;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -138,5 +139,26 @@ public class SaveGameManager {
             fileName += ".json";
         }
         return SAVE_DIRECTORY + username + "/" + fileName;
+    }
+
+// *** NUOVE FUNZIONI AGGIUNTE ***
+    // Restituisce una lista di tutti i file di salvataggio dell'utente
+    public List<String> getAllSaveFiles(String username) {
+        File userDir = new File(SAVE_DIRECTORY + username);
+        if (!userDir.exists() || !userDir.isDirectory()) {
+            return new ArrayList<>();
+        }
+
+        return Arrays.stream(userDir.listFiles((dir, name) -> name.endsWith(".json")))
+            .map(File::getName)
+            .sorted()
+            .collect(Collectors.toList());
+    }
+
+    // Restituisce l'ultimo file salvato dell'utente
+    public String getLastSavedFile(String username) {
+        List<String> saveFiles = getAllSaveFiles(username);
+        if (saveFiles.isEmpty()) return null;
+        return saveFiles.get(saveFiles.size() - 1);
     }
 }
