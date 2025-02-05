@@ -39,7 +39,7 @@ public class SaveController implements GameComponent {
 
     public SaveController() {
         this.gameContext = GameContext.getInstance();
-        this.saveGameManager = new SaveGameManager(clues);
+        this.saveGameManager = new SaveGameManager();
         this.saveGameView = new SaveGameView(gameContext.getUsername()); // Passa il nome utente
         this.currentState = gameContext.getCurrentState(); // Recupera lo stato corrente
         this.saveMenuState = new SaveMenuState(currentState, gameContext);

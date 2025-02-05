@@ -12,6 +12,7 @@ import io.ISSProject.game.model.Clue;
 import io.ISSProject.game.model.Diary.DetectiveDiary;
 import io.ISSProject.game.model.InteractiveObject;
 import io.ISSProject.game.model.Scene;
+import io.ISSProject.game.view.DiaryUI;
 import io.ISSProject.game.view.GameplayView.AbstractSceneView;
 import io.ISSProject.game.view.GameplayView.BrotherLivingRoomView;
 import io.ISSProject.game.view.GameplayView.StoreView;
@@ -32,7 +33,7 @@ public class GameplayController implements GameComponent {
     public GameplayController() {
         this.gameContext = GameContext.getInstance();
         //this.gameView = new BrotherLivingRoomView(GameplayController.this);
-        this.gameView = gameView;
+       // this.gameView = gameView;
         this.diary = DetectiveDiary.getInstance();
     }
 
@@ -44,6 +45,7 @@ public class GameplayController implements GameComponent {
         // Assicuriamoci che il pulsante pausa abbia un listener
         addPauseListener();
         addNextListener();
+        addDiaryListener();
     }
 
     public void updateViewForScene(Scene scene) {
@@ -91,6 +93,26 @@ public class GameplayController implements GameComponent {
             }
         });
     }
+
+    private void addDiaryListener() {
+        gameView.getDiaryButton().addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                System.out.println("Pulsante Diario cliccato");
+                openDiary();
+            }
+        });
+    }
+
+    public void openDiary() {
+        DiaryUI diaryWindow = gameView.getDiaryWindow();
+        diaryWindow.setVisible(true);
+        float x = (gameView.getStage().getWidth() - gameView.getDiaryWindow().getWidth()) / 2;
+        float y = (gameView.getStage().getHeight() - gameView.getDiaryWindow().getHeight()) / 2;
+        gameView.getDiaryWindow().setPosition(x, y);
+
+    }
+
 
     public Actor createInteractiveArea(InteractiveObject object) {
         Actor actor = new Actor();

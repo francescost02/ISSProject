@@ -35,7 +35,7 @@ public class ExitMenuController2 implements GameComponent {
 
         this.currentState = gameContext.getCurrentState(); //recupera lo stato corrente
         this.exitMenuState = new ExitMenuState(currentState, gameContext);
-        this.saveGameManager = new SaveGameManager(clues);
+        this.saveGameManager = new SaveGameManager();
     }
 
     public void addListeners() {

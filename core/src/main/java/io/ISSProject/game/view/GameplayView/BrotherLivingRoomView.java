@@ -145,6 +145,5 @@ public class BrotherLivingRoomView extends AbstractSceneView {
     public TextButton getPauseButton() {
         return pauseButton;
     }
-
      */
 }
