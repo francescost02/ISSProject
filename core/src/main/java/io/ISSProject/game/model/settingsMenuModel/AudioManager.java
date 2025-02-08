@@ -1,7 +1,9 @@
 package io.ISSProject.game.model.settingsMenuModel;
 
+import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 
 public class AudioManager {
@@ -10,11 +12,14 @@ public class AudioManager {
     private int volume = 50; // Volume di default
     private boolean muted = false;
     private Music backgroundMusic;
+    private Sound clickSound;
+    private Sound clickSoundNotClue;
 
     private AudioManager() {
         // Carica una traccia audio di esempio
         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("audio/gameSound.mp3"));
-
+        clickSound = Gdx.audio.newSound(Gdx.files.internal("audio/clickSound.wav"));
+        clickSoundNotClue = Gdx.audio.newSound(Gdx.files.internal("audio/clickSound2.mp3"));
         backgroundMusic.setLooping(true); // Imposta il loop
         updateVolume();
     }
@@ -24,6 +29,21 @@ public class AudioManager {
             instance = new AudioManager();
         }
         return instance;
+    }
+
+    public void playClickSound() {
+        if (clickSound != null) {
+            clickSound.play(1.0f); // Volume da 0.0f (muto) a 1.0f (massimo)
+        }
+        if (clickSoundNotClue != null) {
+            clickSoundNotClue.play(1.0f); // Volume da 0.0f (muto) a 1.0f (massimo)
+        }
+    }
+
+    public void playClickSound2() {
+        if (clickSoundNotClue != null) {
+            clickSoundNotClue.play(1.0f); // Volume da 0.0f (muto) a 1.0f (massimo)
+        }
     }
 
     public void setVolume(int volume) {
@@ -77,4 +97,5 @@ public class AudioManager {
     public void dispose() {
         backgroundMusic.dispose(); // Rilascia le risorse
     }
+
 }

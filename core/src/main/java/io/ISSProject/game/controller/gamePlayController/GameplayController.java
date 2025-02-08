@@ -16,6 +16,7 @@ import io.ISSProject.game.model.Clue;
 import io.ISSProject.game.model.Diary.DetectiveDiary;
 import io.ISSProject.game.model.InteractiveObject;
 import io.ISSProject.game.model.Scene;
+import io.ISSProject.game.model.settingsMenuModel.AudioManager;
 import io.ISSProject.game.view.DiaryUI;
 import io.ISSProject.game.view.GameplayView.*;
 
@@ -28,12 +29,11 @@ public class GameplayController implements GameComponent {
     private AbstractSceneView gameView;
     private final DetectiveDiary diary;
     private GameMediator mediator;
+    private AudioManager audioManager;
 
 
     public GameplayController() {
         this.gameContext = GameContext.getInstance();
-        //this.gameView = new BrotherLivingRoomView(GameplayController.this);
-       // this.gameView = gameView;
         this.diary = DetectiveDiary.getInstance();
     }
 
@@ -41,7 +41,7 @@ public class GameplayController implements GameComponent {
     // Metodo per impostare la view dopo la creazione del controller
     public void setScreen(AbstractSceneView gameView) {
         this.gameView = gameView;
-
+        this.audioManager = AudioManager.getInstance();
         // Assicuriamoci che il pulsante pausa abbia un listener
         addPauseListener();
         addNextListener();
@@ -102,8 +102,10 @@ public class GameplayController implements GameComponent {
                 System.out.println("Pulsante Next cliccato");
                 if(mediator != null && gameContext.getCurrentScene().isCompleted()) {
                     mediator.notify(GameplayController.this, "GO_TO_NEXT_SCENE");
-                } else
+                } else {
+                    audioManager.playClickSound2();
                     mediator.notify(GameplayController.this, "SCENE_NOT_COMPLETED");
+                }
 
             }
         });
@@ -144,15 +146,17 @@ public class GameplayController implements GameComponent {
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("Area cliccata: " + object.getTooltipText());
                 gameView.getDialogWindow().updateText(object.getDialogText());
-
                 // Interazione specifica
                 object.interact();
 
                 // Se l'oggetto è un indizio, aggiorna la scena
                 if (object instanceof Clue clue) {
+                    audioManager.playClickSound();
                     mediator.notify(GameplayController.this, "CLUE_FOUND", clue);
                     checkSceneCompletion();
                 }
+                else
+                    audioManager.playClickSound2();
             }
         });
         return actor;
