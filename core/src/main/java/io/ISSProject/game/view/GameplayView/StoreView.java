@@ -6,11 +6,15 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import io.ISSProject.game.controller.gamePlayController.GameplayController;
+import io.ISSProject.game.model.InteractiveObject;
+
+import java.util.List;
 
 public class StoreView extends AbstractSceneView {
     private final GameplayController controller;
@@ -73,10 +77,20 @@ public class StoreView extends AbstractSceneView {
 
     @Override
     public void setupInteractiveObjects() {
+        Table interactiveLayer = new Table();
+
+        List<InteractiveObject> interactiveObjects = controller.getInteractiveObjectsForCurrentScene();
+        for (InteractiveObject object : interactiveObjects) {
+            Actor actor = controller.createInteractiveArea(object);
+            actor.setPosition(object.getX(), object.getY());
+            interactiveLayer.addActor(actor);
+        }
         Stack gameStack = new Stack();
         gameStack.add(new Image(backgroundTexture));
+        gameStack.add(interactiveLayer);
         getGameArea().add(gameStack).expand().fill();
     }
+
 
     @Override
     public void resize(int width, int height) {
@@ -89,5 +103,7 @@ public class StoreView extends AbstractSceneView {
         skin.dispose();
         backgroundTexture.dispose();
     }
+
+
 }
 

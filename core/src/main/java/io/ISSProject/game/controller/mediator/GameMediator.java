@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import io.ISSProject.game.ClueNotification;
+import io.ISSProject.game.controller.Puzzles.PuzzleController;
 import io.ISSProject.game.controller.gamePlayController.GameplayController;
 import io.ISSProject.game.controller.gamePlayController.PauseMenuController;
 import io.ISSProject.game.controller.ScreenController;
@@ -14,9 +15,13 @@ import io.ISSProject.game.controller.mainMenuCommand.MainMenuController2;
 import io.ISSProject.game.controller.saveMenu.SaveController;
 import io.ISSProject.game.controller.settingsMenuController.SettingsController;
 import io.ISSProject.game.model.Clue;
+import io.ISSProject.game.model.Puzzles.PuzzleObject;
+import io.ISSProject.game.model.Puzzles.PuzzleStrategy;
+import io.ISSProject.game.model.Puzzles.ReverseTextPuzzle;
 import io.ISSProject.game.model.Scene;
-import io.ISSProject.game.model.saveModel.SaveGameManager;
 import io.ISSProject.game.model.userManagment.UserManager;
+import io.ISSProject.game.view.Puzzles.AbstractPuzzleView;
+import io.ISSProject.game.view.Puzzles.TextPuzzleView;
 import io.ISSProject.game.view.UI.UnregisteredUI;
 
 import java.util.List;
@@ -155,11 +160,14 @@ public class GameMediator {
                 Stage currentStage = gameplayController.getScreen().getStage();
                 Skin skin = gameplayController.getScreen().getSkin();
                 new ClueNotification(clueTitle, skin, currentStage);
+                /*
 
                 // Aggiungi l'indizio alla scena solo se non è già presente
                 if (!currentScene.getInteractiveObjects().contains(clue)) {
                     currentScene.addInteractiveObject(clue);
                 }
+
+                 */
                 break;
 
             case "GO_TO_NEXT_SCENE":
@@ -190,6 +198,41 @@ public class GameMediator {
                 game.setScreen(gameplayController.getScreen());
                 Gdx.input.setInputProcessor(gameplayController.getScreen().getStage());
                 break;
+
+            case "SHOW_PUZZLE":
+                PuzzleStrategy puzzle = (PuzzleStrategy) data[0];
+                PuzzleObject puzzleObj = (PuzzleObject) sender;
+
+                puzzleObj.setMediator(this);
+
+                PuzzleController puzzleController = new PuzzleController(puzzle, this, puzzleObj);
+                Stage puzzleStage = gameplayController.getScreen().getStage();
+                Skin puzzleSkin = gameplayController.getScreen().getSkin();
+
+                AbstractPuzzleView puzzleView = null;
+                if (puzzle instanceof ReverseTextPuzzle) {
+                    puzzleView = new TextPuzzleView("Enigma testuale", puzzleSkin, puzzleController);
+                }
+                if (puzzleView == null){
+                    throw new IllegalArgumentException("Tipo puzzle non supportato"+puzzle.getClass().getSimpleName());
+                }
+                puzzleView.show(puzzleStage);
+                break;
+
+            case "PUZZLE_SOLVED":
+                PuzzleObject solvedPuzzle = (PuzzleObject) data[0];
+                /*
+                // Tratta il puzzle come un indizio trovato
+                Clue newClue = new Clue(solvedPuzzle.getTooltipText(), solvedPuzzle.getDialogText(),
+                    solvedPuzzle.getX(), solvedPuzzle.getY(),
+                    solvedPuzzle.getWidth(), puzsolvedPuzzlezleObj.getHeight());
+                newClue.setFound(true);
+
+                 */
+                //gameContext.getCurrentScene().addInteractiveObject(newClue);
+                gameplayController.checkSceneCompletion();
+                break;
+
         }
     }
 }

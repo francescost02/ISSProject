@@ -1,0 +1,216 @@
+mySkin.png
+	size: 2048, 2048
+	filter: Linear, Linear
+	repeat: none
+1.png
+	bounds: 104, 4, 32, 32
+12.png
+	bounds: 240, 4, 32, 32
+13.png
+	bounds: 1542, 1348, 32, 32
+18.png
+	bounds: 1400, 214, 32, 32
+10.png
+	bounds: 1400, 214, 32, 32
+11.png
+	bounds: 1400, 214, 32, 32
+14.png
+	bounds: 1400, 214, 32, 32
+15.png
+	bounds: 1400, 214, 32, 32
+16.png
+	bounds: 1400, 214, 32, 32
+17.png
+	bounds: 1400, 214, 32, 32
+20.png
+	bounds: 1400, 214, 32, 32
+21.png
+	bounds: 1400, 214, 32, 32
+22.png
+	bounds: 1400, 214, 32, 32
+23.png
+	bounds: 1400, 214, 32, 32
+3.png
+	bounds: 1400, 214, 32, 32
+33.png
+	bounds: 1400, 214, 32, 32
+34.png
+	bounds: 1400, 214, 32, 32
+39.png
+	bounds: 1400, 214, 32, 32
+40.png
+	bounds: 1400, 214, 32, 32
+8.png
+	bounds: 1400, 214, 32, 32
+9.png
+	bounds: 1400, 214, 32, 32
+19.png
+	bounds: 70, 4, 32, 32
+2.png
+	bounds: 1542, 1110, 32, 32
+24.png
+	bounds: 1542, 1042, 32, 32
+25.png
+	bounds: 1542, 1314, 32, 32
+26.png
+	bounds: 1542, 1178, 32, 32
+27.png
+	bounds: 1916, 1804, 32, 32
+28.png
+	bounds: 1834, 1686, 32, 32
+29.png
+	bounds: 1542, 1144, 32, 32
+30.png
+	bounds: 274, 4, 32, 32
+31.png
+	bounds: 1834, 1720, 32, 32
+32.png
+	bounds: 1542, 1212, 32, 32
+35.png
+	bounds: 206, 4, 32, 32
+36.png
+	bounds: 1466, 278, 32, 32
+37.png
+	bounds: 924, 182, 32, 32
+38.png
+	bounds: 1060, 182, 32, 32
+4.png
+	bounds: 138, 4, 32, 32
+41.png
+	bounds: 992, 182, 32, 32
+42.png
+	bounds: 2, 4, 32, 32
+43.png
+	bounds: 692, 166, 112, 48
+44.png
+	bounds: 1834, 1788, 80, 48
+45.png
+	bounds: 1466, 312, 64, 48
+46.png
+	bounds: 1768, 1724, 64, 112
+47.png
+	bounds: 1624, 1546, 80, 64
+48.png
+	bounds: 1542, 1448, 80, 64
+49.png
+	bounds: 1400, 248, 64, 112
+5.png
+	bounds: 1542, 1008, 32, 32
+50.png
+	bounds: 1768, 1658, 64, 64
+51.png
+	bounds: 1960, 1950, 80, 96
+52.png
+	bounds: 1542, 1514, 80, 96
+53.png
+	bounds: 1960, 1852, 80, 96
+54.png
+	bounds: 630, 70, 48, 64
+55.png
+	bounds: 1542, 1382, 48, 64
+56.png
+	bounds: 1624, 1480, 48, 64
+6.png
+	bounds: 890, 182, 32, 32
+7.png
+	bounds: 1026, 182, 32, 32
+BookDesk 1.png
+	bounds: 2, 924, 768, 560
+BookDesk 2.png
+	bounds: 772, 924, 768, 560
+BookDesk 4.png
+	bounds: 772, 1486, 768, 560
+BookDesk 5.png
+	bounds: 772, 362, 768, 560
+BookDesk 6.png
+	bounds: 2, 1486, 768, 560
+BookDesk 7.png
+	bounds: 2, 362, 768, 560
+Button (1).png
+	bounds: 1624, 1462, 16, 16
+Button (10).png
+	bounds: 1834, 1668, 16, 16
+Button (11).png
+	bounds: 1592, 1412, 16, 16
+Button (12).png
+	bounds: 1674, 1528, 16, 16
+Button (13).png
+	bounds: 172, 4, 32, 32
+Button (19).png
+	bounds: 172, 4, 32, 32
+Button (14).png
+	bounds: 1834, 1754, 32, 32
+Button (20).png
+	bounds: 1834, 1754, 32, 32
+Button (26).png
+	bounds: 1834, 1754, 32, 32
+Button (15).png
+	bounds: 1542, 1280, 32, 32
+Button (17).png
+	bounds: 856, 182, 32, 32
+Button (23).png
+	bounds: 856, 182, 32, 32
+Button (29).png
+	bounds: 856, 182, 32, 32
+Button (18).png
+	bounds: 1542, 1246, 32, 32
+Button (2).png
+	bounds: 308, 2, 16, 16
+Button (21).png
+	bounds: 1542, 1076, 32, 32
+Button (22).png
+	bounds: 1868, 1754, 32, 32
+Button (16).png
+	bounds: 1868, 1754, 32, 32
+Button (24).png
+	bounds: 1768, 1624, 32, 32
+Button (25).png
+	bounds: 1868, 1720, 32, 32
+Button (27).png
+	bounds: 36, 4, 32, 32
+Button (28).png
+	bounds: 958, 182, 32, 32
+Button (3).png
+	bounds: 692, 148, 16, 16
+Button (30).png
+	bounds: 1868, 1686, 32, 32
+Button (31).png
+	bounds: 1642, 1462, 16, 16
+Button (32).png
+	bounds: 1434, 230, 16, 16
+Button (33).png
+	bounds: 1542, 990, 16, 16
+Button (4).png
+	bounds: 1466, 260, 16, 16
+Button (5).png
+	bounds: 710, 148, 16, 16
+Button (6).png
+	bounds: 1592, 1430, 16, 16
+Button (7).png
+	bounds: 308, 20, 16, 16
+Button (8).png
+	bounds: 1674, 1510, 16, 16
+Button (9).png
+	bounds: 1802, 1640, 16, 16
+Dialogue Box 1.png
+	bounds: 2, 136, 688, 224
+Items (13).png
+	bounds: 1500, 294, 16, 16
+Items (17).png
+	bounds: 806, 166, 48, 48
+Items (21).png
+	bounds: 1706, 1562, 48, 48
+Minimap.png
+	bounds: 1542, 1612, 224, 224
+Notification 1.png
+	bounds: 340, 54, 288, 80
+Notification 2.png
+	bounds: 2, 38, 336, 96
+Player HUD.png
+	bounds: 1110, 200, 288, 160
+Rewards (1).png
+	bounds: 1542, 1838, 416, 208
+Rewards (2).png
+	bounds: 692, 216, 416, 144
+BookDesk 3.png
+	bounds: 2, 2, 768, 560

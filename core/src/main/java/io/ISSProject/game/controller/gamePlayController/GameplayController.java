@@ -11,11 +11,14 @@ import io.ISSProject.game.controller.mediator.GameMediator;
 import io.ISSProject.game.model.Clue;
 import io.ISSProject.game.model.Diary.DetectiveDiary;
 import io.ISSProject.game.model.InteractiveObject;
+import io.ISSProject.game.model.Puzzles.PuzzleObject;
 import io.ISSProject.game.model.Scene;
 import io.ISSProject.game.view.DiaryUI;
 import io.ISSProject.game.view.GameplayView.AbstractSceneView;
 import io.ISSProject.game.view.GameplayView.BrotherLivingRoomView;
 import io.ISSProject.game.view.GameplayView.StoreView;
+
+import java.util.List;
 
 import static java.lang.Thread.sleep;
 
@@ -118,10 +121,16 @@ public class GameplayController implements GameComponent {
         Actor actor = new Actor();
         actor.setTouchable(Touchable.enabled);
 
+        // Imposta il mediator se l'oggetto è un PuzzleObject
+        if (object instanceof PuzzleObject puzzleObj) {
+            puzzleObj.setMediator(mediator);
+        }
+
         // Aggiungi tooltip
         TextTooltip tooltip = new TextTooltip(object.getTooltipText(), gameView.getSkin());
         tooltip.setInstant(true);
         actor.addListener(tooltip);
+        actor.setBounds(object.getX(), object.getY(), object.getWidth(), object.getHeight());
 
         // Aggiungi listener per il click
         actor.addListener(new ClickListener() {
@@ -179,5 +188,10 @@ public class GameplayController implements GameComponent {
         if (mediator != null) {
             mediator.notify(this, event, data);
         }
+    }
+
+    public List<InteractiveObject> getInteractiveObjectsForCurrentScene() {
+        Scene currentScene = gameContext.getCurrentScene();
+        return currentScene.getInteractiveObjects();
     }
 }

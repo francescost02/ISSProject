@@ -1,5 +1,6 @@
 package io.ISSProject.game.view.GameplayView;
 
+import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
@@ -44,11 +45,21 @@ public class BrotherLivingRoomView extends AbstractSceneView {
     public void setupInteractiveObjects() {
         Table interactiveLayer = new Table();
 
+        List<InteractiveObject> interactiveObjects = controller.getInteractiveObjectsForCurrentScene();
+        for (InteractiveObject object : interactiveObjects){
+            Actor actor = controller .createInteractiveArea(object);
+            actor.setPosition(object.getX(), object.getY());
+            interactiveLayer.addActor(actor);
+        }
+        /*
+/*
         // Crea attori per le aree interattive (simile a prima)
         Clue lamp = new Clue(
             "una lampada vintage",
             "Una lampada vintage...non credo mi possa aiutare nella risoluzione di questo caso."
         );
+
+
         InteractiveObject book = new SceneObject(
             "Un antico libro sulla magia...",
             "Un antico libro sulla magia...chissà se esiste qualche incantesimo per avere una giornata normale ogni tanto."
@@ -64,14 +75,17 @@ public class BrotherLivingRoomView extends AbstractSceneView {
             "Questa chiave sembra importante... potrei usarla per qualcosa."
         );
 
-        Actor lampActor = controller.createInteractiveArea(lamp);
-        Actor bookActor = controller.createInteractiveArea(book);
-        Actor paintingActor = controller.createInteractiveArea(painting);
+         */
+
+        //Actor lampActor = controller.createInteractiveArea(lamp);
+        //Actor bookActor = controller.createInteractiveArea(book);
+        //Actor paintingActor = controller.createInteractiveArea(painting);
 
         Stack gameStack = new Stack();
         gameStack.add(new Image(backgroundTexture));
         gameStack.add(interactiveLayer);
 
+        /*
         // Usa un approccio relativo per il posizionamento
         lampActor.setPosition(
             599f / 800f * stage.getViewport().getWorldWidth(),
@@ -82,6 +96,8 @@ public class BrotherLivingRoomView extends AbstractSceneView {
             260f / 600f * stage.getViewport().getWorldHeight() * 0.7f
         );
 
+         */
+/*
         bookActor.setPosition(
             110f / 800f * stage.getViewport().getWorldWidth(),
             331f / 600f * stage.getViewport().getWorldHeight() * 0.7f
@@ -101,9 +117,11 @@ public class BrotherLivingRoomView extends AbstractSceneView {
             40f / 160f * stage.getViewport().getWorldHeight() * 0.7f
         );
 
-        interactiveLayer.addActor(lampActor);
+        //interactiveLayer.addActor(lampActor);
         interactiveLayer.addActor(bookActor);
         interactiveLayer.addActor(paintingActor);
+
+ */
 
         getGameArea().add(gameStack).expand().fill();
     }

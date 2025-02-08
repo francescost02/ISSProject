@@ -3,7 +3,10 @@ package io.ISSProject.game.controller;
 import io.ISSProject.game.controller.gameState.GameContext;
 import io.ISSProject.game.controller.gameState.GameplayState;
 import io.ISSProject.game.model.Clue;
+import io.ISSProject.game.model.Puzzles.PuzzleObject;
+import io.ISSProject.game.model.Puzzles.ReverseTextPuzzle;
 import io.ISSProject.game.model.Scene;
+import io.ISSProject.game.model.SceneObject;
 
 public class GameInitializer {
     public static void initializeGame(GameContext gameContext) {
@@ -27,9 +30,33 @@ public class GameInitializer {
         gameContext.addScene(scene3);
 
         // Crea e registra gli indizi
-        Clue lamp = new Clue("Una lampada vintage", "Una lampada vintage...non credo mi possa aiutare nella risoluzione di questo caso.");
-       // scene1.addInteractiveObject(lamp);
+        Clue lamp = new Clue(
+            "Una lampada vintage", "Una lampada vintage...non credo mi possa aiutare nella risoluzione di questo caso.",
+            100f, 150f,
+            40f, 120f
+        );
+
+        scene1.addInteractiveObject(lamp);
         gameContext.registerClue(lamp);
+
+        SceneObject book = new SceneObject(
+            "Un libro...", "un libro pieno di bestemmie ho sonno",
+            50f, 60f,
+            40f, 120f
+        );
+        scene2.addInteractiveObject(book);
+
+        //Creazione enigmi
+        PuzzleObject puzzleObject = new PuzzleObject(
+            "Enigma Misterioso", // tooltipText che appare al passaggio del mouse
+            "Hai trovato un enigma da risolvere!", // dialogText che appare al click
+            100f, // posizione x nella scena
+            100f, // posizione y nella scena
+            50f,  // larghezza dell'area cliccabile
+            50f,  // altezza dell'area cliccabile
+            new ReverseTextPuzzle()
+        );
+        scene1.addInteractiveObject(puzzleObject);
 
         System.out.println("Scene1 in GameInitializer: " + System.identityHashCode(scene1));
         System.out.println("Current Scene in GameContext: " + System.identityHashCode(gameContext.getCurrentScene()));

@@ -26,6 +26,7 @@ dependencies {
 
   implementation "com.google.code.gson:gson:2.8.9"
 
+  implementation "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
 }
 
 tasks.withType(Test) {

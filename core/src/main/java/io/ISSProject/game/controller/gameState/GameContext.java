@@ -2,6 +2,8 @@ package io.ISSProject.game.controller.gameState;
 
 import io.ISSProject.game.controller.GameInitializer;
 import io.ISSProject.game.model.Clue;
+import io.ISSProject.game.model.InteractiveObject;
+import io.ISSProject.game.model.Puzzles.PuzzleObject;
 import io.ISSProject.game.model.Scene;
 import io.ISSProject.game.model.saveModel.GameStateMemento;
 
@@ -135,6 +137,18 @@ public class GameContext {
                 restoredScene.setAssociatedState(new GameplayState(this, restoredScene));
             }
 
+            // Ripristina lo stato dei puzzle completati
+            if (memento.getCompletedPuzzles() != null) {
+                for (InteractiveObject obj : currentScene.getInteractiveObjects()) {
+                    if (obj instanceof PuzzleObject puzzleObj) {
+                        if (memento.getCompletedPuzzles().contains(puzzleObj.getTooltipText())) {
+                            puzzleObj.setPuzzleCompleted(true);
+                            System.out.println("Puzzle ripristinato come completato: " + puzzleObj.getTooltipText());
+                        }
+                    }
+                }
+            }
+
             // Aggiungi gli indizi trovati
             for (String clueName : memento.getFoundClues()) {
                 Clue foundClue = clueRegistry.get(clueName);
@@ -143,7 +157,7 @@ public class GameContext {
                     System.out.println("Indizio aggiunto alla scena: " + foundClue.getTooltipText());
                 }
             }
-
+/*
             // **Assicuriamoci che gli indizi siano registrati PRIMA di aggiungerli alla scena**
             for (String clueName : memento.getFoundClues()) {
                 if (!clueRegistry.containsKey(clueName)) {
@@ -152,6 +166,9 @@ public class GameContext {
                     registerClue(newClue);
                 }
             }
+
+ */
+
 
             // Recupera gli indizi trovati dal memento e li aggiunge alla scena
             for (String clueName : memento.getFoundClues()) {
@@ -163,6 +180,7 @@ public class GameContext {
                     System.err.println("Errore: Indizio '" + clueName + "' non registrato.");
                 }
             }
+
             // Aggiorna gli indizi trovati nella scena caricata
             currentScene.markCluesAsFound(memento.getFoundClues());
             System.out.println("Scena del gioco ripristinata con successo.");

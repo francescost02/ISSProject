@@ -3,6 +3,8 @@ package io.ISSProject.game.model.saveModel;
 import io.ISSProject.game.model.Clue;
 import io.ISSProject.game.model.Diary.DetectiveDiary;
 import io.ISSProject.game.model.Diary.DiaryEntry;
+import io.ISSProject.game.model.InteractiveObject;
+import io.ISSProject.game.model.Puzzles.PuzzleObject;
 import io.ISSProject.game.model.Scene;
 
 import java.io.File;
@@ -55,12 +57,22 @@ public class SaveGameManager {
         // Evita duplicati aggiungendo un suffisso se necessario
         filePath = resolveDuplicateFileName(filePath);
 
+        List<String> completedPuzzles = new ArrayList<>();
+        for (InteractiveObject obj : scene.getInteractiveObjects()) {
+            if (obj instanceof PuzzleObject puzzleObj && puzzleObj.isPuzzleCompleted()) {
+                completedPuzzles.add(puzzleObj.getTooltipText());
+            }
+        }
+
         // Crea un oggetto memento con i dati da salvare
         GameStateMemento memento = new GameStateMemento(
             username,                     // Nome dell'utente
             scene.getName(),              // Nome della scena
             scene.exportFoundClues()      // Indizi trovati nella scena
         );
+
+        // Aggiungi i puzzle completati al memento
+        memento.setCompletedPuzzles(completedPuzzles);
 
         System.out.println ( scene.getName() );
 
@@ -169,4 +181,6 @@ public class SaveGameManager {
         if (saveFiles.isEmpty()) return null;
         return saveFiles.get(saveFiles.size() - 1);
     }
+
+
 }

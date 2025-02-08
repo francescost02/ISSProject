@@ -2,6 +2,7 @@ package io.ISSProject.game.view.GameplayView;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -13,6 +14,7 @@ import io.ISSProject.game.view.DiaryUI;
 public abstract class AbstractSceneView extends ScreenAdapter {
     protected Stage stage;
     protected Skin skin;
+    protected Skin skin2;
     protected Table overlayArea;
     private Table mainTable;
     private Table gameArea;
@@ -24,7 +26,11 @@ public abstract class AbstractSceneView extends ScreenAdapter {
 
     public AbstractSceneView() {
         this.stage = new Stage(new FitViewport(800, 600));
+        //this.skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
+        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("core/assets/myUI/mySkin/mySkin.atlas"));
         this.skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
+        this.skin2 = new Skin(atlas);
+
         this.overlayArea = new Table();
         this.dialogWindow = new DialogWindow(skin);
         this.diaryWindow = new DiaryUI(skin);
@@ -48,7 +54,7 @@ public abstract class AbstractSceneView extends ScreenAdapter {
         stage.clear();
         setupLayout();
         setupInteractiveObjects();
-        //stage.setDebugAll(true);
+        stage.setDebugAll(true);
         stage.addActor(diaryWindow);
     }
     public void setupLayout() {
