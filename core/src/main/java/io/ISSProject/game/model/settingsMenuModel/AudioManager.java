@@ -13,7 +13,7 @@ public class AudioManager {
 
     private AudioManager() {
         // Carica una traccia audio di esempio
-        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("audio/game-menu-sound.mp3"));
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("audio/gameSound.mp3"));
 
         backgroundMusic.setLooping(true); // Imposta il loop
         updateVolume();

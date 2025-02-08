@@ -144,11 +144,12 @@ public class GameContext {
                 }
             }
 
-            // **Assicuriamoci che gli indizi siano registrati PRIMA di aggiungerli alla scena**
+
+            //**Assicuriamoci che gli indizi siano registrati PRIMA di aggiungerli alla scena**
             for (String clueName : memento.getFoundClues()) {
                 if (!clueRegistry.containsKey(clueName)) {
                     System.out.println("Registrazione dell'indizio mancante: " + clueName);
-                    Clue newClue = new Clue(clueName, "Testo segnaposto per " + clueName);
+                    Clue newClue = new Clue(clueName, "Testo segnaposto per " + clueName, "ciao");
                     registerClue(newClue);
                 }
             }

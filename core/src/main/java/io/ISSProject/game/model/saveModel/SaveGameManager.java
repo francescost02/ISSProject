@@ -92,7 +92,7 @@ public class SaveGameManager {
         diary.clear();
 
         for (DiaryEntry entry: memento.getDiaryEntries()){
-            diary.addEntry(entry.getTitle(), entry.getDescription());
+            diary.addEntry(entry.getTitle(), entry.getContent());
         }
 
         return memento; // Ritorna il memento caricato

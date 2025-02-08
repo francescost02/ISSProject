@@ -1,6 +1,7 @@
 package io.ISSProject.game.view.GameplayView;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -10,26 +11,35 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.*;
 import io.ISSProject.game.model.Clue;
+import io.ISSProject.game.model.CluePaper;
 import io.ISSProject.game.model.InteractiveObject;
 import io.ISSProject.game.model.SceneObject;
 import io.ISSProject.game.view.DialogWindow;
 import io.ISSProject.game.controller.gamePlayController.GameplayController;
 
 public class BrotherLivingRoomView extends AbstractSceneView {
-    //private Table mainTable;
-    //private DialogWindow dialogWindow;
     private final GameplayController controller;
     private final Texture backgroundTexture;
     private final Vector2 tempCoords = new Vector2();
-   // private Table gameArea;
-   // private Table overlayArea;
-    //private TextButton pauseButton; // Pulsante di pausa
+    private String[] dialogLines;
+    private int currentLineIndex = 0;
 
     public BrotherLivingRoomView (GameplayController controller) {
         super(); // Chiama il costruttore della superclasse
         this.controller = controller;
         this.backgroundTexture = new Texture(Gdx.files.internal("images/BrotherLivingRoom.jpeg"));
-        //gameArea = new Table();
+        this.dialogLines = new String[]{
+            "Meglio tornare nell'appartamento di mio fratello...",
+            "Bisogna controllare bene le altre stanze... magari mi sono fatto sfuggire qualche altro indizio.",
+            ""
+        };
+    }
+
+    private void advanceDialog() {
+        if (currentLineIndex < dialogLines.length - 1) {
+            currentLineIndex++;
+            dialogWindow.updateText(dialogLines[currentLineIndex]);
+        }
     }
 
     public void setupUI() {
@@ -38,14 +48,15 @@ public class BrotherLivingRoomView extends AbstractSceneView {
 
     public void setupLayout() {
         super.setupLayout();
-       // gameArea = new Table();
-    }
+        if (dialogLines != null && dialogLines.length > 0) {
+            dialogWindow.updateText(dialogLines[currentLineIndex]);
+        }    }
 
     public void setupInteractiveObjects() {
         Table interactiveLayer = new Table();
 
         // Crea attori per le aree interattive (simile a prima)
-        Clue lamp = new Clue(
+        InteractiveObject lamp = new SceneObject(
             "una lampada vintage",
             "Una lampada vintage...non credo mi possa aiutare nella risoluzione di questo caso."
         );
@@ -59,14 +70,23 @@ public class BrotherLivingRoomView extends AbstractSceneView {
             "Un bellissimo quadro, ma a meno che mio fratello l'abbia rubato a un gallerista, non credo mi servirà per risolvere il caso..."
         );
 
-        InteractiveObject key = new Clue(
-            "Una chiave misteriosa",
-            "Questa chiave sembra importante... potrei usarla per qualcosa."
+        Clue drawer = new CluePaper(
+            "Un cassetto socchiuso",
+            "Forse contiene qualcosa di utile... un volantino con un indirizzo di un magazzino nella periferia della città.",
+            "Grande Magazzino\n\nVicolo del silenzio n34\n\n\nM"
+        );
+
+        Clue letter = new CluePaper(
+            "Una busta",
+            "Sembra esserci una busta sopra il divano...",
+            "Lascialo perdere,\n\n o finirai nei guai anche tu"
         );
 
         Actor lampActor = controller.createInteractiveArea(lamp);
         Actor bookActor = controller.createInteractiveArea(book);
         Actor paintingActor = controller.createInteractiveArea(painting);
+        Actor drawerActor = controller.createInteractiveArea(drawer);
+        Actor letterActor = controller.createInteractiveArea(letter);
 
         Stack gameStack = new Stack();
         gameStack.add(new Image(backgroundTexture));
@@ -101,9 +121,31 @@ public class BrotherLivingRoomView extends AbstractSceneView {
             40f / 160f * stage.getViewport().getWorldHeight() * 0.7f
         );
 
+        drawerActor.setPosition(
+            100f / 1600f * stage.getViewport().getWorldWidth(),
+            364f / 1244f * stage.getViewport().getWorldHeight() * 0.7f
+        );
+
+        drawerActor.setSize(
+            150f / 1600f * stage.getViewport().getWorldWidth(),
+            120f / 1244f * stage.getViewport().getWorldHeight() * 0.7f
+        );
+
+        letterActor.setPosition(
+            915f / 1600f * stage.getViewport().getWorldWidth(),
+            434f / 1244f * stage.getViewport().getWorldHeight() * 0.7f
+        );
+
+        letterActor.setSize(
+            95f / 1600f * stage.getViewport().getWorldWidth(),
+            100f / 1244f * stage.getViewport().getWorldHeight() * 0.7f
+        );
+
         interactiveLayer.addActor(lampActor);
         interactiveLayer.addActor(bookActor);
         interactiveLayer.addActor(paintingActor);
+        interactiveLayer.addActor(drawerActor);
+        interactiveLayer.addActor(letterActor);
 
         getGameArea().add(gameStack).expand().fill();
     }
@@ -111,6 +153,10 @@ public class BrotherLivingRoomView extends AbstractSceneView {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+            advanceDialog();
+        }
 
         stage.act(delta);
         stage.draw();
@@ -132,18 +178,4 @@ public class BrotherLivingRoomView extends AbstractSceneView {
         skin.dispose();
         backgroundTexture.dispose();
     }
-
-/*
-    public Stage getStage() {
-        return stage;
-    }
-
-    public DialogWindow getDialogWindow() {
-        return dialogWindow;
-    }
-
-    public TextButton getPauseButton() {
-        return pauseButton;
-    }
-     */
 }

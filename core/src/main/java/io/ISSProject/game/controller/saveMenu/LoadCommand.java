@@ -6,9 +6,7 @@ import io.ISSProject.game.controller.gameState.GameState;
 import io.ISSProject.game.model.Scene;
 import io.ISSProject.game.model.saveModel.GameStateMemento;
 import io.ISSProject.game.model.saveModel.SaveGameManager;
-import io.ISSProject.game.view.GameplayView.AbstractSceneView;
-import io.ISSProject.game.view.GameplayView.BrotherLivingRoomView;
-import io.ISSProject.game.view.GameplayView.StoreView;
+import io.ISSProject.game.view.GameplayView.*;
 import io.ISSProject.game.view.saveMenu.SaveGameView;
 
 public class LoadCommand implements SaveMenuCommand {
@@ -47,16 +45,59 @@ public class LoadCommand implements SaveMenuCommand {
 
                         // Verifica se la scena è già associata al controller
                         if (gameplayController.getScreen() == null) {
-                            System.out.println("CIAO");
-
                             // Crea la vista dinamicamente in base alla scena
                             AbstractSceneView sceneView;
                             switch (scena.getName()) {
+                                case "Intro":
+                                    sceneView = new IntroView(gameplayController);
+                                    break;
+                                case "Brother's Bedroom":
+                                    sceneView = new BrotherBedroomView(gameplayController);
+                                    break;
                                 case "Brother's Living Room":
                                     sceneView = new BrotherLivingRoomView(gameplayController);
                                     break;
                                 case "Ferramenta":
                                     sceneView = new StoreView(gameplayController);  // Crea una vista per "Ferramenta"
+                                    break;
+                                case "Warehouse":
+                                    sceneView = new WarehouseView(gameplayController);
+                                    break;
+                                case "Call":
+                                    sceneView = new CallView(gameplayController);
+                                    break;
+                                case "Before Abandoned Shelter":
+                                    sceneView = new BeforeAbandonedShelterView(gameplayController);
+                                    break;
+                                case "Abandoned Shelter":
+                                    sceneView = new AbandonedShelterView(gameplayController);
+                                    break;
+                                case "Trap Door":
+                                    sceneView = new TrapDoorView(gameplayController);
+                                    break;
+                                case "Secret Room 1":
+                                    sceneView = new SecretRoom1View(gameplayController);
+                                    break;
+                                case "Ex Boss' Hiddenout 1":
+                                    sceneView = new ExBossHiddenoutView1(gameplayController);
+                                    break;
+                                case "Studio":
+                                    sceneView = new StudioView(gameplayController);
+                                    break;
+                                case "Ex Boss' Hiddenout 2":
+                                    sceneView = new ExBossHiddenoutView2(gameplayController);
+                                    break;
+                                case "Buttons":
+                                    sceneView = new ButtonsView(gameplayController);
+                                    break;
+                                case "Secret Room 2":
+                                    sceneView = new SecretRoom2View(gameplayController);
+                                    break;
+                                case "Before Boss' Hiddenout":
+                                    sceneView = new BeforeBossHiddenoutView();
+                                    break;
+                                case "Final":
+                                    sceneView = new FinalView();
                                     break;
                                 // Aggiungi altri casi per altre scene, se necessario
                                 default:

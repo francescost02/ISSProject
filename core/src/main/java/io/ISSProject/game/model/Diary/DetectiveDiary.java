@@ -26,12 +26,12 @@ public class DetectiveDiary {
         return instance;
     }
 
-    public void addEntry(String title, String description){
+    public void addEntry(String title, String content){
         //Controlliamo se esiste già una entry con lo stesso nome
         boolean entryExists = entries.stream()
             .anyMatch(entry -> entry.getTitle().equals(title));
         if(!entryExists) {
-            DiaryEntry entry = new DiaryEntry(title, description);
+            DiaryEntry entry = new DiaryEntry(title, content);
             entries.add(entry);
             notifyObservers(entry);
         }

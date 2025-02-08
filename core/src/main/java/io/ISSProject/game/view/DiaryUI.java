@@ -138,6 +138,7 @@ public class DiaryUI extends Window implements DiaryObservers {
         // Create labels
         Table headerTable = new Table();
 
+
         Label titleLabel = new Label(entry.getTitle(), getSkin(), "default");
         titleLabel.setWrap(true);
         //titleLabel.setAlignment(Align.center);
@@ -147,8 +148,12 @@ public class DiaryUI extends Window implements DiaryObservers {
 
         headerTable.add(titleLabel).expandX().fillX().left();
         headerTable.add(dateLabel).right();
-
+/*
         Label descLabel = new Label(entry.getDescription(), getSkin());
+        descLabel.setWrap(true);
+   */
+
+        Label descLabel = new Label(entry.getContent(), getSkin());
         descLabel.setWrap(true);
 
         // Add to entry table

@@ -14,12 +14,16 @@ import io.ISSProject.game.controller.mainMenuCommand.MainMenuController2;
 import io.ISSProject.game.controller.saveMenu.SaveController;
 import io.ISSProject.game.controller.settingsMenuController.SettingsController;
 import io.ISSProject.game.model.Clue;
+import io.ISSProject.game.model.CluePaper;
 import io.ISSProject.game.model.Scene;
 import io.ISSProject.game.model.saveModel.SaveGameManager;
 import io.ISSProject.game.model.userManagment.UserManager;
 import io.ISSProject.game.view.UI.UnregisteredUI;
 
 import java.util.List;
+
+
+import static io.ISSProject.game.ClueNotification.showIncompleteSceneNotification;
 
 public class GameMediator {
     private MainMenuController2 menuController;
@@ -80,7 +84,7 @@ public class GameMediator {
             case "START_NEW_GAME":
                 Scene initialScene = gameContext.getCurrentScene();
                 if (initialScene == null) {
-                    initialScene = new Scene("Brother's Living Room", 1);
+                    initialScene = new Scene("Intro", 0);
                     gameContext.setCurrentScene(initialScene);
                 }
                 gameContext.changeState(new GameplayState(gameContext, initialScene));
@@ -137,6 +141,7 @@ public class GameMediator {
                 Clue clue = (Clue) data[0];
                 String clueTitle = clue.getTooltipText();
                 Scene currentScene = gameContext.getCurrentScene();
+                String content = clue.getContent();
 
                 // Controlla se l'indizio è già stato trovato
                 if (currentScene.isClueAlreadyFound(clueTitle)) {
@@ -150,11 +155,12 @@ public class GameMediator {
                 }
                 // Segna l'indizio come trovato
                 clue.setFound(true);
-
-                // Mostra la notifica del nuovo indizio
-                Stage currentStage = gameplayController.getScreen().getStage();
-                Skin skin = gameplayController.getScreen().getSkin();
-                new ClueNotification(clueTitle, skin, currentStage);
+                if (clue instanceof CluePaper) {
+                    // Mostra la notifica del nuovo indizio
+                    Stage currentStage = gameplayController.getScreen().getStage();
+                    Skin skin = gameplayController.getScreen().getSkin();
+                    new ClueNotification(content, skin, currentStage);
+                }
 
                 // Aggiungi l'indizio alla scena solo se non è già presente
                 if (!currentScene.getInteractiveObjects().contains(clue)) {
@@ -190,6 +196,18 @@ public class GameMediator {
                 game.setScreen(gameplayController.getScreen());
                 Gdx.input.setInputProcessor(gameplayController.getScreen().getStage());
                 break;
+            case "SCENE_NOT_COMPLETED":
+                Stage stage = gameplayController.getScreen().getStage();
+                Skin skin = gameplayController.getScreen().getSkin();
+                showIncompleteSceneNotification(skin, stage);
+                break;
+                /*
+            case "SCENE_COMPLETED":
+                stage = gameplayController.getScreen().getStage();
+                skin = gameplayController.getScreen().getSkin();
+                showCcompleteSceneNotification(skin, stage);
+                break;
+                 */
         }
     }
 }

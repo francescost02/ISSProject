@@ -2,9 +2,13 @@ package io.ISSProject.game.controller.gamePlayController;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextTooltip;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Timer;
+import io.ISSProject.game.ClueNotification;
 import io.ISSProject.game.controller.gameState.GameContext;
 import io.ISSProject.game.controller.mediator.GameComponent;
 import io.ISSProject.game.controller.mediator.GameMediator;
@@ -13,9 +17,7 @@ import io.ISSProject.game.model.Diary.DetectiveDiary;
 import io.ISSProject.game.model.InteractiveObject;
 import io.ISSProject.game.model.Scene;
 import io.ISSProject.game.view.DiaryUI;
-import io.ISSProject.game.view.GameplayView.AbstractSceneView;
-import io.ISSProject.game.view.GameplayView.BrotherLivingRoomView;
-import io.ISSProject.game.view.GameplayView.StoreView;
+import io.ISSProject.game.view.GameplayView.*;
 
 import static java.lang.Thread.sleep;
 
@@ -23,12 +25,10 @@ import static java.lang.Thread.sleep;
 public class GameplayController implements GameComponent {
     private static GameplayController instance;
     private final GameContext gameContext;
-    //private final BrotherLivingRoomView gameView;
     private AbstractSceneView gameView;
-    //private PauseView overlayView;
     private final DetectiveDiary diary;
     private GameMediator mediator;
-    //private Viewport sharedViewport = new ScreenViewport();
+
 
     public GameplayController() {
         this.gameContext = GameContext.getInstance();
@@ -49,17 +49,30 @@ public class GameplayController implements GameComponent {
     }
 
     public void updateViewForScene(Scene scene) {
-        // Crea una nuova view specifica per la scena corrente
-        if (scene.getName().equals("Brother's Living Room")) {
-            this.gameView = new BrotherLivingRoomView(GameplayController.this); // Cambia view
-        } else if (scene.getName().equals("Ferramenta")) {
-            this.gameView = new StoreView(GameplayController.this); // Cambia view per Ferramenta
-        } else {
-            //continua
+        switch (scene.getName()) {
+            case "Intro" -> this.gameView = new IntroView(GameplayController.this);
+            case "Brother's Bedroom" -> this.gameView = new BrotherBedroomView(GameplayController.this);
+            case "Brother's Living Room" ->
+                this.gameView = new BrotherLivingRoomView(GameplayController.this); // Cambia view
+            case "Ferramenta" -> this.gameView = new StoreView(GameplayController.this); // Cambia view per Ferramenta
+            case "Warehouse" -> this.gameView = new WarehouseView(GameplayController.this);
+            case "Call" -> this.gameView = new CallView(GameplayController.this);
+            case "Before Abandoned Shelter" -> this.gameView = new BeforeAbandonedShelterView(GameplayController.this);
+            case "Abandoned Shelter" -> this.gameView = new AbandonedShelterView(GameplayController.this);
+            case "Trap Door" -> this.gameView = new TrapDoorView(GameplayController.this);
+            case "Secret Room 1" -> this.gameView = new SecretRoom1View(GameplayController.this);
+            case "Ex Boss' Hiddenout 1" -> this.gameView = new ExBossHiddenoutView1(GameplayController.this);
+            case "Studio" -> this.gameView = new StudioView(GameplayController.this);
+            case "Ex Boss' Hiddenout 2" -> this.gameView = new ExBossHiddenoutView2(GameplayController.this);
+            case "Buttons" -> this.gameView = new ButtonsView(GameplayController.this);
+            case "Secret Room 2" -> this.gameView = new SecretRoom2View(GameplayController.this);
+            case "Before Boss' Hiddenout" -> this.gameView = new BeforeBossHiddenoutView();
+            case "Final" -> this.gameView = new FinalView();
         }
 
-        addPauseListener();  // aggiungere il listener anche dopo il cambio
+        addPauseListener();
         addNextListener();
+        addDiaryListener();
     }
 
     public static synchronized GameplayController getInstance() {
@@ -87,9 +100,11 @@ public class GameplayController implements GameComponent {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("Pulsante Next cliccato");
-                if (mediator != null && gameContext.getCurrentScene().isCompleted() ) {
+                if(mediator != null && gameContext.getCurrentScene().isCompleted()) {
                     mediator.notify(GameplayController.this, "GO_TO_NEXT_SCENE");
-                }
+                } else
+                    mediator.notify(GameplayController.this, "SCENE_NOT_COMPLETED");
+
             }
         });
     }
@@ -135,11 +150,8 @@ public class GameplayController implements GameComponent {
 
                 // Se l'oggetto è un indizio, aggiorna la scena
                 if (object instanceof Clue clue) {
-                    //clue.setFound(true); // Segna l'indizio come trovato
-                    //System.out.println ("Found: " + clue.isFound());
                     mediator.notify(GameplayController.this, "CLUE_FOUND", clue);
                     checkSceneCompletion();
-
                 }
             }
         });
@@ -153,7 +165,6 @@ public class GameplayController implements GameComponent {
         if (currentScene != null && currentScene.isCompleted()) {
             System.out.println("Scena completata!");
             mediator.notify(this, "SCENE_COMPLETED", currentScene);
-            //mediator.notify(this, "GO_TO_NEXT_SCENE");
 
         } else {
             System.out.println("La scena non è ancora completata.");
