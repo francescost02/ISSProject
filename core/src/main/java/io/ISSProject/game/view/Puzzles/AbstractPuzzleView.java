@@ -49,7 +49,7 @@ public abstract class AbstractPuzzleView extends Dialog {
     protected void result(Object object) {
         if ("SOLVE".equals(object)){
             Object inputValue = getInputValue();
-            controller.handleSolutionAttempt(inputValue, this);
+            controller.handleInput(inputValue, this);
         } else if("HINT".equals(object)){
             controller.showHint(this);
         } else if ("CANCEL".equals(object)){

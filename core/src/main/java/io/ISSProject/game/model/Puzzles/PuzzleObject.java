@@ -58,4 +58,8 @@ public class PuzzleObject extends SceneObject implements GameComponent {
     public boolean isPuzzleCompleted() {
         return puzzle.isCompleted();
     }
+
+    public PuzzleStrategy getPuzzle(){
+        return puzzle;
+    }
 }

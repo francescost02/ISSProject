@@ -5,7 +5,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import io.ISSProject.game.ClueNotification;
-import io.ISSProject.game.controller.Puzzles.PuzzleController;
+import io.ISSProject.game.controller.Puzzles.BasePuzzleController;
+import io.ISSProject.game.controller.Puzzles.SequenceButtonPuzzleController;
+import io.ISSProject.game.controller.Puzzles.TextPuzzleController;
 import io.ISSProject.game.controller.gamePlayController.GameplayController;
 import io.ISSProject.game.controller.gamePlayController.PauseMenuController;
 import io.ISSProject.game.controller.ScreenController;
@@ -18,9 +20,11 @@ import io.ISSProject.game.model.Clue;
 import io.ISSProject.game.model.Puzzles.PuzzleObject;
 import io.ISSProject.game.model.Puzzles.PuzzleStrategy;
 import io.ISSProject.game.model.Puzzles.ReverseTextPuzzle;
+import io.ISSProject.game.model.Puzzles.SequenceButtonPuzzle;
 import io.ISSProject.game.model.Scene;
 import io.ISSProject.game.model.userManagment.UserManager;
 import io.ISSProject.game.view.Puzzles.AbstractPuzzleView;
+import io.ISSProject.game.view.Puzzles.SequencePuzzleView;
 import io.ISSProject.game.view.Puzzles.TextPuzzleView;
 import io.ISSProject.game.view.UI.UnregisteredUI;
 
@@ -202,16 +206,19 @@ public class GameMediator {
             case "SHOW_PUZZLE":
                 PuzzleStrategy puzzle = (PuzzleStrategy) data[0];
                 PuzzleObject puzzleObj = (PuzzleObject) sender;
-
                 puzzleObj.setMediator(this);
 
-                PuzzleController puzzleController = new PuzzleController(puzzle, this, puzzleObj);
+                AbstractPuzzleView puzzleView = null;
+                BasePuzzleController puzzleController = null;
                 Stage puzzleStage = gameplayController.getScreen().getStage();
                 Skin puzzleSkin = gameplayController.getScreen().getSkin();
-
-                AbstractPuzzleView puzzleView = null;
-                if (puzzle instanceof ReverseTextPuzzle) {
+                if (puzzle instanceof ReverseTextPuzzle textPuzzle) {
+                    puzzleController = new TextPuzzleController(textPuzzle, this, puzzleObj);
                     puzzleView = new TextPuzzleView("Enigma testuale", puzzleSkin, puzzleController);
+                } else if (puzzle instanceof SequenceButtonPuzzle sequencePuzzle) {
+                    puzzleController = new SequenceButtonPuzzleController(sequencePuzzle, this, puzzleObj);
+                    puzzleView = new SequencePuzzleView("Enigma sequenza", puzzleSkin, puzzleController);
+
                 }
                 if (puzzleView == null){
                     throw new IllegalArgumentException("Tipo puzzle non supportato"+puzzle.getClass().getSimpleName());

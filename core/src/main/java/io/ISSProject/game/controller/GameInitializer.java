@@ -4,7 +4,9 @@ import io.ISSProject.game.controller.gameState.GameContext;
 import io.ISSProject.game.controller.gameState.GameplayState;
 import io.ISSProject.game.model.Clue;
 import io.ISSProject.game.model.Puzzles.PuzzleObject;
+import io.ISSProject.game.model.Puzzles.PuzzleStrategy;
 import io.ISSProject.game.model.Puzzles.ReverseTextPuzzle;
+import io.ISSProject.game.model.Puzzles.SequenceButtonPuzzle;
 import io.ISSProject.game.model.Scene;
 import io.ISSProject.game.model.SceneObject;
 
@@ -57,6 +59,17 @@ public class GameInitializer {
             new ReverseTextPuzzle()
         );
         scene1.addInteractiveObject(puzzleObject);
+
+        PuzzleStrategy sequencePuzzle = new SequenceButtonPuzzle();
+        PuzzleObject puzzleObject1 = new PuzzleObject(
+            "Enigma sequenza",
+            "Cosa c'è dietro la libreria, degli strani interuttori..., "
+            , 200f, 250f,
+            60f, 40f, 
+            sequencePuzzle
+        );
+        scene1.addInteractiveObject(puzzleObject1);
+
 
         System.out.println("Scene1 in GameInitializer: " + System.identityHashCode(scene1));
         System.out.println("Current Scene in GameContext: " + System.identityHashCode(gameContext.getCurrentScene()));

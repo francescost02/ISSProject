@@ -1,36 +1,49 @@
 package io.ISSProject.game.view.Puzzles;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import io.ISSProject.game.controller.Puzzles.PuzzleController;
 
 public class SequencePuzzleView extends AbstractPuzzleView {
-    private final TextButton[] buttons;
-    private final Table buttonTable;
+    private  TextButton[] buttons;
+    private  Table buttonTable;
+    private Image switchesImage;
+    private Table mainContent;
 
     public SequencePuzzleView(String title, Skin skin, PuzzleController controller) {
         super(title, skin, controller);
-        this.buttons = new TextButton[3];
-        this.buttonTable = new Table();
     }
 
     @Override
     protected void setupPuzzleUI(Table contentTable) {
+        Texture switchesTexture = new Texture(Gdx.files.internal("assets/images/test_img.jpg"));
+        switchesImage = new Image(switchesTexture);
+
+        Table imageTable = new Table();
+        imageTable.add(switchesImage).width(400).height(200);
+        contentTable.add(imageTable).pad(10).row();
+
+        this.buttons = new TextButton[3];
+        this.buttonTable = new Table();
         buttonTable.center();
 
         // Crea i tre bottoni
         for (int i = 0; i < 3; i++) {
             final int buttonNumber = i + 1;
             buttons[i] = new TextButton(String.valueOf(buttonNumber), getSkin());
-            buttons[i].addListener(new ChangeListener() {
+            buttons[i].setColor(1,1,1,0);
+            buttons[i].addListener(new ClickListener() {
                 @Override
-                public void changed(ChangeEvent event, Actor actor) {
-                    if (controller instanceof SequencePuzzleController) {
-                        ((SequencePuzzleController) controller).onButtonPressed(buttonNumber);
-                    }
+                public void clicked(InputEvent event, float x, float y) {
+                    controller.handleInput(buttonNumber, SequencePuzzleView.this);
                 }
             });
             buttonTable.add(buttons[i]).pad(10).size(100, 100);
