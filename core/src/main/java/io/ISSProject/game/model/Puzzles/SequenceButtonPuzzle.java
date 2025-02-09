@@ -8,26 +8,21 @@ import java.util.Set;
 public class SequenceButtonPuzzle implements PuzzleStrategy {
     // La sequenza corretta dei bottoni (2->3->1)
     private final int[] correctSequence = {2, 3, 1};
+    private int currentStep = 0;
+    private boolean completed = false;
 
     // Lista per tenere traccia della sequenza inserita dall'utente
-    private List<Integer> currentSequence;
+    private List<Integer> currentSequence = new ArrayList<>();
 
     // Set per tenere traccia dei bottoni già utilizzati
-    private Set<Integer> usedButtons;
-
-    // Indica la posizione corrente nella sequenza
-    private int currentStep;
-
-    // Flag che indica se il puzzle è stato completato
-    private boolean completed;
+    private Set<Integer> usedButtons = new HashSet<>();
 
     @Override
     public void initialize() {
-        // Inizializza le strutture dati
-        currentSequence = new ArrayList<>();
-        usedButtons = new HashSet<>();
         currentStep = 0;
         completed = false;
+        currentSequence = new ArrayList<>();
+        usedButtons = new HashSet<>();
     }
 
     /**
@@ -36,42 +31,33 @@ public class SequenceButtonPuzzle implements PuzzleStrategy {
      * @return true se il bottone è corretto nella sequenza, false altrimenti
      */
     public boolean checkButton(int buttonNumber) {
+
         // Verifica se il bottone è già stato usato
         if (usedButtons.contains(buttonNumber)) {
             return false;
         }
 
-        // Aggiunge il bottone alla sequenza corrente e lo marca come usato
-        currentSequence.add(buttonNumber);
-        usedButtons.add(buttonNumber);
+        if (buttonNumber == correctSequence[currentStep]) {
+            // Aggiunge il bottone agli utilizzati
+            usedButtons.add(buttonNumber);
+            currentSequence.add(buttonNumber);
 
-        // Verifica se il bottone è corretto per il passo attuale
-        if (buttonNumber != correctSequence[currentStep]) {
-            // Se sbagliato, resetta il puzzle
+            currentStep++;
+            if (currentStep == correctSequence.length) {
+                completed = true;
+            }
+            return true;
+        } else {
             resetPuzzle();
             return false;
         }
-
-        // Avanza al prossimo passo
-        currentStep++;
-
-        // Verifica se la sequenza è stata completata
-        if (currentStep == correctSequence.length) {
-            completed = true;
-            return true;
-        }
-
-        // Il bottone era corretto ma la sequenza non è ancora completa
-        return true;
     }
 
-    /**
-     * Resetta lo stato del puzzle
-     */
     public void resetPuzzle() {
         currentSequence.clear();
         usedButtons.clear();
         currentStep = 0;
+        completed = false;
     }
 
     /**
