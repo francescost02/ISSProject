@@ -10,6 +10,9 @@ import io.ISSProject.game.controller.mediator.GameMediator;
 import io.ISSProject.game.controller.gameState.GameContext;
 import io.ISSProject.game.model.Scene;
 import io.ISSProject.game.model.userManagment.UserManager;
+import io.ISSProject.game.view.GameplayView.AbstractSceneView;
+import io.ISSProject.game.view.GameplayView.BrotherLivingRoomView;
+import io.ISSProject.game.view.GameplayView.StoreView;
 import io.ISSProject.game.view.UI.LoggingInUI;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
@@ -32,7 +35,23 @@ public class MainGame extends Game {
         userManager = UserManager.getInstance();
         mainMenuController = new MainMenuController2();
         screenController = new ScreenController(this);
+
+        // Recupera la scena iniziale dal GameContext o creane una di default
+        Scene initialScene = gameContext.getCurrentScene();
+        if (initialScene == null) {
+            initialScene = new Scene("Brother's Living Room", 1);
+            //initialScene = new Scene("Ferramenta", 0);
+            gameContext.setCurrentScene(initialScene);
+        }
+        // Crea un controller senza una view
         gameplayController = new GameplayController();
+
+        // Crea la view con il controller ora esistente
+        AbstractSceneView initialView = new BrotherLivingRoomView(gameplayController);
+        //AbstractSceneView initialView = new StoreView(gameplayController);
+
+        // Imposta la view nel controlesso ler
+        gameplayController.setScreen(initialView);
 
         //configurazione del mediatore
         mediator = new GameMediator(this);

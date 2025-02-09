@@ -6,10 +6,14 @@ public class Clue extends InteractiveObject {
     private boolean found; // Indica se il giocatore ha trovato l'indizio
     private DetectiveDiary diary;
 
-    public Clue(String tooltipText, String dialogText) {
+    public Clue(String tooltipText, String dialogText, float x, float y, float width, float height) {
         super(tooltipText, dialogText);
         this.found = false;
         this.diary = DetectiveDiary.getInstance();
+        setX(x);
+        setY(y);
+        setWidth(width);
+        setHeight(height);
     }
 
     public boolean isFound() {

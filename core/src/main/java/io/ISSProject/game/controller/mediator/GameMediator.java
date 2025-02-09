@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import io.ISSProject.game.ClueNotification;
+import io.ISSProject.game.controller.Puzzles.PuzzleController;
 import io.ISSProject.game.controller.gamePlayController.GameplayController;
 import io.ISSProject.game.controller.gamePlayController.PauseMenuController;
 import io.ISSProject.game.controller.ScreenController;
@@ -14,9 +15,13 @@ import io.ISSProject.game.controller.mainMenuCommand.MainMenuController2;
 import io.ISSProject.game.controller.saveMenu.SaveController;
 import io.ISSProject.game.controller.settingsMenuController.SettingsController;
 import io.ISSProject.game.model.Clue;
+import io.ISSProject.game.model.Puzzles.PuzzleObject;
+import io.ISSProject.game.model.Puzzles.PuzzleStrategy;
+import io.ISSProject.game.model.Puzzles.ReverseTextPuzzle;
 import io.ISSProject.game.model.Scene;
-import io.ISSProject.game.model.saveModel.SaveGameManager;
 import io.ISSProject.game.model.userManagment.UserManager;
+import io.ISSProject.game.view.Puzzles.AbstractPuzzleView;
+import io.ISSProject.game.view.Puzzles.TextPuzzleView;
 import io.ISSProject.game.view.UI.UnregisteredUI;
 
 import java.util.List;
@@ -134,52 +139,53 @@ public class GameMediator {
                 break;
 
             case "CLUE_FOUND":
-                Clue receivedClue = (Clue) data[0];
-                String clueTitle = receivedClue.getTooltipText();
+                Clue clue = (Clue) data[0];
+                String clueTitle = clue.getTooltipText();
                 Scene currentScene = gameContext.getCurrentScene();
 
-                // Trova l'istanza esatta del Clue nella scena
-                Clue clue = currentScene.getInteractiveObjects().stream()
-                    .filter(obj -> obj instanceof Clue && ((Clue) obj).getTooltipText().equals(clueTitle))
-                    .map(obj -> (Clue) obj)
-                    .findFirst()
-                    .orElse(null);
+                // Controlla se l'indizio è già stato trovato
+                if (currentScene.isClueAlreadyFound(clueTitle)) {
+                    System.out.println("Hai già trovato questo indizio.");
 
-                if (clue == null) {
-                    clue = receivedClue; // Usa comunque il Clue ricevuto per evitare crash
-                    currentScene.addInteractiveObject(clue);
-                }
-
-                boolean alreadyFound = clue.isFound();
-                if(alreadyFound == false) {
-                    // Mostra la notifica del nuovo indizio
-                    Stage currentStage = gameplayController.getScreen().getStage();
-                    Skin skin = gameplayController.getScreen().getSkin();
-
-                    // Segna l'indizio come trovato
-                    clue.setFound(true);
-                    new ClueNotification(clueTitle, skin, currentStage);
-                } else {
                     // Mostra la notifica dell'indizio già trovato
                     Stage currentStage = gameplayController.getScreen().getStage();
                     Skin skin = gameplayController.getScreen().getSkin();
-
-                    new ClueNotification(clueTitle, skin, currentStage, alreadyFound);
+                    new ClueNotification(clueTitle, skin, currentStage, false);
+                    return; // Esce senza fare nulla
                 }
+                // Segna l'indizio come trovato
+                clue.setFound(true);
+
+                // Mostra la notifica del nuovo indizio
+                Stage currentStage = gameplayController.getScreen().getStage();
+                Skin skin = gameplayController.getScreen().getSkin();
+                new ClueNotification(clueTitle, skin, currentStage);
+                /*
 
                 // Aggiungi l'indizio alla scena solo se non è già presente
                 if (!currentScene.getInteractiveObjects().contains(clue)) {
                     currentScene.addInteractiveObject(clue);
                 }
+
+                 */
                 break;
 
             case "GO_TO_NEXT_SCENE":
+                System.out.println("Scena attuale: " + gameContext.getCurrentScene().getName());
                 Scene nextScene = gameContext.getCurrentScene().getNextScene();
                 if (nextScene != null) {
+                    System.out.println("Passando alla prossima scena: " + nextScene.getName());
+                    // Cambia lo stato nel GameContext per la nuova scena
+                    gameContext.setCurrentScene(nextScene);
                     gameContext.changeState(new GameplayState(gameContext, nextScene));
+
+                    // Cambia anche la view, utilizzando il metodo del controller
+                    gameplayController.updateViewForScene(nextScene);
+
+                    // Imposta la schermata corrente
                     game.setScreen(gameplayController.getScreen());
                 } else {
-                    System.out.println("Non ci sono più scene.");
+                    System.out.println("Non ci sono altre scene.");
                 }
                 break;
 
@@ -192,6 +198,41 @@ public class GameMediator {
                 game.setScreen(gameplayController.getScreen());
                 Gdx.input.setInputProcessor(gameplayController.getScreen().getStage());
                 break;
+
+            case "SHOW_PUZZLE":
+                PuzzleStrategy puzzle = (PuzzleStrategy) data[0];
+                PuzzleObject puzzleObj = (PuzzleObject) sender;
+
+                puzzleObj.setMediator(this);
+
+                PuzzleController puzzleController = new PuzzleController(puzzle, this, puzzleObj);
+                Stage puzzleStage = gameplayController.getScreen().getStage();
+                Skin puzzleSkin = gameplayController.getScreen().getSkin();
+
+                AbstractPuzzleView puzzleView = null;
+                if (puzzle instanceof ReverseTextPuzzle) {
+                    puzzleView = new TextPuzzleView("Enigma testuale", puzzleSkin, puzzleController);
+                }
+                if (puzzleView == null){
+                    throw new IllegalArgumentException("Tipo puzzle non supportato"+puzzle.getClass().getSimpleName());
+                }
+                puzzleView.show(puzzleStage);
+                break;
+
+            case "PUZZLE_SOLVED":
+                PuzzleObject solvedPuzzle = (PuzzleObject) data[0];
+                /*
+                // Tratta il puzzle come un indizio trovato
+                Clue newClue = new Clue(solvedPuzzle.getTooltipText(), solvedPuzzle.getDialogText(),
+                    solvedPuzzle.getX(), solvedPuzzle.getY(),
+                    solvedPuzzle.getWidth(), puzsolvedPuzzlezleObj.getHeight());
+                newClue.setFound(true);
+
+                 */
+                //gameContext.getCurrentScene().addInteractiveObject(newClue);
+                gameplayController.checkSceneCompletion();
+                break;
+
         }
     }
 }

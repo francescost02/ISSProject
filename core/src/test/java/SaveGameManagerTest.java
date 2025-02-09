@@ -13,7 +13,7 @@ public class SaveGameManagerTest {
 
     @BeforeEach
     void setUp() {
-        saveGameManager = new SaveGameManager(List.of());
+        saveGameManager = new SaveGameManager();
     }
 
     @AfterEach

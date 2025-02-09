@@ -39,7 +39,7 @@ public class SaveController implements GameComponent {
 
     public SaveController() {
         this.gameContext = GameContext.getInstance();
-        this.saveGameManager = new SaveGameManager(/*clues*/);
+        this.saveGameManager = new SaveGameManager();
         this.saveGameView = new SaveGameView(gameContext.getUsername()); // Passa il nome utente
         this.currentState = gameContext.getCurrentState(); // Recupera lo stato corrente
         this.saveMenuState = new SaveMenuState(currentState, gameContext);
@@ -100,19 +100,35 @@ public class SaveController implements GameComponent {
         return saveGameView;
     }
 
-/*
+
     public void switchToLoadedScene(Scene loadedScene) {
         // Cambia la schermata attuale alla nuova scena
         Game game = (Game) Gdx.app.getApplicationListener();
-        GameplayController gameplayController = GameplayController.getInstance(gameContext);
+        GameplayController gameplayController = GameplayController.getInstance();
+        //GameplayController gameplayController = new GameplayController();
+        MainMenuController2 mainMenuController2 = new MainMenuController2();
 
+        mediator = new GameMediator(game);
+        mediator.registerComponents2(
+            mainMenuController2,
+            gameplayController);
+
+        mainMenuController2.setMediator(mediator);
+        gameplayController.setMediator(mediator);
+
+        gameContext.setCurrentScene(loadedScene);
+        game.setScreen(gameplayController.getScreen());
+
+        // Aggiorna la scena nel contesto di gioco
         gameContext.setCurrentScene(loadedScene);
         game.setScreen(gameplayController.getScreen());
 
         // Aggiorna l'InputProcessor per la scena caricata
         Gdx.input.setInputProcessor(gameplayController.getScreen().getStage());
-    }*/
+    }
 
+
+/*
     public void switchToLoadedScene(Scene loadedScene) {
         // Cambia la schermata attuale alla nuova scena
         Game game = (Game) Gdx.app.getApplicationListener();
@@ -134,4 +150,6 @@ public class SaveController implements GameComponent {
         // Aggiorna l'InputProcessor per la scena caricata
         Gdx.input.setInputProcessor(gameplayController.getScreen().getStage());
     }
+    */
+
 }

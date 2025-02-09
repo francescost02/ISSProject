@@ -9,12 +9,26 @@ buildscript {
     maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots/' }
   }
   dependencies {
+    classpath "com.badlogicgames.gdx:gdx-tools:1.12.0"
   }
 }
 
 plugins {
   id 'java-library'
 }
+
+task texturePacker {
+  doLast {
+    file("core/assets/myUI/mySkin/raw").mkdirs()
+    file("core/assets/myUI/mySkin/packed").mkdirs()
+    com.badlogic.gdx.tools.texturepacker.TexturePacker.process(
+      "core/assets/myUI/mySkin/raw",  // input dir
+      "core/assets/myUI/mySkin/packed",             // output dir
+      "mySkin"                       // nome del pack
+    )
+  }
+}
+
 
 
 allprojects {
@@ -74,3 +88,5 @@ subprojects {
 }
 
 eclipse.project.name = 'ISSProject' + '-parent'
+
+
