@@ -16,6 +16,7 @@ import io.ISSProject.game.model.Clue;
 import io.ISSProject.game.model.Diary.DetectiveDiary;
 import io.ISSProject.game.model.InteractiveObject;
 import io.ISSProject.game.model.Scene;
+import io.ISSProject.game.model.puzzles.PuzzleObject;
 import io.ISSProject.game.model.settingsMenuModel.AudioManager;
 import io.ISSProject.game.view.DiaryUI;
 import io.ISSProject.game.view.GameplayView.*;
@@ -64,10 +65,12 @@ public class GameplayController implements GameComponent {
             case "Ex Boss' Hiddenout 1" -> this.gameView = new ExBossHiddenoutView1(GameplayController.this);
             case "Studio" -> this.gameView = new StudioView(GameplayController.this);
             case "Ex Boss' Hiddenout 2" -> this.gameView = new ExBossHiddenoutView2(GameplayController.this);
-            case "Buttons" -> this.gameView = new ButtonsView(GameplayController.this);
+            /*case "Buttons" -> this.gameView = new ButtonsView(GameplayController.this);
+
+             */
             case "Secret Room 2" -> this.gameView = new SecretRoom2View(GameplayController.this);
             case "Before Boss' Hiddenout" -> this.gameView = new BeforeBossHiddenoutView();
-            case "Final" -> this.gameView = new FinalView();
+            case "Final" -> this.gameView = new FinalView(GameplayController.this);
         }
 
         addPauseListener();
@@ -140,6 +143,13 @@ public class GameplayController implements GameComponent {
         tooltip.setInstant(true);
         actor.addListener(tooltip);
 
+        // Imposta il mediator se l'oggetto è un PuzzleObject
+        if (object instanceof PuzzleObject puzzleObj) {
+            audioManager.playClickSound();
+            puzzleObj.setMediator(mediator);
+            checkSceneCompletion();
+        }
+
         // Aggiungi listener per il click
         actor.addListener(new ClickListener() {
             @Override
@@ -152,8 +162,14 @@ public class GameplayController implements GameComponent {
                 // Se l'oggetto è un indizio, aggiorna la scena
                 if (object instanceof Clue clue) {
                     audioManager.playClickSound();
+                    System.out.println (gameContext.getCurrentScene());
+                    if (gameContext.getCurrentScene().getName().equals("Final")) {
+                        System.out.println(gameContext.getCurrentScene());
+                        mediator.notify(GameplayController.this, "FINAL_CHOICE");
+                    }
                     mediator.notify(GameplayController.this, "CLUE_FOUND", clue);
                     checkSceneCompletion();
+
                 }
                 else
                     audioManager.playClickSound2();

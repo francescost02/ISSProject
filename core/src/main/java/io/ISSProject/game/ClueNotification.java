@@ -1,5 +1,6 @@
 package io.ISSProject.game;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -13,6 +14,10 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
+import io.ISSProject.game.view.GameplayView.DefeatView;
+import io.ISSProject.game.view.GameplayView.VictoryView;
+
+import static com.badlogic.gdx.utils.JsonValue.ValueType.object;
 
 public class ClueNotification extends Dialog {
     private Texture paperTexture;
@@ -116,6 +121,27 @@ public class ClueNotification extends Dialog {
 
         dialog.show(stage);
     }
+
+    public static void showChoice(Skin skin, Stage stage, final Game game) {
+        Dialog dialog = new Dialog("Scelta finale", skin) {
+            @Override
+            protected void result(Object object) {
+                if (object.equals("Boss")) {
+                    game.setScreen(new VictoryView()); // Schermata di vittoria
+                } else if (object.equals("Marco")) {
+                    game.setScreen(new DefeatView()); // Schermata di sconfitta
+                }
+            }
+        };
+
+        dialog.text("Decidi chi incolpare");
+        dialog.button("Boss", "Boss");
+        dialog.button("Marco", "Marco");
+
+        dialog.show(stage); // Rimuovi il setPosition, perché lo fa automaticamente show()
+    }
+
+
 
     /*
     public static void showCcompleteSceneNotification(Skin skin, Stage stage) {

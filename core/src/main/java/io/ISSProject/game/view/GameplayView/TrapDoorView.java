@@ -13,6 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
     import io.ISSProject.game.model.Clue;
 import io.ISSProject.game.model.InteractiveObject;
 import io.ISSProject.game.model.SceneObject;
+import io.ISSProject.game.model.puzzles.PuzzleObject;
+import io.ISSProject.game.model.puzzles.ReverseTextPuzzle;
 import io.ISSProject.game.view.DialogWindow;
 import io.ISSProject.game.controller.gamePlayController.GameplayController;
 
@@ -58,13 +60,6 @@ public class TrapDoorView extends AbstractSceneView {
     public void setupInteractiveObjects() {
         Table interactiveLayer = new Table();
 
-        // Creazione degli oggetti interattivi
-        Clue trapDoor = new Clue(
-            "Botola nascosta",
-            "La botola è chiusa... Sembrerebbe che ci sia bisogno di inserire un codice per aprirla.",
-            ""
-        );
-
         InteractiveObject box1 = new SceneObject(
             "Scatole",
             "Non contengono nulla di utile..."
@@ -75,25 +70,24 @@ public class TrapDoorView extends AbstractSceneView {
             "Non contengono nulla di utile..."
         );
 
+        //Creazione enigmi
+        PuzzleObject puzzleObject = new PuzzleObject(
+            "Enigma Misterioso", // tooltipText che appare al passaggio del mouse
+            "Hai trovato un enigma da risolvere!", // dialogText che appare al click
+            new ReverseTextPuzzle()
+        );
+
+
         // Creazione delle aree interattive
-        Actor trapDoorActor = controller.createInteractiveArea(trapDoor);
         Actor box1Actor = controller.createInteractiveArea(box1);
         Actor box2Actor = controller.createInteractiveArea(box2);
+        Actor puzzleObjectActor = controller.createInteractiveArea(puzzleObject);
 
         Stack gameStack = new Stack();
         gameStack.add(new Image(backgroundTexture));
         gameStack.add(interactiveLayer);
 
         // Posizionamento degli oggetti interattivi (calcolato rispetto alla risoluzione dell'immagine)
-        trapDoorActor.setPosition(
-            640f / 1600f * stage.getViewport().getWorldWidth(),
-            274f / 1244f * stage.getViewport().getWorldHeight() * 0.7f
-        );
-        trapDoorActor.setSize(
-            350f / 1600f * stage.getViewport().getWorldWidth(),
-            110f / 1244f * stage.getViewport().getWorldHeight() * 0.7f
-        );
-
         box1Actor.setPosition(
             90f / 1600f * stage.getViewport().getWorldWidth(),
             194f / 1244f * stage.getViewport().getWorldHeight() * 0.7f
@@ -112,10 +106,21 @@ public class TrapDoorView extends AbstractSceneView {
             640f / 1244f * stage.getViewport().getWorldHeight() * 0.7f
         );
 
+        // Usa un approccio relativo per il posizionamento
+        puzzleObjectActor.setPosition(
+            640f / 1600f * stage.getViewport().getWorldWidth(),
+            274f / 1244f * stage.getViewport().getWorldHeight() * 0.7f
+        );
+        puzzleObjectActor.setSize(
+            350f / 1600f * stage.getViewport().getWorldWidth(),
+            110f / 1244f * stage.getViewport().getWorldHeight() * 0.7f
+        );
+
+
         // Aggiunta degli oggetti alla scena
-        interactiveLayer.addActor(trapDoorActor);
         interactiveLayer.addActor(box2Actor);
         interactiveLayer.addActor(box1Actor);
+        interactiveLayer.addActor(puzzleObjectActor);
 
         getGameArea().add(gameStack).expand().fill();
     }

@@ -11,18 +11,29 @@ import io.ISSProject.game.controller.ScreenController;
 import io.ISSProject.game.controller.exitMenuStrategy.ExitMenuController2;
 import io.ISSProject.game.controller.gameState.*;
 import io.ISSProject.game.controller.mainMenuCommand.MainMenuController2;
+import io.ISSProject.game.controller.puzzles.BasePuzzleController;
+import io.ISSProject.game.controller.puzzles.SequenceButtonPuzzleController;
+import io.ISSProject.game.controller.puzzles.TextPuzzleController;
 import io.ISSProject.game.controller.saveMenu.SaveController;
 import io.ISSProject.game.controller.settingsMenuController.SettingsController;
 import io.ISSProject.game.model.Clue;
 import io.ISSProject.game.model.CluePaper;
 import io.ISSProject.game.model.Scene;
+import io.ISSProject.game.model.puzzles.PuzzleObject;
+import io.ISSProject.game.model.puzzles.PuzzleStrategy;
+import io.ISSProject.game.model.puzzles.ReverseTextPuzzle;
+import io.ISSProject.game.model.puzzles.SequenceButtonPuzzle;
 import io.ISSProject.game.model.saveModel.SaveGameManager;
 import io.ISSProject.game.model.userManagment.UserManager;
 import io.ISSProject.game.view.UI.UnregisteredUI;
+import io.ISSProject.game.view.puzzles.AbstractPuzzleView;
+import io.ISSProject.game.view.puzzles.SequencePuzzleView;
+import io.ISSProject.game.view.puzzles.TextPuzzleView;
 
 import java.util.List;
 
 
+import static io.ISSProject.game.ClueNotification.showChoice;
 import static io.ISSProject.game.ClueNotification.showIncompleteSceneNotification;
 
 public class GameMediator {
@@ -201,13 +212,47 @@ public class GameMediator {
                 Skin skin = gameplayController.getScreen().getSkin();
                 showIncompleteSceneNotification(skin, stage);
                 break;
+            case "SHOW_PUZZLE":
+                PuzzleStrategy puzzle = (PuzzleStrategy) data[0];
+                PuzzleObject puzzleObj = (PuzzleObject) sender;
+                puzzleObj.setMediator(this);
+
+                AbstractPuzzleView puzzleView = null;
+                BasePuzzleController puzzleController = null;
+                Stage puzzleStage = gameplayController.getScreen().getStage();
+                Skin puzzleSkin = gameplayController.getScreen().getSkin();
+                if (puzzle instanceof ReverseTextPuzzle textPuzzle) {
+                    puzzleController = new TextPuzzleController(textPuzzle, this, puzzleObj);
+                    puzzleView = new TextPuzzleView("Enigma testuale", puzzleSkin, puzzleController);
+                } else if (puzzle instanceof SequenceButtonPuzzle sequencePuzzle) {
+                    puzzleController = new SequenceButtonPuzzleController(sequencePuzzle, this, puzzleObj);
+                    puzzleView = new SequencePuzzleView("Enigma sequenza", puzzleSkin, puzzleController);
+
+                }
+                if (puzzleView == null){
+                    throw new IllegalArgumentException("Tipo puzzle non supportato"+puzzle.getClass().getSimpleName());
+                }
+                puzzleView.show(puzzleStage);
+                break;
+
+            case "PUZZLE_SOLVED":
+                PuzzleObject solvedPuzzle = (PuzzleObject) data[0];
                 /*
-            case "SCENE_COMPLETED":
+                // Tratta il puzzle come un indizio trovato
+                Clue newClue = new Clue(solvedPuzzle.getTooltipText(), solvedPuzzle.getDialogText(),
+                    solvedPuzzle.getX(), solvedPuzzle.getY(),
+                    solvedPuzzle.getWidth(), puzsolvedPuzzlezleObj.getHeight());
+                newClue.setFound(true);
+
+                 */
+                //gameContext.getCurrentScene().addInteractiveObject(newClue);
+                gameplayController.checkSceneCompletion();
+                break;
+            case "FINAL_CHOICE":
                 stage = gameplayController.getScreen().getStage();
                 skin = gameplayController.getScreen().getSkin();
-                showCcompleteSceneNotification(skin, stage);
-                break;
-                 */
+                showChoice(skin, stage, game);
+
         }
     }
 }

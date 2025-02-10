@@ -14,6 +14,8 @@ import io.ISSProject.game.model.Clue;
 import io.ISSProject.game.model.CluePaper;
 import io.ISSProject.game.model.InteractiveObject;
 import io.ISSProject.game.model.SceneObject;
+import io.ISSProject.game.model.puzzles.PuzzleObject;
+import io.ISSProject.game.model.puzzles.ReverseTextPuzzle;
 import io.ISSProject.game.view.DialogWindow;
 import io.ISSProject.game.controller.gamePlayController.GameplayController;
 
@@ -73,20 +75,22 @@ public class BrotherLivingRoomView extends AbstractSceneView {
         Clue drawer = new CluePaper(
             "Un cassetto socchiuso",
             "Forse contiene qualcosa di utile... un volantino con un indirizzo di un magazzino nella periferia della città.",
-            "Grande Magazzino\n\nVicolo del silenzio n34\n\n\nM"
+            "Grande Magazzino\nVicolo del silenzio n34\n\nM"
         );
 
         Clue letter = new CluePaper(
             "Una busta",
             "Sembra esserci una busta sopra il divano...",
-            "Lascialo perdere,\n\n o finirai nei guai anche tu"
+            "Lascialo perdere,\n o finirai nei guai anche tu"
         );
+
 
         Actor lampActor = controller.createInteractiveArea(lamp);
         Actor bookActor = controller.createInteractiveArea(book);
         Actor paintingActor = controller.createInteractiveArea(painting);
         Actor drawerActor = controller.createInteractiveArea(drawer);
         Actor letterActor = controller.createInteractiveArea(letter);
+
 
         Stack gameStack = new Stack();
         gameStack.add(new Image(backgroundTexture));
@@ -140,6 +144,7 @@ public class BrotherLivingRoomView extends AbstractSceneView {
             95f / 1600f * stage.getViewport().getWorldWidth(),
             100f / 1244f * stage.getViewport().getWorldHeight() * 0.7f
         );
+
 
         interactiveLayer.addActor(lampActor);
         interactiveLayer.addActor(bookActor);

@@ -2,7 +2,9 @@ package io.ISSProject.game.controller.gameState;
 
 import io.ISSProject.game.controller.GameInitializer;
 import io.ISSProject.game.model.Clue;
+import io.ISSProject.game.model.InteractiveObject;
 import io.ISSProject.game.model.Scene;
+import io.ISSProject.game.model.puzzles.PuzzleObject;
 import io.ISSProject.game.model.saveModel.GameStateMemento;
 
 import java.util.HashMap;
@@ -116,7 +118,7 @@ public class GameContext {
     public void restoreScene(GameStateMemento memento) {
         if (memento != null) {
             String savedSceneName = memento.getSceneName();
-            System.out.println (savedSceneName);
+            System.out.println(savedSceneName);
             System.out.println("Caricando la scena: " + savedSceneName);
 
             // Ripristina la scena dal nome salvato
@@ -144,31 +146,42 @@ public class GameContext {
                 }
             }
 
-
-            //**Assicuriamoci che gli indizi siano registrati PRIMA di aggiungerli alla scena**
-            for (String clueName : memento.getFoundClues()) {
-                if (!clueRegistry.containsKey(clueName)) {
-                    System.out.println("Registrazione dell'indizio mancante: " + clueName);
-                    Clue newClue = new Clue(clueName, "Testo segnaposto per " + clueName, "ciao");
-                    registerClue(newClue);
+            // Ripristina lo stato dei puzzle completati
+            if (memento.getCompletedPuzzles() != null) {
+                for (InteractiveObject obj : currentScene.getInteractiveObjects()) {
+                    if (obj instanceof PuzzleObject puzzleObj) {
+                        if (memento.getCompletedPuzzles().contains(puzzleObj.getTooltipText())) {
+                            puzzleObj.setPuzzleCompleted(true);
+                            System.out.println("Puzzle ripristinato come completato: " + puzzleObj.getTooltipText());
+                        }
+                    }
                 }
-            }
 
-            // Recupera gli indizi trovati dal memento e li aggiunge alla scena
-            for (String clueName : memento.getFoundClues()) {
-                Clue foundClue = clueRegistry.get(clueName);
-                if (foundClue != null) {
-                    currentScene.addInteractiveObject(foundClue);
-                    System.out.println("Indizio aggiunto alla scena: " + foundClue.getTooltipText());
-                } else {
-                    System.err.println("Errore: Indizio '" + clueName + "' non registrato.");
+                //**Assicuriamoci che gli indizi siano registrati PRIMA di aggiungerli alla scena**
+                for (String clueName : memento.getFoundClues()) {
+                    if (!clueRegistry.containsKey(clueName)) {
+                        System.out.println("Registrazione dell'indizio mancante: " + clueName);
+                        Clue newClue = new Clue(clueName, "Testo segnaposto per " + clueName, "ciao");
+                        registerClue(newClue);
+                    }
                 }
+
+                // Recupera gli indizi trovati dal memento e li aggiunge alla scena
+                for (String clueName : memento.getFoundClues()) {
+                    Clue foundClue = clueRegistry.get(clueName);
+                    if (foundClue != null) {
+                        currentScene.addInteractiveObject(foundClue);
+                        System.out.println("Indizio aggiunto alla scena: " + foundClue.getTooltipText());
+                    } else {
+                        System.err.println("Errore: Indizio '" + clueName + "' non registrato.");
+                    }
+                }
+                // Aggiorna gli indizi trovati nella scena caricata
+                currentScene.markCluesAsFound(memento.getFoundClues());
+                System.out.println("Scena del gioco ripristinata con successo.");
+            } else {
+                System.out.println("Nessuna scena da ripristinare.");
             }
-            // Aggiorna gli indizi trovati nella scena caricata
-            currentScene.markCluesAsFound(memento.getFoundClues());
-            System.out.println("Scena del gioco ripristinata con successo.");
-        } else {
-            System.out.println("Nessuna scena da ripristinare.");
         }
     }
 

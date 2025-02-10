@@ -72,7 +72,7 @@ public class MainMenuView2 implements Screen {
 
         // Aggiungere uno sfondo personalizzato (opzionale)
         rootTable.setBackground(new TextureRegionDrawable(new Texture(Gdx.files.internal("images/background-menu-tmp.jpg"))));
-        rootTable.setDebug(true);
+        rootTable.setDebug(false);
     }
 
     @Override
