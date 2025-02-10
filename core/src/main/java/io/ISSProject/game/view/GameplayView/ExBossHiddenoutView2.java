@@ -10,6 +10,9 @@ import io.ISSProject.game.model.Clue;
 import io.ISSProject.game.model.InteractiveObject;
 import io.ISSProject.game.model.SceneObject;
 import io.ISSProject.game.controller.gamePlayController.GameplayController;
+import io.ISSProject.game.model.puzzles.PuzzleObject;
+import io.ISSProject.game.model.puzzles.PuzzleStrategy;
+import io.ISSProject.game.model.puzzles.SequenceButtonPuzzle;
 
 public class ExBossHiddenoutView2 extends AbstractSceneView {
     private GameplayController controller;
@@ -69,10 +72,11 @@ public class ExBossHiddenoutView2 extends AbstractSceneView {
             "Una vecchia poltrona logora. Forse qualcuno ci ha passato molto tempo seduto a leggere o a riflettere."
         );
 
-        Clue library = new Clue(
-            "Libreria",
-            "Se c’è davvero una stanza segreta, deve esserci un meccanismo per aprirla… Forse questi libri non sono solo decorativi.",
-            "ciao"
+        PuzzleStrategy sequencePuzzle = new SequenceButtonPuzzle();
+        PuzzleObject puzzleObject1 = new PuzzleObject(
+            "Enigma sequenza",
+            "Cosa c'è dietro la libreria, degli strani interuttori..., ",
+            sequencePuzzle
         );
 
         // Creazione delle aree interattive
@@ -80,7 +84,7 @@ public class ExBossHiddenoutView2 extends AbstractSceneView {
         Actor tableActor = controller.createInteractiveArea(table);
         Actor pizzaBoxesActor = controller.createInteractiveArea(pizzaBoxes);
         Actor armchairActor = controller.createInteractiveArea(armchair);
-        Actor libraryActor = controller.createInteractiveArea(library);
+        Actor puzzleObject1Actor = controller.createInteractiveArea(puzzleObject1);
 
         Stack gameStack = new Stack();
         gameStack.add(new Image(backgroundTexture));
@@ -123,11 +127,11 @@ public class ExBossHiddenoutView2 extends AbstractSceneView {
             150f / 896f * stage.getViewport().getWorldHeight()
         );
 
-        libraryActor.setPosition(
+        puzzleObject1Actor.setPosition(
             150f / 1152f * stage.getViewport().getWorldWidth(),
             286f / 896f * stage.getViewport().getWorldHeight()
         );
-        libraryActor.setSize(
+        puzzleObject1Actor.setSize(
             480f / 1152f * stage.getViewport().getWorldWidth(),
             170f / 896f * stage.getViewport().getWorldHeight()
         );
@@ -137,7 +141,7 @@ public class ExBossHiddenoutView2 extends AbstractSceneView {
         interactiveLayer.addActor(tableActor);
         interactiveLayer.addActor(pizzaBoxesActor);
         interactiveLayer.addActor(armchairActor);
-        interactiveLayer.addActor(libraryActor);
+        interactiveLayer.addActor(puzzleObject1Actor);
 
         getGameArea().add(gameStack).expand().fill();
     }

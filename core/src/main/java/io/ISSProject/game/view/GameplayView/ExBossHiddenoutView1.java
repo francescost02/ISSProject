@@ -11,6 +11,9 @@ import io.ISSProject.game.model.CluePaper;
 import io.ISSProject.game.model.InteractiveObject;
 import io.ISSProject.game.model.SceneObject;
 import io.ISSProject.game.controller.gamePlayController.GameplayController;
+import io.ISSProject.game.model.puzzles.PuzzleObject;
+import io.ISSProject.game.model.puzzles.PuzzleStrategy;
+import io.ISSProject.game.model.puzzles.SequenceButtonPuzzle;
 
 public class ExBossHiddenoutView1 extends AbstractSceneView {
     private GameplayController controller;
@@ -23,9 +26,9 @@ public class ExBossHiddenoutView1 extends AbstractSceneView {
         this.controller = controller;
         this.backgroundTexture = new Texture(Gdx.files.internal("images/ExBossHiddenout.jpg"));
         this.dialogLines = new String[]{
-            "L’investigatore arriva davanti a un edificio fatiscente, controllando l’indirizzo sul bigliettino.",
-            "Investigatore: Questo dovrebbe essere il posto... Ma qualcosa non torna...",
-            "Scruta l’area circostante: finestre sporche, porte socchiuse, nessun segno di attività recente.",
+            "L' edificio è davvero fatiscente",
+            "Questo dovrebbe essere il posto... Ma qualcosa non torna...",
+            "Finestre sporche, porte socchiuse, nessun segno di attività recente.",
             "Si avvicina cautamente alla porta e la spinge. Con un cigolio sinistro, l’ingresso si apre senza alcuna resistenza.",
             "Entra, l'interno è spoglio: solamente documenti strappati e segni di un’evacuazione frettolosa.",
             " Investigatore: Dannazione... Sapevano che sarei arrivato.",
@@ -81,7 +84,7 @@ public class ExBossHiddenoutView1 extends AbstractSceneView {
         Clue brotherDocuments = new CluePaper(
             "Documenti del fratello",
             "Riconosco la calligrafia... sono i documenti mancanti di mio fratello. Devo assolutamente leggerli.",
-            "Nome organizzazione?"
+            "Nome del boss: Luigi Bianchi"
         );
 
         // Creazione delle aree interattive
@@ -90,6 +93,7 @@ public class ExBossHiddenoutView1 extends AbstractSceneView {
         Actor pizzaBoxesActor = controller.createInteractiveArea(pizzaBoxes);
         Actor armchairActor = controller.createInteractiveArea(armchair);
         Actor brotherDocumentsActor = controller.createInteractiveArea(brotherDocuments);
+
 
         Stack gameStack = new Stack();
         gameStack.add(new Image(backgroundTexture));

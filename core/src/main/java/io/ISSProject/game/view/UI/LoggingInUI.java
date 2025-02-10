@@ -112,8 +112,6 @@ public class LoggingInUI extends ScreenAdapter {
 
                 controller.submitRegistration(username);
                 //System.out.println("Username confermato: " + username);
-
-
             }
         });
     }

@@ -47,7 +47,7 @@ public class SaveAndCloseStrategy implements ExitStrategy {
 
                 // Effettua il salvataggio dello stato corrente
                 saveGameManager.saveGame(username, saveFileName, gameContext.getCurrentScene());
-                System.out.println( gameContext.getCurrentScene().getName() + "crazy");
+                System.out.println( gameContext.getCurrentScene().getName());
                 System.out.println("Partita salvata con il nome file: " + saveFileName);
             } catch (Exception e) {
                 System.err.println("Errore durante il salvataggio del gioco: " + e.getMessage());

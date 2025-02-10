@@ -76,7 +76,7 @@ public class WarehouseView extends AbstractSceneView {
         Clue paper = new CluePaper(
             "Un foglio appeso alla parete",
             "Il foglio sembra avere qualcosa di scritto, ma la luce lo illumina solo parzialmente.",
-            "Segui il denaro, \n\nnon fermarti\n\n\nM"
+            "Segui il denaro, \nnon fermarti\n\nM"
         );
 
         // Creazione delle aree interattive

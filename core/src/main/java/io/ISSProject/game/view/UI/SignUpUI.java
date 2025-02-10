@@ -67,22 +67,6 @@ public class SignUpUI extends ScreenAdapter {
         Container<Table> container = new Container<>(contentTable);
         container.setBackground(createColorBackground(new Color(0.3f, 0.3f, 0.3f, 0.9f)));
         container.pad(40);
-        /*
-        container.setActor(table);
-        // Dimensioni fisse o che si adattano alla schermata? Può dare problemi con diverse risoluzioni?
-        container.setSize(600, 400);
-        container.setPosition((Gdx.graphics.getWidth() - container.getWidth()) / 2, (Gdx.graphics.getHeight() - container.getHeight()) / 2);
-        container.setBackground(createColorBackground(new Color(Color.GRAY)));
-
-
-
-
-        container.fillX();
-        container.fillY();
-
-        stage.addActor(container);
-
-         */
 
         Label titleLabel = new Label("REGISTRAZIONE", skin);
         titleLabel.setFontScale(2.0f);

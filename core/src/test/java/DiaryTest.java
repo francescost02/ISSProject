@@ -47,7 +47,7 @@ public class DiaryTest {
 
         DiaryEntry lastEntry = entries.get(entries.size() - 1);
         assertEquals(title, lastEntry.getTitle(), "Il titolo dell'indizio dovrebbe corrispondere");
-        assertEquals(description, lastEntry.getDescription(), "La descrizione dell'indizio dovrebbe corrispondere");
+        assertEquals(description, lastEntry.getContent(), "La descrizione dell'indizio dovrebbe corrispondere");
     }
 
     @Test

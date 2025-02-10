@@ -48,7 +48,7 @@ public abstract class AbstractSceneView extends ScreenAdapter {
         stage.clear();
         setupLayout();
         setupInteractiveObjects();
-        //stage.setDebugAll(true);
+        stage.setDebugAll(true);
         stage.addActor(diaryWindow);
     }
     public void setupLayout() {

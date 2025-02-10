@@ -87,9 +87,11 @@ public class LoadCommand implements SaveMenuCommand {
                                 case "Ex Boss' Hiddenout 2":
                                     sceneView = new ExBossHiddenoutView2(gameplayController);
                                     break;
-                                case "Buttons":
+                                /*case "Buttons":
                                     sceneView = new ButtonsView(gameplayController);
                                     break;
+
+                                 */
                                 case "Secret Room 2":
                                     sceneView = new SecretRoom2View(gameplayController);
                                     break;
@@ -97,7 +99,7 @@ public class LoadCommand implements SaveMenuCommand {
                                     sceneView = new BeforeBossHiddenoutView();
                                     break;
                                 case "Final":
-                                    sceneView = new FinalView();
+                                    sceneView = new FinalView(gameplayController);
                                     break;
                                 // Aggiungi altri casi per altre scene, se necessario
                                 default:
