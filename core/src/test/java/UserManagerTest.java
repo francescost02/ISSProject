@@ -19,9 +19,14 @@ public class UserManagerTest {
     public void tearDown() {
         userManager = null;
     }
-
+    /*
+    Dopo la prima creazione del file Json testUser2 è stato già creato,
+    quindi per assicurarci che anche i test successivi soddisifino il test,
+    rimuoviamo inizialmente il nome dell'utente.
+    */
     @Test
     public void testRegisterNewUser_Success() {
+        userManager.deleteUser("testUser2");
         boolean result = userManager.registerNewUser(new User("testUser2"));
         userManager.showAllUsers();
         assertTrue(result, "L'utente dovrebbe essere registrato con successo.");

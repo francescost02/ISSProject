@@ -1,0 +1,9 @@
+{
+  "username": "testUser",
+  "sceneName": "TestScene",
+  "foundClues": [
+    "TestClue"
+  ],
+  "diaryEntries": [],
+  "completedPuzzles": []
+}

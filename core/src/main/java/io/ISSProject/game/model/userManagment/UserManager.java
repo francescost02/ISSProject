@@ -3,12 +3,24 @@ package io.ISSProject.game.model.userManagment;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonWriter;
+import io.ISSProject.game.controller.InterfaceManager;
+import io.ISSProject.game.controller.gameState.GameContext;
+import io.ISSProject.game.controller.mediator.GameComponent;
+import io.ISSProject.game.controller.mediator.GameMediator;
+import io.ISSProject.game.model.userManagment.state.LoggedInState;
+import io.ISSProject.game.model.userManagment.state.LoggingInState;
+import io.ISSProject.game.model.userManagment.state.SignUpState;
+import io.ISSProject.game.model.userManagment.state.UnregisteredState;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserManager {
+public class UserManager implements GameComponent {
+
+    //mediatore tra i vari controller
+    private GameMediator mediator;
 
     private static UserManager instance;
     private String filePath;
@@ -17,22 +29,89 @@ public class UserManager {
     private List<User> users;
     private List<Observer> observers;
 
+    private UserState currentState;
+    private List<InterfaceManager> observersUI;
+
+    @Override
+    public void setMediator(GameMediator mediator){
+        this.mediator = mediator;
+    }
+
+    @Override
+    public void notify(String event, Object...data){
+        if(mediator != null){
+            mediator.notify(this, event, data);
+        }
+    }
+
 
     public UserManager(){
+        //Inizializza il json
+        this.json = new Json();
 
         this.filePath = "assets/json/users.json";
         fileHandle = new FileHandle(new File(filePath));
 
+        //Inizializza lista degli utenti
+        this.users = new ArrayList<>();
+
+        //Inizializza lista degli osservatori
+        this.observers = new ArrayList<>();
+        this.observersUI = new ArrayList<>();
+
+        //Gestione del file
         if(!fileHandle.exists()){
-            this.fileHandle.writeString("" , false);
-            System.out.println("File json creato");
+            //this.fileHandle.writeString("" , false);
+            saveUsers(); //Salva una lista vuota in formato JSON
+            System.out.println("File json creato con lista vuota");
+        } else{
+            readUsers();
         }
 
-        this.json = new Json();
-        this.users = new ArrayList<>();
-        this.observers = new ArrayList<>();
+        //Stato iniziale
+        currentState = new UnregisteredState(this);
     }
 
+    public void selectRegistrationPath(){
+        setState(new SignUpState(this, mediator));
+    }
+
+    public void selectLoginPath(){
+        setState(new LoggingInState(this, mediator));
+    }
+
+    public void handleInput(String input){
+        currentState.handleInput(input);
+    }
+
+    public UserState getState(){
+        return currentState;
+    }
+
+    public void returnToUnregistered(){
+        setState(new UnregisteredState(this));
+    }
+
+    public void setState(UserState newState){
+        this.currentState = newState;
+        notifyObserversUI();
+    }
+
+    public void addObserverUI(InterfaceManager observer){
+        observersUI.add(observer);
+    }
+
+    public void removeObserverUI(InterfaceManager observer){
+        observersUI.remove(observer);
+    }
+
+    public void notifyObserversUI(){
+        for(InterfaceManager observer : observersUI){
+            observer.update(this);
+        }
+    }
+
+    // Osservatori per notificare file di log francesco
     public void addObserver(Observer observer) {
         observers.add(observer);
     }
@@ -75,6 +154,8 @@ public class UserManager {
     public boolean saveUsers(){
 
         if(this.fileHandle.exists()){
+            //formattazione corretta per file json
+            json.setOutputType(JsonWriter.OutputType.json);
             String jsonString = json.toJson(users);
             this.fileHandle.writeString(jsonString , false);
             return true;
@@ -93,19 +174,23 @@ public class UserManager {
             this.users.add(newUser);
             this.saveUsers();
             this.notifyUserAdded(newUser);
+            //eseguiamo automaticamente il login dopo la registrazione
+            loginUser(newUser.getUsername());
             return true;
         }
     }
 
     public boolean loginUser(String username){
         User user = this.findUserByName(username);
-
         if(user == null){
             System.out.println("L'utente non e' registrato nel sistema");
             return false;
         }
         this.notifyUserLogged(user);
+        setState(new LoggedInState(user, mediator));
+        this.notify("USER_LOGGED_IN", user);
         System.out.println("accesso effettuato con successo");
+        GameContext.getInstance().setUsername(username); //passa l'username al GameContext
         return true;
     }
 
@@ -117,14 +202,29 @@ public class UserManager {
     }
 
     public void readUsers(){
-
-            if(fileHandle.exists()){
+        try{
+            if (fileHandle.exists()){
+                //Legge il contenuto del file Json,
+                //se non vuoto viene creata una lista di utenti
                 String jsStr = fileHandle.readString();
-                users = json.fromJson(ArrayList.class , User.class , jsStr);
-
+                if(!jsStr.trim().isEmpty()){
+                    List<User> loadedUsers = json.fromJson(ArrayList.class, User.class, jsStr);
+                    // Se la lista di utenti iscriti non è un puntatore a null, viene utilizzata
+                    // per ottenre il riferimento alla corrente lista di utenti
+                    if (loadedUsers != null){
+                        users = loadedUsers;
+                        return;
+                    }
+                }
             }
+        } catch (Exception e){
+            System.err.println("Errore nella lettura degli utenti: "+ e.getMessage());
+            e.printStackTrace();
+        }
+
+        // se la lista di utenti è vuota quando viene chiamato readUsers() essa viene inizializzata
+        // con una lista vuota
         if (users == null) {
-            System.out.println("Attenzione: `users` è ancora null. Inizializzazione forzata.");
             users = new ArrayList<>();
         }
     }
@@ -170,8 +270,6 @@ public class UserManager {
         return null;
     }
 
-
-
     public static UserManager getInstance(){
 
         if(instance == null){
@@ -179,23 +277,5 @@ public class UserManager {
             return instance;
         }
         return instance;
-    }
-
-    public static void main(String[] args) {
-        UserManager userManager = UserManager.getInstance();
-        userManager.addObserver(new LoggingUserManagerObserver());
-        userManager.registerNewUser(new User("ciccio"));
-
-        userManager.registerNewUser(new User("pippo"));
-
-        userManager.loginUser("pippo");
-        userManager.loginUser("ciccio");
-
-        //userManager.showAllUsers();
-
-        userManager.deleteUser("mimmo");
-        userManager.updateUserData(new User("ciccio") , "pierpaolo");
-
-        userManager.readUsers();
     }
 }
