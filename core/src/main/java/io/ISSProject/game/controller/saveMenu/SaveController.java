@@ -103,6 +103,7 @@ public class SaveController implements GameComponent {
 
     public void switchToLoadedScene(Scene loadedScene) {
         // Cambia la schermata attuale alla nuova scena
+
         Game game = (Game) Gdx.app.getApplicationListener();
         GameplayController gameplayController = GameplayController.getInstance();
         //GameplayController gameplayController = new GameplayController();

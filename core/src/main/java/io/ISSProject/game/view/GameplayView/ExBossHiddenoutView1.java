@@ -6,10 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import io.ISSProject.game.model.Clue;
-import io.ISSProject.game.model.CluePaper;
-import io.ISSProject.game.model.InteractiveObject;
-import io.ISSProject.game.model.SceneObject;
+import io.ISSProject.game.model.*;
 import io.ISSProject.game.controller.gamePlayController.GameplayController;
 import io.ISSProject.game.model.puzzles.PuzzleObject;
 import io.ISSProject.game.model.puzzles.PuzzleStrategy;
@@ -26,16 +23,15 @@ public class ExBossHiddenoutView1 extends AbstractSceneView {
         this.controller = controller;
         this.backgroundTexture = new Texture(Gdx.files.internal("images/ExBossHiddenout.jpg"));
         this.dialogLines = new String[]{
-            "L' edificio è davvero fatiscente",
-            "Questo dovrebbe essere il posto... Ma qualcosa non torna...",
-            "Finestre sporche, porte socchiuse, nessun segno di attività recente.",
-            "Si avvicina cautamente alla porta e la spinge. Con un cigolio sinistro, l’ingresso si apre senza alcuna resistenza.",
-            "Entra, l'interno è spoglio: solamente documenti strappati e segni di un’evacuazione frettolosa.",
-            " Investigatore: Dannazione... Sapevano che sarei arrivato.",
-            "Si avvicina a un tavolo polveroso, dove trova un mozzicone di sigaretta ancora tiepido.",
-            "Investigatore: Non può essere passato troppo tempo… Forse posso ancora recuperarli.",
-            "Stringe il pugno attorno al bigliettino e si guarda intorno, cercando il prossimo indizio.",
-            ""
+            DialogManager.get("HIDBOSSV1_1"),
+            DialogManager.get("HIDBOSSV1_2"),
+            DialogManager.get("HIDBOSSV1_3"),
+            DialogManager.get("HIDBOSSV1_4"),
+            DialogManager.get("HIDBOSSV1_5"),
+            DialogManager.get("HIDBOSSV1_6"),
+            DialogManager.get("HIDBOSSV1_7"),
+            DialogManager.get("HIDBOSSV1_8"),
+            DialogManager.get("HIDBOSSV1_9"),
         };
     }
 

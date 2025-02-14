@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
     import com.badlogic.gdx.utils.viewport.FitViewport;
 import io.ISSProject.game.controller.gamePlayController.GameplayController;
 import io.ISSProject.game.model.Clue;
+import io.ISSProject.game.model.DialogManager;
 import io.ISSProject.game.model.InteractiveObject;
 import io.ISSProject.game.model.SceneObject;
 import io.ISSProject.game.view.DialogWindow;
@@ -26,15 +27,16 @@ public class FinalView extends AbstractSceneView {
         this.controller = controller;
         this.backgroundTexture = new Texture(Gdx.files.internal("images/final.png"));
         this.dialogLines = new String[] {
-            "Il boss è seduto su una poltrona in pelle",
-            "L’investigatore è in piedi di fronte a lui, la pistola puntata. " ,
-            "La tensione è palpabile.",
-            "Investigatore: È finita. Ho trovato abbastanza prove per incastrarti. " + "Sei il responsabile di tutto questo.",
-            "Boss: Oh, davvero? Ti credi furbo, eh? " + "Ma dimmi, detective, sei sicuro di aver capito tutto?",
-            "Investigatore: Gli indizi non mentono. Sei tu che hai orchestrato tutto.",
-            "Boss: [scuote la testa con un sorriso divertito] Io? No, no, amico mio… Io eseguo solo gli ordini. Sono un semplice pezzo sulla scacchiera.",
-            "Investigatore: [stringe la presa sulla pistola] Allora chi tira i fili? Chi sta sopra di te?",
-            "Boss: Io lavoro per... Marco"
+            DialogManager.get("BOSS1"),
+            DialogManager.get("BOSS2"),
+            DialogManager.get("BOSS3"),
+            DialogManager.get("BOSS4"),
+            DialogManager.get("BOSS5"),
+            DialogManager.get("BOSS6"),
+            DialogManager.get("BOSS7"),
+            DialogManager.get("BOSS8"),
+            DialogManager.get("BOSS9"),
+            DialogManager.get("BOSS10"),
         };
     }
 
@@ -42,9 +44,8 @@ public class FinalView extends AbstractSceneView {
         Table interactiveLayer = new Table();
 
         // Creazione degli oggetti interattivi
-        InteractiveObject boss = new Clue(
+        InteractiveObject boss = new SceneObject(
             "Boss",
-            "",
             "Scelta finale"
         );
 

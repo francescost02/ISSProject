@@ -4,28 +4,46 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import io.ISSProject.game.controller.gamePlayController.GameplayController;
+import io.ISSProject.game.controller.mediator.GameMediator;
+import io.ISSProject.game.model.DialogManager;
 
 public class DefeatView extends AbstractSceneView {
     private Texture backgroundTexture;
     private String[] dialogLines;
     private int currentLineIndex = 0;
     private GameplayController controller;
+    private GameMediator mediator;
 
-    public DefeatView() {
+    public DefeatView(GameplayController controller, GameMediator mediator) {
         super();
+        this.controller = controller;
+        this.mediator = controller.getMediator();
         this.backgroundTexture = new Texture(Gdx.files.internal("images/defeat.png"));
         this.dialogLines = new String[] {
-            "Dobbiamo ancora lavorare sulle tue capacità investigative",
-            "Hai accusato Marco, ma era lui a lasciarti gli indizi per arrivare alla verità.",
-            "Gli indizi con la lettera \"M\" non erano un segnale di colpevolezza, ma il modo in cui Marco cercava di farti arrivare al boss.\n",
-                "Purtroppo, hai abboccato al depistaggio del boss e il vero colpevole è sfuggito alla giustizia. Riprova e fai più attenzione ai dettagli!"
+            DialogManager.get("DEFEAT1"),
+            DialogManager.get("DEFEAT2"),
+            DialogManager.get("DEFEAT3"),
+            DialogManager.get("DEFEAT4"),
+
         };
     }
 
     public void setupUI() {
         super.setupUI();
+        TextButton menuButton = new TextButton("Torna al Menu", skin);
+        menuButton.setPosition(stage.getWidth()/2 - 50, stage.getHeight()/2 - 100);
+        menuButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                //((MainGame)Gdx.app.getApplicationListener()).resetGame();
+                mediator.notify(controller, "RESTART_GAME");
+            }
+        });
+        stage.addActor(menuButton);
     }
 
     public void setupLayout() {

@@ -10,10 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.*;
-import io.ISSProject.game.model.Clue;
-import io.ISSProject.game.model.CluePaper;
-import io.ISSProject.game.model.InteractiveObject;
-import io.ISSProject.game.model.SceneObject;
+import io.ISSProject.game.model.*;
 import io.ISSProject.game.model.puzzles.PuzzleObject;
 import io.ISSProject.game.model.puzzles.ReverseTextPuzzle;
 import io.ISSProject.game.view.DialogWindow;
@@ -31,9 +28,8 @@ public class BrotherLivingRoomView extends AbstractSceneView {
         this.controller = controller;
         this.backgroundTexture = new Texture(Gdx.files.internal("images/BrotherLivingRoom.jpeg"));
         this.dialogLines = new String[]{
-            "Meglio tornare nell'appartamento di mio fratello...",
-            "Bisogna controllare bene le altre stanze... magari mi sono fatto sfuggire qualche altro indizio.",
-            ""
+            DialogManager.get("BROTHERLIVROOM1"),
+            DialogManager.get("BROTHERLIVROOM2"),
         };
     }
 

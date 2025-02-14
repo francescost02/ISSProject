@@ -14,23 +14,22 @@ public abstract class AbstractPuzzleView extends Dialog {
         super(title, skin);
         this.controller = controller;
 
-        // Imposta lo stile base del dialog
+        //Imposto lo stile base del dialog
         setModal(true);  // Blocca input sulla scena sottostante
         setMovable(false);  // Dialog non spostabile
 
-        // Crea il layout base
+        //Layout base
         contentTable = new Table();
         contentTable.pad(20);
 
-        // Aggiungi descrizione puzzle
         Label description = new Label(controller.getPuzzleDescription(), skin);
         description.setWrap(true);  // Permette il wrapping del testo
         contentTable.add(description).width(400f).pad(10).row();
 
-        // Setup specifico per ogni tipo di puzzle
+        //Setup specifico per ogni tipo di puzzle
         setupPuzzleUI(contentTable);
 
-        // Aggiungi i bottoni standard
+        //Aggiungo i bottoni standard
         addStandardButtons();
 
         getContentTable().add(contentTable);

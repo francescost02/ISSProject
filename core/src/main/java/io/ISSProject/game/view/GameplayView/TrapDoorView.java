@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
     import com.badlogic.gdx.utils.viewport.*;
     import io.ISSProject.game.model.Clue;
+import io.ISSProject.game.model.DialogManager;
 import io.ISSProject.game.model.InteractiveObject;
 import io.ISSProject.game.model.SceneObject;
 import io.ISSProject.game.model.puzzles.PuzzleObject;
@@ -29,13 +30,12 @@ public class TrapDoorView extends AbstractSceneView {
         this.controller = controller;
         this.backgroundTexture = new Texture(Gdx.files.internal("images/TrapDoor.jpeg"));
         this.dialogLines = new String[]{
-            "L’investigatore decide quindi di lasciare il rifugio e ritornare nel magazzino , sospettando che potrebbe ancora nascondere qualcosa di rilevante.",
-            "Investigatore: Strano... Ho già controllato questo posto, eppure ho la sensazione che mi sia sfuggito qualcosa...",
-            "Mentre scruta il pavimento, nota una botola parzialmente nascosta da alcune casse.",
-            "Investigatore: E questa? Non l’avevo vista prima... Vediamo dove porta.",
-            "Dannazione... è chiusa, bisogna inserire un codice per aprirla.",
-            "Forse questi scarabocchi sui fogli possono essermi utili...",
-            ""
+            DialogManager.get("TRAP1"),
+            DialogManager.get("TRAP2"),
+            DialogManager.get("TRAP3"),
+            DialogManager.get("TRAP4"),
+            DialogManager.get("TRAP5"),
+            DialogManager.get("TRAP6"),
         };
     }
 

@@ -2,10 +2,12 @@ package io.ISSProject.game.controller.gameState;
 
 import io.ISSProject.game.controller.GameInitializer;
 import io.ISSProject.game.model.Clue;
+import io.ISSProject.game.model.Diary.DetectiveDiary;
 import io.ISSProject.game.model.InteractiveObject;
 import io.ISSProject.game.model.Scene;
 import io.ISSProject.game.model.puzzles.PuzzleObject;
 import io.ISSProject.game.model.saveModel.GameStateMemento;
+import io.ISSProject.game.model.settingsMenuModel.AudioManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,6 +20,7 @@ public class GameContext {
     private Scene savedScene; // Per salvare lo stato della scena
     private Map<String, Clue> clueRegistry = new HashMap<>(); //indizi
     private Map<String, Scene> sceneRegistry = new HashMap<>(); //scene disponibili
+    private String playerFinalChoice;
 
 
     public GameContext() {
@@ -31,6 +34,10 @@ public class GameContext {
             System.out.println("GameContext: Istanza creata.");
         }
         return instance;
+    }
+
+    public static void resetInstance() {
+        instance = null;
     }
 
     public void changeState(GameState newState) {
@@ -209,5 +216,28 @@ public class GameContext {
             sceneRegistry.put(scene.getName(), scene);
             System.out.println("Scena '" + scene.getName() + "' aggiunta.");
         }
+    }
+
+
+    public void setPlayerFinalChoice(String choice) {
+        this.playerFinalChoice = choice;
+    }
+
+    public String getPlayerFinalChoice() {
+        return playerFinalChoice;
+    }
+
+    public void fullReset(){
+        this.clueRegistry.clear();
+        this.sceneRegistry.clear();
+        this.playerFinalChoice = null;
+        this.currentScene = null;
+        this.savedScene = null;
+        DetectiveDiary.getInstance().clear();
+        String currentUser = this.username;
+        GameInitializer.initializeGame(this);
+        // Ritorna allo stato iniziale
+        this.currentState = new MainMenuState(this);
+        this.username = currentUser;
     }
 }

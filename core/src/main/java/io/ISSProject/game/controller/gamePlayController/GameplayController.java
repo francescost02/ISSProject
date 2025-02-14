@@ -2,13 +2,10 @@ package io.ISSProject.game.controller.gamePlayController;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextTooltip;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Timer;
-import io.ISSProject.game.ClueNotification;
+import io.ISSProject.game.view.ClueNotification;
 import io.ISSProject.game.controller.gameState.GameContext;
 import io.ISSProject.game.controller.mediator.GameComponent;
 import io.ISSProject.game.controller.mediator.GameMediator;
@@ -71,6 +68,8 @@ public class GameplayController implements GameComponent {
             case "Secret Room 2" -> this.gameView = new SecretRoom2View(GameplayController.this);
             case "Before Boss' Hiddenout" -> this.gameView = new BeforeBossHiddenoutView();
             case "Final" -> this.gameView = new FinalView(GameplayController.this);
+            case "Victory View"-> this.gameView = new VictoryView(GameplayController.this, mediator);
+            case "Defeat View"-> this.gameView = new DefeatView(GameplayController.this, mediator);
         }
 
         addPauseListener();
@@ -163,13 +162,22 @@ public class GameplayController implements GameComponent {
                 if (object instanceof Clue clue) {
                     audioManager.playClickSound();
                     System.out.println (gameContext.getCurrentScene());
+                    /*
                     if (gameContext.getCurrentScene().getName().equals("Final")) {
                         System.out.println(gameContext.getCurrentScene());
-                        mediator.notify(GameplayController.this, "FINAL_CHOICE");
+                        //mediator.notify(GameplayController.this, "FINAL_CHOICE");
                     }
+                     */
                     mediator.notify(GameplayController.this, "CLUE_FOUND", clue);
                     checkSceneCompletion();
-
+                }
+                else if (gameContext.getCurrentScene().getName().equals("Final")){
+                    audioManager.playClickSound();
+                    ClueNotification.showChoice(
+                        gameView.getSkin(),
+                        gameView.getStage(),
+                        GameplayController.this
+                    );
                 }
                 else
                     audioManager.playClickSound2();
@@ -211,4 +219,22 @@ public class GameplayController implements GameComponent {
             mediator.notify(this, event, data);
         }
     }
+
+    private boolean checkPlayerChoice() {
+        // Verifica l'ultima scelta memorizzata nel contesto di gioco
+        return gameContext.getCurrentScene().getName().equals("Final") &&
+            gameContext.getPlayerFinalChoice().equals("Boss");
+    }
+
+    public static void resetInstance() {
+        if (instance != null) {
+            instance.gameView = null;
+            instance.audioManager = AudioManager.getInstance(); // Ricarica l'istanza
+            instance.audioManager.reloadSounds();
+        }
+        instance = null;
+        System.out.println("GameplayController: Istanza resettata.");
+    }
+
+
 }

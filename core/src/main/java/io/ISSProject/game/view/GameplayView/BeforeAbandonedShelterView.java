@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import io.ISSProject.game.controller.gamePlayController.GameplayController;
+import io.ISSProject.game.model.DialogManager;
 
 public class BeforeAbandonedShelterView extends AbstractSceneView {
     private GameplayController controller;
@@ -24,13 +25,12 @@ public class BeforeAbandonedShelterView extends AbstractSceneView {
         this.backgroundTexture = new Texture(Gdx.files.internal("images/BeforeAbandonedShelter.jpg"));
         // Inizializzazione sicura dell'array dialoghi
         this.dialogLines = new String[]{
-            "L'indirizzo sembra portare ad un rifugio abbandonato fuori città...",
-            "Il vento sferza tra gli alberi, facendo scricchiolare i rami secchi...",
-            "L’investigatore si ferma davanti alla casa... inghiottito dall’oscurità del bosco.",
-            "Il legno marcio e le finestre infrante parlano di anni di abbandono.",
-            "L'investigatore a bassa voce esclama tra sé e sé: Se è qui che dovrei trovarlo, non promette bene...",
-            "Spinge la porta, che si apre con un cigolio sinistro...",
-            ""
+            DialogManager.get("BEFSHELTER1"),
+            DialogManager.get("BEFSHELTER2"),
+            DialogManager.get("BEFSHELTER3"),
+            DialogManager.get("BEFSHELTER4"),
+            DialogManager.get("BEFSHELTER5"),
+            DialogManager.get("BEFSHELTER6")
         };
     }
 

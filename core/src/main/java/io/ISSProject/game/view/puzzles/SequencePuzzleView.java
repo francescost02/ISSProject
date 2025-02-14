@@ -1,7 +1,6 @@
 package io.ISSProject.game.view.puzzles;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -9,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import io.ISSProject.game.controller.puzzles.PuzzleController;
-import io.ISSProject.game.controller.puzzles.SequenceButtonPuzzleController;
 
 public class SequencePuzzleView extends AbstractPuzzleView {
     private Actor[] invisibleActors;

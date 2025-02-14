@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import io.ISSProject.game.controller.gamePlayController.GameplayController;
+import io.ISSProject.game.model.DialogManager;
 
 public class IntroView extends AbstractSceneView {
     private Texture backgroundTexture;
@@ -18,12 +19,11 @@ public class IntroView extends AbstractSceneView {
         this.backgroundTexture = new Texture(Gdx.files.internal("images/investigatore_sfondo.png"));
         this.controller = controller;
         this.dialogLines = new String[] {
-            "Un giovane e promettente investigatore privato riceve un messaggio di richiesta di aiuto dal fratello...",
-            "Il fratello dell’investigatore è un banchiere... dice di essere in pericolo e per questo stabilisce di incontrarsi in un bar per discuterne.",
-            "L’investigatore attende nel bar ma dopo diverse ore il fratello non si fa ancora vivo...",
-            "Insospettito decide di recarsi a casa del fratello per capire cosa sia successo.",
-            "giunto nell’appartamento capisce subito che qualcosa non va...",
-            ""
+            DialogManager.get("INTRO1"),
+            DialogManager.get("INTRO2"),
+            DialogManager.get("INTRO3"),
+            DialogManager.get("INTRO4"),
+            DialogManager.get("INTRO5"),
         };
     }
 

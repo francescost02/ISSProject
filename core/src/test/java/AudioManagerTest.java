@@ -21,6 +21,7 @@ public class AudioManagerTest {
 
     @BeforeEach
     void setUp() {
+        AudioManager.resetInstance(); // Resetta l'istanza prima di ogni test
         // Configura Gdx in modalità headless
         if (Gdx.files == null) {
             HeadlessApplicationConfiguration config = new HeadlessApplicationConfiguration();
@@ -38,7 +39,6 @@ public class AudioManagerTest {
                 @Override
                 public void dispose() {}
             }, config);
-            //Gdx.files = new MockFiles(); // Mock dei file system
         }
 
         // Inizializza l'istanza singleton prima di ogni test
@@ -80,11 +80,16 @@ public class AudioManagerTest {
     @Test
     void testMuteToggle() {
         // Verifica il comportamento del mute toggle
+        boolean wasMuted = audioManager.isMuted();
+        float initialVolume = audioManager.getVolume();
+
         audioManager.toggleMute();
         assertTrue(audioManager.isMuted(), "Il sistema dovrebbe essere messo in mute");
+        assertEquals(0, audioManager.getVolume(), "Il volume dovrebbe essere 0 quando è in mute");
 
         audioManager.toggleMute();
         assertFalse(audioManager.isMuted(), "Il sistema dovrebbe essere smutato");
+        assertEquals(initialVolume, audioManager.getVolume(), "Il volume dovrebbe essere ripristinato al valore precedente");
     }
 
     @Test

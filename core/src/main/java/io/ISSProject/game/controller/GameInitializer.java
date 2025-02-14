@@ -25,10 +25,11 @@ public class GameInitializer {
         Scene scene11 = new Scene("Ex Boss' Hiddenout 1", 1);
         Scene scene12 = new Scene("Studio", 1);
         Scene scene13 = new Scene("Ex Boss' Hiddenout 2", 0);
-        //Scene scene14 = new Scene("Buttons", 0);
         Scene scene14 = new Scene("Secret Room 2", 1);
         Scene scene15 = new Scene("Before Boss' Hiddenout", 0);
         Scene scene16 = new Scene("Final", 1);
+        Scene scene17 = new Scene("Victory", 0);
+        Scene scene18 = new Scene("Defeat", 0);
 
         scene1.setAssociatedState(new GameplayState(gameContext, scene1));
         scene2.setAssociatedState(new GameplayState(gameContext, scene2));
@@ -46,7 +47,7 @@ public class GameInitializer {
         scene14.setAssociatedState(new GameplayState(gameContext, scene14));
         scene15.setAssociatedState(new GameplayState(gameContext, scene15));
         scene16.setAssociatedState(new GameplayState(gameContext, scene16));
-        //scene17.setAssociatedState(new GameplayState(gameContext, scene17));
+        scene17.setAssociatedState(new GameplayState(gameContext, scene17));
 
         gameContext.setCurrentScene(scene1);
 
@@ -66,7 +67,7 @@ public class GameInitializer {
         scene13.setNextScene(scene14);
         scene14.setNextScene(scene15);
         scene15.setNextScene(scene16);
-        //scene16.setNextScene(scene17);
+        scene16.setNextScene(scene17);
 
         // Aggiungi tutte le scene al GameContext
         gameContext.addScene(scene1);
@@ -85,24 +86,7 @@ public class GameInitializer {
         gameContext.addScene(scene14);
         gameContext.addScene(scene15);
         gameContext.addScene(scene16);
-        //gameContext.addScene(scene17);
+        gameContext.addScene(scene17);
 
-/*
-        //Creazione enigmi
-        PuzzleObject puzzleObject = new PuzzleObject(
-            "Enigma Misterioso", // tooltipText che appare al passaggio del mouse
-            "Hai trovato un enigma da risolvere!", // dialogText che appare al click
-            new ReverseTextPuzzle()
-        );
-        scene1.addInteractiveObject(puzzleObject);
-
-        PuzzleStrategy sequencePuzzle = new SequenceButtonPuzzle();
-        PuzzleObject puzzleObject1 = new PuzzleObject(
-            "Enigma sequenza",
-            "Cosa c'è dietro la libreria, degli strani interuttori..., ",
-            sequencePuzzle
-        );
-        scene1.addInteractiveObject(puzzleObject1);
-*/
     }
 }

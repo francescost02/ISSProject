@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import io.ISSProject.game.model.Clue;
+import io.ISSProject.game.model.DialogManager;
 import io.ISSProject.game.model.InteractiveObject;
 import io.ISSProject.game.model.SceneObject;
 import io.ISSProject.game.controller.gamePlayController.GameplayController;
@@ -22,16 +23,15 @@ public class StudioView extends AbstractSceneView {
         this.controller = controller;
         this.backgroundTexture = new Texture(Gdx.files.internal("images/studio.jpg"));
         this.dialogLines = new String[]{
-            "L'investigatore ritorna nel suo studio... La scrivania è piena di documenti e appunti.",
-            "Investigatore: Dannazione… sono bloccato. Ogni pista sembra portare a un vicolo cieco.",
-            "Prende il biglietto con scritto \"Segui il denaro, non fermarti.\" da un fascicolo e lo osserva attentamente.",
-            "Investigatore tra sé e sé, con tono determinato: Forse è proprio questa la chiave...",
-            "Se traccio i movimenti di denaro dell’organizzazione, posso arrivare al boss senza rischiare uno scontro diretto.",
-            "Ecco... questi movimenti non tornano. Ci sono società di copertura... trasporti, magazzini...",
-            "Tutto sembra lecito, ma il denaro passa sempre attraverso le stesse attività.",
-            "Mentre continua ad analizzare i dati... drin... drin... drin...",
-            "Il telefono sulla scrivania squilla all’improvviso, interrompendo il silenzio della stanza.",
-            ""
+            DialogManager.get("STUDIO1"),
+            DialogManager.get("STUDIO2"),
+            DialogManager.get("STUDIO3"),
+            DialogManager.get("STUDIO4"),
+            DialogManager.get("STUDIO5"),
+            DialogManager.get("STUDIO6"),
+            DialogManager.get("STUDIO7"),
+            DialogManager.get("STUDIO8"),
+            DialogManager.get("STUDIO9"),
         };
     }
 
@@ -59,9 +59,7 @@ public class StudioView extends AbstractSceneView {
         // Creazione degli oggetti interattivi
         Clue phone = new Clue(
             "Telefono",
-            "Voce robotica: Hai poco tempo. Se vuoi arrivare in fondo, smetti di cercare e agisci. " +
-                "Come immaginavi, il covo è stato spostato. Non so dove sia ora... ma c’è qualcos’altro che dovresti controllare. " +
-                "Torna all’ex covo. C’è una stanza segreta che merita più attenzione.... Click",
+            DialogManager.get("CLUEPHONE"),
             ""
         );
 

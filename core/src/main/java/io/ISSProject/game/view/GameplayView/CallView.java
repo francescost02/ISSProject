@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import io.ISSProject.game.controller.gamePlayController.GameplayController;
+import io.ISSProject.game.model.DialogManager;
 
 public class CallView extends AbstractSceneView {
     private GameplayController controller;
@@ -25,22 +26,20 @@ public class CallView extends AbstractSceneView {
         this.backgroundTexture = new Texture(Gdx.files.internal("images/call.png"));
         // Inizializzazione sicura dell'array dialoghi
         this.dialogLines = new String[]{
-            "Drin... drin.. drin... drin...",
-            "Investigatore: Il telefono sta squillando, chi mi chiama a quest'ora...",
-            "Osserva lo schermo: numero anonimo...",
-            "Esita un momento, un pò confuso e sospettoso, poi risponde...",
-            "Voce misteriosa: So cosa stai cercando...",
-            "Investigatore: ... chi sei?",
-            "Voce misteriosa: Vuoi salvare tuo fratello, vero?",
-            "Le dita dell’investigatore si stringono attorno al telefono e urla: DIMMI DOVE SI TROVA",
-            "Voce misteriosa: Vai in questo indirizzo... Troverai quello che cerchi.",
-            "L’investigatore afferra rapidamente un taccuino e annota l’indirizzo ed esclama: Perché dovrei fidarmi?",
-            "Una breve pausa, poi un sussurro quasi ironico: Perché non hai altra scelta.",
-            "La chiamata si interrompe. Il battito dell’investigatore accelera. Resta un attimo immobile, scrutando il telefono, come se potesse dargli altre risposte.",
-            "Con un sospiro, si alza. Infila il taccuino nel cappotto e si prepara.",
-            "Afferra il martello... se è una trappola, vuole essere pronto.",
-            "Ma se c’è anche solo una possibilità di trovare suo fratello, deve andare.",
-            ""
+            DialogManager.get("CALL1"),
+            DialogManager.get("CALL2"),
+            DialogManager.get("CALL3"),
+            DialogManager.get("CALL4"),
+            DialogManager.get("CALL5"),
+            DialogManager.get("CALL6"),
+            DialogManager.get("CALL7"),
+            DialogManager.get("CALL8"),
+            DialogManager.get("CALL9"),
+            DialogManager.get("CALL10"),
+            DialogManager.get("CALL11"),
+            DialogManager.get("CALL12"),
+            DialogManager.get("CALL13"),
+            DialogManager.get("CALL14")
         };
     }
 

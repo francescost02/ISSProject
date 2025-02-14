@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import io.ISSProject.game.model.Clue;
+import io.ISSProject.game.model.DialogManager;
 import io.ISSProject.game.model.InteractiveObject;
 import io.ISSProject.game.model.SceneObject;
 import io.ISSProject.game.controller.gamePlayController.GameplayController;
@@ -25,8 +26,7 @@ public class ExBossHiddenoutView2 extends AbstractSceneView {
         this.controller = controller;
         this.backgroundTexture = new Texture(Gdx.files.internal("images/ExBossHiddenout.jpg"));
         this.dialogLines = new String[]{
-            "L'investigatore si reca di nuovo nell'ex covo del boss per cercare di trovare la stanza segreta.",
-            ""
+            DialogManager.get("HIDBOSSV2_1")
         };
     }
 

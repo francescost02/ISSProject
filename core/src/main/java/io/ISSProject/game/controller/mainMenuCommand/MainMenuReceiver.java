@@ -11,6 +11,7 @@ import io.ISSProject.game.controller.settingsMenuController.SettingsController;
 import io.ISSProject.game.model.Clue;
 import io.ISSProject.game.model.Scene;
 import io.ISSProject.game.model.saveModel.SaveGameManager;
+import io.ISSProject.game.model.userManagment.UserManager;
 
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class MainMenuReceiver {
 
     public MainMenuReceiver(GameMediator mediator) {
         this.gameContext = GameContext.getInstance();
+        //this.gameContext.setUsername(UserManager.getInstance().getCurrentUser());
         this.saveGameManager = new SaveGameManager();
     }
     public void createNewGame() {

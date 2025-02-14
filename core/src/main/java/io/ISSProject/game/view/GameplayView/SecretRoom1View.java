@@ -6,10 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import io.ISSProject.game.model.Clue;
-import io.ISSProject.game.model.CluePaper;
-import io.ISSProject.game.model.InteractiveObject;
-import io.ISSProject.game.model.SceneObject;
+import io.ISSProject.game.model.*;
 import io.ISSProject.game.controller.gamePlayController.GameplayController;
 
 public class SecretRoom1View extends AbstractSceneView {
@@ -23,10 +20,9 @@ public class SecretRoom1View extends AbstractSceneView {
         this.controller = controller;
         this.backgroundTexture = new Texture(Gdx.files.internal("images/SecretRoom1.jpg"));
         this.dialogLines = new String[]{
-            "L'investigatore apre con cautela la botola e scende in una stanza buia e polverosa...",
-            "Una lampada illumina un vecchio mobile impolverato...",
-            "Investigatore: Non sembra esserci molto qui sotto... Aspetta...",
-            ""
+            DialogManager.get("SECRETROOM1"),
+            DialogManager.get("SECRETROOM2"),
+            DialogManager.get("SECRETROOM3")
         };
     }
 

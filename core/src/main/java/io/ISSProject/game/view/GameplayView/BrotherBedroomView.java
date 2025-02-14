@@ -10,10 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.*;
-import io.ISSProject.game.model.Clue;
-import io.ISSProject.game.model.CluePaper;
-import io.ISSProject.game.model.InteractiveObject;
-import io.ISSProject.game.model.SceneObject;
+import io.ISSProject.game.model.*;
 import io.ISSProject.game.view.DialogWindow;
 import io.ISSProject.game.controller.gamePlayController.GameplayController;
 
@@ -28,11 +25,10 @@ public class BrotherBedroomView extends AbstractSceneView {
         this.controller = controller;
         this.backgroundTexture = new Texture(Gdx.files.internal("images/BrotherBedroom.jpg"));
         this.dialogLines = new String[]{
-            "In cucina sembra esserci un pasto freddo consumato solo a metà...",
-            "... Come se fosse stato interrotto da qualcosa o qualcuno.",
-            "Forse conviene controllare la scrivania in camera da letto...",
-            "... Lì mio fratello conservava i suoi documenti.",
-            ""
+            DialogManager.get("BROTHERBEDROOM1"),
+            DialogManager.get("BROTHERBEDROOM2"),
+            DialogManager.get("BROTHERBEDROOM3"),
+            DialogManager.get("BROTHERBEDROOM4")
         };
     }
 

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
     import com.badlogic.gdx.utils.viewport.FitViewport;
+import io.ISSProject.game.model.DialogManager;
 import io.ISSProject.game.view.DialogWindow;
 
 public class BeforeBossHiddenoutView extends AbstractSceneView {
@@ -19,12 +20,10 @@ public class BeforeBossHiddenoutView extends AbstractSceneView {
         super();
         this.backgroundTexture = new Texture(Gdx.files.internal("images/BeforeBossHiddenout.png"));
         this.dialogLines = new String[] {
-            "L’investigatore si dirige verso la villa.",
-            "Luna piena. Il vento soffia tra i rami scheletrici degli alberi.",
-            "Investigatore (sottovoce, scrutando la casa nell'oscurità):\n" +
-            "Eccola… il nuovo covo dell'organizzazione. Se i documenti erano corretti, qui avviene il traffico di denaro.",
-            "L'investigatore prende un respiro profondo, poi si incammina lentamente verso la villa, con l'adrenalina che pulsa nelle vene.",
-            ""
+            DialogManager.get("BEFBOSS1"),
+            DialogManager.get("BEFBOSS2"),
+            DialogManager.get("BEFBOSS3"),
+            DialogManager.get("BEFBOSS4")
         };
     }
 

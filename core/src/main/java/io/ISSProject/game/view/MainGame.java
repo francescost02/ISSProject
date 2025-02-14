@@ -32,6 +32,7 @@ public class MainGame extends Game {
     @Override
     public void create() {
         batch = new SpriteBatch();
+        GameContext.resetInstance();
         gameContext = GameContext.getInstance();
         userManager = UserManager.getInstance();
         mainMenuController = new MainMenuController2();

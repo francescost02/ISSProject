@@ -4,7 +4,8 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import io.ISSProject.game.ClueNotification;
+import io.ISSProject.game.view.ClueNotification;
+import io.ISSProject.game.controller.GameInitializer;
 import io.ISSProject.game.controller.gamePlayController.GameplayController;
 import io.ISSProject.game.controller.gamePlayController.PauseMenuController;
 import io.ISSProject.game.controller.ScreenController;
@@ -23,7 +24,6 @@ import io.ISSProject.game.model.puzzles.PuzzleObject;
 import io.ISSProject.game.model.puzzles.PuzzleStrategy;
 import io.ISSProject.game.model.puzzles.ReverseTextPuzzle;
 import io.ISSProject.game.model.puzzles.SequenceButtonPuzzle;
-import io.ISSProject.game.model.saveModel.SaveGameManager;
 import io.ISSProject.game.model.userManagment.UserManager;
 import io.ISSProject.game.view.UI.UnregisteredUI;
 import io.ISSProject.game.view.puzzles.AbstractPuzzleView;
@@ -33,8 +33,7 @@ import io.ISSProject.game.view.puzzles.TextPuzzleView;
 import java.util.List;
 
 
-import static io.ISSProject.game.ClueNotification.showChoice;
-import static io.ISSProject.game.ClueNotification.showIncompleteSceneNotification;
+import static io.ISSProject.game.view.ClueNotification.showIncompleteSceneNotification;
 
 public class GameMediator {
     private MainMenuController2 menuController;
@@ -93,13 +92,25 @@ public class GameMediator {
                 break;
 
             case "START_NEW_GAME":
+                gameContext.fullReset();//
+
+                //GameplayController.resetInstance();//
+                //gameplayController = GameplayController.getInstance();//
+                GameInitializer.initializeGame(gameContext);//
+
                 Scene initialScene = gameContext.getCurrentScene();
                 if (initialScene == null) {
                     initialScene = new Scene("Intro", 0);
+                    //GameInitializer.initializeGame(gameContext);//
                     gameContext.setCurrentScene(initialScene);
                 }
+
+                gameplayController.updateViewForScene(initialScene);//
+
                 gameContext.changeState(new GameplayState(gameContext, initialScene));
                 game.setScreen(gameplayController.getScreen());
+                Gdx.input.setInputProcessor(gameplayController.getScreen().getStage());//
+
                 break;
 
             case "LOAD_GAME":
@@ -111,6 +122,31 @@ public class GameMediator {
                 SaveController saveController = new SaveController();
                 saveController.setMediator(this);
                 game.setScreen(saveController.getScreen());
+                break;
+            case "RESTART_GAME":
+                gameContext.fullReset();
+
+                Scene initialScene2 = gameContext.loadSceneByName("Intro");
+                gameContext.setCurrentScene(initialScene2);
+                String previousUser = gameContext.getUsername();
+                GameContext.resetInstance(); // Distrugge l'istanza singleton
+                GameplayController.resetInstance();
+
+                gameplayController = GameplayController.getInstance(); // Usa getInstance() invece di new
+                gameplayController.setMediator(this);
+
+                gameContext = GameContext.getInstance(); // Crea nuovo contesto
+                gameContext.setUsername(previousUser);
+                //gameplayController = new GameplayController();
+                menuController = new MainMenuController2();
+                //gameplayController.setMediator(this);
+                menuController.setMediator(this);
+                //GameInitializer.initializeGame(gameContext);
+                registerComponents(menuController, userManager, gameContext, screenController, gameplayController);
+                gameContext.changeState(new MainMenuState(gameContext));
+                game.setScreen(menuController.getScreen());
+                //Gdx.input.setInputProcessor(initialScene.getScreen().getStage());
+
                 break;
 
             case "SHOW_SETTINGS_MENU":
@@ -249,9 +285,23 @@ public class GameMediator {
                 gameplayController.checkSceneCompletion();
                 break;
             case "FINAL_CHOICE":
+                boolean choiceCorrect = (boolean) data[0];
+                if(choiceCorrect){
+                    gameplayController.updateViewForScene(new Scene("Victory View", 0));
+                    game.setScreen(gameplayController.getScreen());
+                    Gdx.input.setInputProcessor(gameplayController.getScreen().getStage());
+                } else {
+                    gameplayController.updateViewForScene(new Scene("Defeat View", 0));
+                    game.setScreen(gameplayController.getScreen());
+                    Gdx.input.setInputProcessor(gameplayController.getScreen().getStage());
+                }
+                break;
+                /*
                 stage = gameplayController.getScreen().getStage();
                 skin = gameplayController.getScreen().getSkin();
-                showChoice(skin, stage, game);
+                showChoice(skin, stage, game, gameplayController);
+
+                 */
 
         }
     }

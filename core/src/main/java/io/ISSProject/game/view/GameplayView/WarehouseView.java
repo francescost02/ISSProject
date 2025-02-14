@@ -10,10 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.*;
-import io.ISSProject.game.model.Clue;
-import io.ISSProject.game.model.CluePaper;
-import io.ISSProject.game.model.InteractiveObject;
-import io.ISSProject.game.model.SceneObject;
+import io.ISSProject.game.model.*;
 import io.ISSProject.game.view.DialogWindow;
 import io.ISSProject.game.controller.gamePlayController.GameplayController;
 
@@ -28,11 +25,10 @@ public class WarehouseView extends AbstractSceneView {
         this.controller = controller;
         this.backgroundTexture = new Texture(Gdx.files.internal("images/Warehouse.jpeg"));
         this.dialogLines = new String[]{
-            "La stessa notte l'investigatore si dirige verso il magazzino...",
-            "Sembra un luogo desolato... ma si vede una luce accesa in una stanza...",
-            "Non sembra esserci nessuno... ci sono solo attrezzi sparsi e un disordine evidente...",
-            "... Come se qualcuno fosse andato via di fretta.",
-            ""
+            DialogManager.get("WAR1"),
+            DialogManager.get("WAR2"),
+            DialogManager.get("WAR3"),
+            DialogManager.get("WAR4"),
         };
     }
 

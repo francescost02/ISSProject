@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import io.ISSProject.game.model.DialogManager;
 import io.ISSProject.game.model.InteractiveObject;
 import io.ISSProject.game.model.SceneObject;
 import io.ISSProject.game.controller.gamePlayController.GameplayController;
@@ -21,18 +22,16 @@ public class AbandonedShelterView extends AbstractSceneView {
         this.controller = controller;
         this.backgroundTexture = new Texture(Gdx.files.internal("images/AbandonedShelter.jpeg"));
         this.dialogLines = new String[]{
-            "L’aria è umida, densa di polvere e muffa...",
-            "Entra con cautela, ogni passo fa scricchiolare il pavimento sotto di lui.",
-            "I suoi occhi scrutano l’ambiente: mobili rotti, pareti scrostate, vetri sparsi sul pavimento, detriti e cianfrusaglie ovunque...",
-            "Nessuna traccia di suo fratello.",
-            "l'inestigatore stringendo i denti: Dannazione...",
-            "Accende la torcia, illuminando ogni angolo: nessun segno di lotta, nessun oggetto utile, nessun indizio concreto...",
-            "... solo il vuoto di un posto dimenticato.",
-            "L'investigatore sospira in modo frustrato: Era una maledetta perdita di tempo.",
-            "Resta fermo per un momento, lasciando che la verità gli scivoli addosso come un colpo allo stomaco. Poi, stringe i pugni.",
-            "Inevstigatore: Qualcuno sta giocando con me. Ma ha appena commesso un errore: ora sono io a cercarlo!",
-            "Si volta ed esce, il suo passo più deciso che mai. Il gioco è appena iniziato... e stavolta è lui a dettare le regole.",
-            ""
+            DialogManager.get("SHELTER1"),
+            DialogManager.get("SHELTER2"),
+            DialogManager.get("SHELTER3"),
+            DialogManager.get("SHELTER4"),
+            DialogManager.get("SHELTER5"),
+            DialogManager.get("SHELTER6"),
+            DialogManager.get("SHELTER7"),
+            DialogManager.get("SHELTER8"),
+            DialogManager.get("SHELTER9"),
+            DialogManager.get("SHELTER10"),
         };
     }
 

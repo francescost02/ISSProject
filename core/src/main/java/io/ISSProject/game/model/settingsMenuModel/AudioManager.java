@@ -11,6 +11,7 @@ public class AudioManager {
     private static AudioManager instance;
     private int volume = 50; // Volume di default
     private boolean muted = false;
+    private int previousVolume = 50;
     private Music backgroundMusic;
     private Sound clickSound;
     private Sound clickSoundNotClue;
@@ -51,6 +52,9 @@ public class AudioManager {
         if (!muted) {
             this.volume = Math.max(0, Math.min(volume, 100)); // Mantieni il volume tra 0 e 100
         }
+        if (this.volume == 0){
+            muted = true;
+        }
         updateVolume();
     }
 
@@ -60,14 +64,17 @@ public class AudioManager {
     }
 
     public void toggleMute() {
-        muted = !muted;
-
         // Se il mute è attivo, salva il volume corrente e impostalo a 0
         if (muted) {
-            backgroundMusic.setVolume(0);
+            muted = false;
+            volume = previousVolume;
+            //backgroundMusic.setVolume(0);
         } else {
-            updateVolume(); // Ripristina il volume precedente
+            previousVolume = volume;
+            muted = true;
+            volume = 0;
         }
+        updateVolume(); // Ripristina il volume precedente
     }
 
 
@@ -96,6 +103,21 @@ public class AudioManager {
 
     public void dispose() {
         backgroundMusic.dispose(); // Rilascia le risorse
+    }
+
+    public void reloadSounds() {
+        // Ricarica tutte le risorse audio
+        if (clickSound != null) clickSound.dispose();
+        if (clickSoundNotClue != null) clickSoundNotClue.dispose();
+        //if (backgroundMusic != null) backgroundMusic.dispose();
+
+        clickSound = Gdx.audio.newSound(Gdx.files.internal("audio/clickSound.wav"));
+        clickSoundNotClue = Gdx.audio.newSound(Gdx.files.internal("audio/clickSound2.mp3"));
+        //backgroundMusic = Gdx.audio.newSound(Gdx.files.internal("sounds/background.mp3"));
+    }
+
+    public static void resetInstance() {
+        instance = null;
     }
 
 }

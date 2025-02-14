@@ -1,7 +1,7 @@
 package io.ISSProject.game.model.puzzles;
 
 public class ReverseTextPuzzle implements PuzzleStrategy {
-    private final String originalText = "ENIGMA";
+    private final String originalText = "Per aspera ad astra";
     private String reversedText;
     private boolean completed = false;
 

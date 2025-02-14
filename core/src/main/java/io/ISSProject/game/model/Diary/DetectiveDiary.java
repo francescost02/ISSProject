@@ -12,13 +12,13 @@ public class DetectiveDiary {
     private final List<DiaryEntry> entries;
     private final List<DiaryObservers> observers;
 
-    //costruttore privato
+
     private DetectiveDiary(){
         entries = new ArrayList<>();
         observers = new ArrayList<>();
     }
 
-    //metodo get per unica istanza
+
     public static DetectiveDiary getInstance(){
         if(instance == null){
             instance = new DetectiveDiary();

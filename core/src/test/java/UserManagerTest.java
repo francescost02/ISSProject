@@ -19,11 +19,6 @@ public class UserManagerTest {
     public void tearDown() {
         userManager = null;
     }
-
-<<<<<<< HEAD
-    @Test
-    public void testRegisterNewUser_Success() {
-=======
     /*
     Dopo la prima creazione del file Json testUser2 è stato già creato,
     quindi per assicurarci che anche i test successivi soddisifino il test,
@@ -32,7 +27,6 @@ public class UserManagerTest {
     @Test
     public void testRegisterNewUser_Success() {
         userManager.deleteUser("testUser2");
->>>>>>> branch-di-giacomo
         boolean result = userManager.registerNewUser(new User("testUser2"));
         userManager.showAllUsers();
         assertTrue(result, "L'utente dovrebbe essere registrato con successo.");

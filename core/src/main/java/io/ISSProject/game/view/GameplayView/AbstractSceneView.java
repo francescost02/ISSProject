@@ -115,11 +115,9 @@ public abstract class AbstractSceneView extends ScreenAdapter {
         return skin;
     }
 
-    //public abstract void setupUI();
-   // public abstract void setupLayout();
     public abstract void setupInteractiveObjects();
     public abstract void render(float delta);
-    //public abstract void show();
+
     public abstract void resize(int width, int height);
     public abstract void dispose();
 }

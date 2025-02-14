@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import io.ISSProject.game.controller.gamePlayController.GameplayController;
+import io.ISSProject.game.model.DialogManager;
 import io.ISSProject.game.model.InteractiveObject;
 import io.ISSProject.game.model.SceneObject;
 
@@ -28,12 +29,11 @@ public class StoreView extends AbstractSceneView {
         this.backgroundTexture = new Texture(Gdx.files.internal("images/Store.jpeg"));
         // Inizializzazione sicura dell'array dialoghi
         this.dialogLines = new String[] {
-            "Investigatore: Salve, sa dirmi cosa è successo al ragazzo che è venuto qualche ora fa a comprare questi oggetti?",
-            "Commesso: Mi dispiace, non posso aiutarla...",
-            "Investigatore: È importante. Dica quello che sa.",
-            "Commesso: Va bene... un uomo è entrato mentre suo fratello acquistava una torcia e dei guanti...",
-            "Commesso: Sembrava una discussione accesa, poi ha concluso l'acquisto e se n'è andato.",
-            ""
+            DialogManager.get("STORE1"),
+            DialogManager.get("STORE2"),
+            DialogManager.get("STORE3"),
+            DialogManager.get("STORE4"),
+            DialogManager.get("STORE5")
         };
     }
 

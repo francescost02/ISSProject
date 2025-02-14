@@ -1,6 +1,5 @@
-package io.ISSProject.game;
+package io.ISSProject.game.view;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -13,17 +12,33 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Timer;
-import io.ISSProject.game.view.GameplayView.DefeatView;
-import io.ISSProject.game.view.GameplayView.VictoryView;
+import io.ISSProject.game.controller.gamePlayController.GameplayController;
+import io.ISSProject.game.controller.gameState.GameContext;
+import io.ISSProject.game.controller.mediator.GameComponent;
+import io.ISSProject.game.controller.mediator.GameMediator;
 
-import static com.badlogic.gdx.utils.JsonValue.ValueType.object;
-
-public class ClueNotification extends Dialog {
+public class ClueNotification extends Dialog implements GameComponent{
     private Texture paperTexture;
     private Image paperImage;
     private BitmapFont customFont;
     private FreeTypeFontGenerator fontGenerator;
+    private GameMediator mediator;
+
+    @Override
+    public void setMediator(GameMediator mediator){
+        this.mediator = mediator;
+    }
+
+    public GameMediator getMediator(){
+        return this.mediator;
+    }
+
+    @Override
+    public void notify(String event, Object...args){
+        if (mediator != null) {
+            mediator.notify(this, event, args);
+            }
+    }
 
     // Costruttore per "Nuovo Indizio" con finestra personalizzata
     public ClueNotification(String content, Skin skin, Stage stage) {
@@ -122,15 +137,15 @@ public class ClueNotification extends Dialog {
         dialog.show(stage);
     }
 
-    public static void showChoice(Skin skin, Stage stage, final Game game) {
+    public static void showChoice(Skin skin, Stage stage, final GameplayController controller) {
         Dialog dialog = new Dialog("Scelta finale", skin) {
             @Override
             protected void result(Object object) {
-                if (object.equals("Boss")) {
-                    game.setScreen(new VictoryView()); // Schermata di vittoria
-                } else if (object.equals("Marco")) {
-                    game.setScreen(new DefeatView()); // Schermata di sconfitta
-                }
+                String choice = (String) object;
+                GameContext gameContext = GameContext.getInstance();
+                gameContext.setPlayerFinalChoice(choice);
+                boolean isCorrect = choice.equals("Boss");
+                controller.getMediator().notify(controller, "FINAL_CHOICE", isCorrect);
             }
         };
 
@@ -141,27 +156,4 @@ public class ClueNotification extends Dialog {
         dialog.show(stage); // Rimuovi il setPosition, perché lo fa automaticamente show()
     }
 
-
-
-    /*
-    public static void showCcompleteSceneNotification(Skin skin, Stage stage) {
-        Dialog dialog = new Dialog("Scena Completata", skin);
-        dialog.text("Hai sbloccato una nuova scena.");
-        dialog.button("OK");
-
-        dialog.setPosition(
-            (stage.getWidth() - dialog.getWidth()) / 2,
-            (stage.getHeight() - dialog.getHeight()) / 2
-        );
-
-        dialog.addAction(Actions.sequence(
-            Actions.fadeIn(0.5f),
-            Actions.delay(1.5f),
-            Actions.removeActor()
-        ));
-
-        dialog.show(stage);
-    }
-
-     */
 }
